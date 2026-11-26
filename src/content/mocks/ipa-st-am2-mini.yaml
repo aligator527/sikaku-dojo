@@ -1,0 +1,10 @@
+exam: ipa-st
+title: 科目A-2（旧 午前II）ミニ模試（10問）
+description: 令和7年度春期の午前II 過去問題とオリジナル問題から、科目A-2 の出題分野の四肢択一問題を10問ランダムに出題します。本試験（25問・40分）と同じ1問あたり約1分半のペースで解きましょう。基準点に合わせて6割以上で合格とします。
+durationMin: 16
+passingRate: 0.6
+order: 10
+blueprint:
+  - topics: [system-strategy, system-planning, business-strategy, technology-strategy, business-industry, corporate-activity, legal, security]
+    sections: [am2]
+    count: 10

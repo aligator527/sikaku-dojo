@@ -1,0 +1,9 @@
+exam: shindanshi
+title: 第2次試験 事例演習（4問・80分）
+description: 第2次試験の事例I〜IVにならったオリジナル事例の設問を 4問出題します。事例文を読み、字数制限内で解答してください。終了後に解答例と採点の観点を見て自己採点します。本試験は 1 事例 80分で 4〜5 設問です。
+durationMin: 80
+passingRate: 0.6
+order: 6
+blueprint:
+  - sections: [second]
+    count: 4

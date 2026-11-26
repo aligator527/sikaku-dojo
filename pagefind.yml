@@ -1,0 +1,5 @@
+# Pagefind search index (runs after `astro build`, see package.json "build").
+site: dist
+# KaTeX emits each formula twice (visual HTML + hidden MathML); index the visual text only.
+exclude_selectors:
+  - .katex-mathml

@@ -1,0 +1,45 @@
+---
+import MockRunner, { type MockConfig } from '../../../../components/mock/MockRunner';
+import { t } from '../../../../i18n';
+import ExamLayout from '../../../../layouts/ExamLayout.astro';
+import { CUSTOM_MOCK_SLUG, examContext, getExams, getMocks, type Exam } from '../../../../lib/content';
+import { routes } from '../../../../lib/paths';
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const exam of await getExams()) {
+    paths.push({ params: { exam: exam.id, mock: CUSTOM_MOCK_SLUG }, props: { exam, mock: null } });
+    for (const mock of await getMocks(exam.id)) {
+      if (mock.slug === CUSTOM_MOCK_SLUG)
+        throw new Error(`mocks/${mock.id}: "${CUSTOM_MOCK_SLUG}" is reserved`);
+      const config: MockConfig = {
+        id: mock.id,
+        title: mock.title,
+        description: mock.description,
+        durationMin: mock.durationMin,
+        passingRate: mock.passingRate,
+        questions: mock.questions,
+        blueprint: mock.blueprint,
+      };
+      paths.push({ params: { exam: exam.id, mock: mock.slug }, props: { exam, mock: config } });
+    }
+  }
+  return paths;
+}
+
+interface Props {
+  exam: Exam;
+  mock: MockConfig | null;
+}
+
+const { exam, mock } = Astro.props;
+const title = mock?.title ?? t.mock.customTitle;
+---
+
+<ExamLayout exam={exam} tab="mock" title={`${exam.shortName} ${title}`} crumb={title} compact>
+  <MockRunner client:only="react" exam={examContext(exam)} mock={mock} listHref={routes.mocks(exam.id)}>
+    <p slot="fallback" class="meta">
+      {t.common.loading}
+    </p>
+  </MockRunner>
+</ExamLayout>

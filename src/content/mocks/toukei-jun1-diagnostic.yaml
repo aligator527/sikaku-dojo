@@ -1,0 +1,11 @@
+exam: toukei-jun1
+title: 準1級 実力診断テスト（10問）
+description: 確率分布・推定・検定・確率過程から 5 問、回帰・一般化線形モデル・多変量解析・時系列・モデル選択・因果推論から 5 問を出題します。数値入力問題を多く含むので、途中で丸めずに指定の桁まで計算してください。1 問あたり約 3.3 分の本試験ペースです。
+durationMin: 33
+passingRate: 0.6
+order: 10
+blueprint:
+  - topics: [probability-distributions, limit-theorems, stochastic-processes, estimation, testing]
+    count: 5
+  - topics: [regression, glm, anova-doe, model-selection, multivariate, time-series, contingency, bayes-computation, causal-inference]
+    count: 5

@@ -1,0 +1,31 @@
+exam: toukei-2
+title: 2級 本番形式模試（35問・90分）
+description: 本試験（CBT・90分・35問程度）と同じ問題数と時間で、全 12 分野から出題範囲表の比重に合わせてランダムに出題します。受験のたびに問題が入れ替わります。合格ラインは本試験と同じ 60% です。必要なら「付表」ボタンで数値表を開いてください。
+durationMin: 90
+passingRate: 0.6
+order: 5
+blueprint:
+  - topics: [descriptive]
+    count: 4
+  - topics: [bivariate]
+    count: 3
+  - topics: [simple-regression]
+    count: 3
+  - topics: [time-series]
+    count: 2
+  - topics: [data-collection]
+    count: 3
+  - topics: [probability]
+    count: 3
+  - topics: [random-variables]
+    count: 3
+  - topics: [sampling-distribution]
+    count: 3
+  - topics: [estimation]
+    count: 3
+  - topics: [testing]
+    count: 3
+  - topics: [chi-square]
+    count: 2
+  - topics: [linear-model]
+    count: 3

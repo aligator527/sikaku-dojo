@@ -1,0 +1,370 @@
+---
+import { ExternalLink } from '@lucide/astro';
+
+import ExamProgressPanel from '../../../components/exam/ExamProgressPanel';
+import OfflineButton from '../../../components/offline/OfflineButton';
+import TopicTable from '../../../components/exam/TopicTable';
+import { t } from '../../../i18n';
+import ExamLayout from '../../../layouts/ExamLayout.astro';
+import {
+  examPaths,
+  getFormulaSheet,
+  getGuide,
+  getMocks,
+  getQuestions,
+  getResources,
+  getTermsForExam,
+  groupedTopics,
+  pathwaysOf,
+  type Exam,
+} from '../../../lib/content';
+import { routes } from '../../../lib/paths';
+
+export const getStaticPaths = examPaths;
+
+interface Props {
+  exam: Exam;
+}
+
+const { exam } = Astro.props;
+const [questions, terms, mocks, guide, resources, formulas, paths] = await Promise.all([
+  getQuestions(exam.id),
+  getTermsForExam(exam.id),
+  getMocks(exam.id),
+  getGuide(exam.id),
+  getResources(exam.id),
+  getFormulaSheet(exam.id),
+  pathwaysOf(exam.id),
+]);
+const connections = [
+  ...paths.previous.map((p) => ({ label: t.roadmap.previous, exam: p.from, note: p.note })),
+  ...paths.next.map((p) => ({ label: t.roadmap.nextFrom, exam: p.to, note: p.note })),
+  ...paths.related.map((p) => ({ label: t.roadmap.relatedTo, exam: p.to, note: p.note })),
+];
+
+const facts = [
+  [t.exam.organizer, exam.organizer.name],
+  [t.exam.method, exam.format.method],
+  [t.exam.duration, exam.format.duration],
+  [t.exam.questions, exam.format.questions],
+  [t.exam.answerStyle, exam.format.answerStyle],
+  [t.exam.passing, exam.format.passing],
+  [t.exam.schedule, exam.format.schedule],
+  [t.exam.eligibility, exam.format.eligibility],
+].filter((row): row is [string, string] => Boolean(row[1]));
+
+const menu = [
+  {
+    href: routes.questions(exam.id),
+    label: t.examTabs.questions,
+    note: t.exam.questionCount(questions.length),
+    desc: '問題を番号順に一覧し、1問ずつ解答・解説を確認',
+  },
+  {
+    href: routes.drill(exam.id),
+    label: t.examTabs.drill,
+    note: '',
+    desc: '分野・未解答・間違えた問題などの条件で出題',
+  },
+  {
+    href: routes.mocks(exam.id),
+    label: t.examTabs.mock,
+    note: `${mocks.length}種`,
+    desc: '制限時間つきで解き、まとめて採点・分野別に分析',
+  },
+  {
+    href: routes.examGlossary(exam.id),
+    label: t.examTabs.glossary,
+    note: t.exam.termCount(terms.length),
+    desc: '頻出用語の定義と出題のされ方',
+  },
+  ...(guide
+    ? [
+        {
+          href: routes.guide(exam.id),
+          label: t.examTabs.guide,
+          note: guide.data.studyHours ?? '',
+          desc: guide.data.summary,
+        },
+      ]
+    : []),
+  ...(formulas
+    ? [
+        {
+          href: routes.formulas(exam.id),
+          label: t.examTabs.formulas,
+          note: t.formulas.count(formulas.count),
+          desc: '分野別の公式一覧。印刷して持ち歩ける',
+        },
+      ]
+    : []),
+  ...(exam.tools.includes('tables')
+    ? [
+        {
+          href: routes.tables(),
+          label: t.tools.tables.title,
+          note: '',
+          desc: '正規分布・t・χ²・F 分布の数値表。演習・模試の画面からも開ける',
+        },
+      ]
+    : []),
+  {
+    href: routes.resources(exam.id),
+    label: t.examTabs.resources,
+    note: `${resources.length}件`,
+    desc: '公式情報・無料教材・書籍などの外部リンク',
+  },
+];
+---
+
+<ExamLayout exam={exam} tab="overview" searchable searchKind="資格">
+  <div class="layout">
+    <div class="main">
+      <h1 class="visually-hidden">{exam.name}</h1>
+      <p class="summary">{exam.summary}</p>
+
+      <section>
+        <h2 class="section-title">{t.exam.facts}</h2>
+        <dl class="facts">
+          {facts.map(([k, v]) => (
+            <div>
+              <dt>{k}</dt>
+              <dd>{v}</dd>
+            </div>
+          ))}
+        </dl>
+        {exam.format.notes.length > 0 && (
+          <ul class="notes">
+            {exam.format.notes.map((n) => (
+              <li>{n}</li>
+            ))}
+          </ul>
+        )}
+        <p class="meta verify">
+          {t.exam.verifyNote}（{t.exam.updatedAt} {exam.updatedAt}）
+        </p>
+      </section>
+
+      <section>
+        <h2 class="section-title">
+          {t.exam.scope}
+          <small>分野名から分野別演習へ</small>
+        </h2>
+        <TopicTable
+          client:load
+          groups={groupedTopics(exam)}
+          questions={questions.map((q) => ({ id: q.id, topics: q.topics }))}
+          drillHref={routes.drill(exam.id)}
+        />
+      </section>
+    </div>
+
+    <aside class="side">
+      <ExamProgressPanel client:load examId={exam.id} questionIds={questions.map((q) => q.id)} />
+
+      <section>
+        <h2 class="side-title">{t.offline.title}</h2>
+        <p class="menu-desc offline-lead">{t.offline.lead}</p>
+        <OfflineButton client:idle examId={exam.id} />
+      </section>
+
+      <nav class="menu" aria-label={t.exam.menu}>
+        <h2 class="side-title">{t.exam.menu}</h2>
+        <ul>
+          {menu.map((m) => (
+            <li>
+              <a href={m.href}>
+                <span class="menu-label">{m.label}</span>
+                {m.note && <span class="menu-note">{m.note}</span>}
+              </a>
+              <p class="menu-desc">{m.desc}</p>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      {connections.length > 0 && (
+        <section>
+          <h2 class="side-title">{t.roadmap.connections}</h2>
+          <ul class="paths">
+            {connections.map((c) => (
+              <li>
+                <span class="path-kind">{c.label}</span>
+                <a href={routes.exam(c.exam.id)}>{c.exam.name}</a>
+                <p class="menu-desc">{c.note}</p>
+              </li>
+            ))}
+          </ul>
+          <p class="roadmap-link">
+            <a href={routes.roadmap()}>{t.roadmap.title}</a>
+          </p>
+        </section>
+      )}
+
+      {exam.officialLinks.length > 0 && (
+        <section>
+          <h2 class="side-title">{t.exam.official}</h2>
+          <ul class="links">
+            {exam.officialLinks.map((l) => (
+              <li>
+                <a href={l.url} target="_blank" rel="noreferrer">
+                  {l.label}
+                  <ExternalLink size={13} aria-label={t.common.external} />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+    </aside>
+  </div>
+</ExamLayout>
+
+<style>
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-7);
+  }
+
+  @media (min-width: 60rem) {
+    .layout {
+      grid-template-columns: minmax(0, 1fr) 20rem;
+      gap: var(--s-7);
+    }
+  }
+
+  .main {
+    display: grid;
+    gap: var(--s-7);
+    align-content: start;
+  }
+
+  .summary {
+    font-size: var(--fs-lg);
+    line-height: 1.9;
+    max-width: var(--prose-width);
+  }
+
+  .facts {
+    display: grid;
+    border-top: 1px solid var(--rule);
+  }
+
+  .facts > div {
+    display: grid;
+    grid-template-columns: 7.5rem 1fr;
+    gap: var(--s-4);
+    padding: var(--s-2) 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .facts dt {
+    font-size: var(--fs-sm);
+    font-weight: 700;
+    color: var(--ink-2);
+  }
+
+  .facts dd {
+    margin: 0;
+  }
+
+  .notes {
+    margin-top: var(--s-3);
+    padding-left: 1.3em;
+    font-size: var(--fs-sm);
+    color: var(--ink-2);
+  }
+
+  .verify {
+    margin-top: var(--s-3);
+    font-size: var(--fs-xs);
+  }
+
+  .side {
+    display: grid;
+    gap: var(--s-6);
+    align-content: start;
+  }
+
+  .side-title {
+    font-family: var(--font-sans);
+    font-size: var(--fs-sm);
+    font-weight: 700;
+    color: var(--ink-2);
+    padding-bottom: var(--s-2);
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .paths {
+    padding: 0;
+    list-style: none;
+  }
+
+  .paths li {
+    padding: var(--s-3) 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .path-kind {
+    display: block;
+    font-size: var(--fs-xs);
+    color: var(--ink-3);
+  }
+
+  .offline-lead {
+    margin: var(--s-2) 0 var(--s-3);
+  }
+
+  .roadmap-link {
+    margin-top: var(--s-2);
+    font-size: var(--fs-sm);
+  }
+
+  .menu ul,
+  .links {
+    padding: 0;
+    list-style: none;
+  }
+
+  .menu li {
+    padding: var(--s-3) 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .menu a {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--s-2);
+    text-decoration: none;
+  }
+
+  .menu-label {
+    font-weight: 700;
+  }
+
+  .menu-note {
+    font-size: var(--fs-xs);
+    color: var(--ink-3);
+  }
+
+  .menu-desc {
+    margin-top: 2px;
+    font-size: var(--fs-xs);
+    color: var(--ink-3);
+    line-height: 1.6;
+  }
+
+  .links li {
+    padding: var(--s-2) 0;
+    border-bottom: 1px solid var(--rule);
+    font-size: var(--fs-sm);
+  }
+
+  .links a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-1);
+  }
+</style>

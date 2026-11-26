@@ -1,0 +1,35 @@
+exam: toukei-jun1
+title: 準1級 本番形式模試（28問・90分）
+description: 本試験（CBT・90分・25〜30問）と同じ分量で、全 14 分野から選択問題と数値入力問題を出題します。受験のたびに問題が入れ替わります。合格ラインは本試験と同じ 60% です。数値表が必要なときは「付表」ボタンを使ってください。
+durationMin: 90
+passingRate: 0.6
+order: 5
+blueprint:
+  - topics: [probability-distributions]
+    count: 3
+  - topics: [limit-theorems]
+    count: 2
+  - topics: [stochastic-processes]
+    count: 1
+  - topics: [estimation]
+    count: 3
+  - topics: [testing]
+    count: 3
+  - topics: [regression]
+    count: 3
+  - topics: [glm]
+    count: 2
+  - topics: [anova-doe]
+    count: 2
+  - topics: [model-selection]
+    count: 2
+  - topics: [multivariate]
+    count: 2
+  - topics: [time-series]
+    count: 2
+  - topics: [contingency]
+    count: 1
+  - topics: [bayes-computation]
+    count: 1
+  - topics: [causal-inference]
+    count: 1

@@ -1,0 +1,49 @@
+---
+import QuestionIndex, { type QuestionRow } from '../../../../components/exam/QuestionIndex';
+import { t } from '../../../../i18n';
+import ExamLayout from '../../../../layouts/ExamLayout.astro';
+import { examPaths, examContext, type Exam } from '../../../../lib/content';
+import { getCollection } from 'astro:content';
+import { getQuestions } from '../../../../lib/content';
+import { excerpt } from '../../../../lib/markdown/excerpt';
+import { routes } from '../../../../lib/paths';
+
+export const getStaticPaths = examPaths;
+
+interface Props {
+  exam: Exam;
+}
+
+const { exam } = Astro.props;
+const questions = await getQuestions(exam.id);
+const stems = new Map(
+  (await getCollection('questions', (e) => e.data.exam.id === exam.id)).map((e) => [e.id, e.data.stem]),
+);
+const rows: QuestionRow[] = questions.map((q) => ({
+  id: q.id,
+  order: q.order,
+  href: routes.question(exam.id, q.slug),
+  excerpt: excerpt(stems.get(q.id) ?? ''),
+  topics: q.topics,
+  source: { kind: q.source.kind, label: q.source.label },
+  difficulty: q.difficulty,
+  section: q.section,
+}));
+---
+
+<ExamLayout
+  exam={exam}
+  tab="questions"
+  description={`${exam.name}の問題一覧（${questions.length}問）。分野・出典・解答状況で絞り込めます。`}
+>
+  <h1 class="section-title">
+    {t.examTabs.questions}
+    <small>{t.exam.questionCount(questions.length)}</small>
+  </h1>
+  <QuestionIndex
+    client:load
+    rows={rows}
+    topics={examContext(exam).topics}
+    sections={examContext(exam).sections}
+  />
+</ExamLayout>

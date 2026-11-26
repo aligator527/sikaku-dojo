@@ -1,0 +1,34 @@
+---
+import DrillApp from '../../../components/drill/DrillApp';
+import { t } from '../../../i18n';
+import ExamLayout from '../../../layouts/ExamLayout.astro';
+import { examContext, examPaths, groupedTopics, type Exam } from '../../../lib/content';
+
+export const getStaticPaths = examPaths;
+
+interface Props {
+  exam: Exam;
+}
+
+const { exam } = Astro.props;
+const groups = groupedTopics(exam).map((g) => ({
+  group: g.group,
+  topics: g.topics.map((x) => ({ id: x.id, name: x.name })),
+}));
+---
+
+<ExamLayout exam={exam} tab="drill" title={`${exam.shortName} ${t.drill.title}`} description={t.drill.lead}>
+  <h1 class="section-title">{t.drill.title}</h1>
+  <p class="lead meta">{t.drill.lead}</p>
+  <DrillApp client:only="react" exam={examContext(exam)} groups={groups}>
+    <p slot="fallback" class="meta">
+      {t.common.loading}
+    </p>
+  </DrillApp>
+</ExamLayout>
+
+<style>
+  .lead {
+    margin-bottom: var(--s-5);
+  }
+</style>

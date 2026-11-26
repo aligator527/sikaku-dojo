@@ -1,0 +1,11 @@
+exam: toukei-dse
+title: DSエキスパート 実力診断テスト（8問）
+description: 統計基礎・数学基礎から 3 問、計算基礎とモデリング・AI と評価から 5 問を出題します。本試験は 90 分で 40 問程度なので、1 問あたり約 2 分強のペースで解いてください。
+durationMin: 18
+passingRate: 0.6
+order: 10
+blueprint:
+  - topics: [prob-inference, bayes-computation, linear-algebra, calculus-optimization]
+    count: 3
+  - topics: [data-engineering, algorithms, supervised, unsupervised, model-evaluation, time-series-survival, text-analysis, causal-inference, deep-learning, ai-application]
+    count: 5

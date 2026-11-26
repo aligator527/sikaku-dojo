@@ -1,0 +1,138 @@
+title: 簿記・会計
+items:
+  - title: 日本商工会議所 簿記検定 公式サイト
+    url: https://www.kentei.ne.jp/bookkeeping
+    publisher: 日本商工会議所
+    lang: ja
+    kind: official
+    cost: free
+    exams: [boki-3, boki-2, boki-1]
+    description: 各級のレベル・試験科目・合格基準、最新のお知らせ（出題区分表の改定や配点変更など）を確認できる公式ページ。
+  - title: 簿記検定試験 出題区分表
+    url: https://www.kentei.ne.jp/bookkeeping/exam-list
+    publisher: 日本商工会議所
+    lang: ja
+    kind: official
+    cost: free
+    exams: [boki-3, boki-2, boki-1]
+    description: 級ごとの出題範囲を示した公式の区分表（商業簿記・会計学、工業簿記・原価計算）と商業簿記標準・許容勘定科目表。2026年度適用版と2027年度適用版の両方を掲載。
+  - title: 出題区分表などの改定について（2027年度適用・改定項目等の説明書）
+    url: https://www.kentei.ne.jp/wp/wp-content/uploads/2014/10/2027_kaitei_shushi_fixed.pdf
+    publisher: 日本商工会議所
+    lang: ja
+    kind: official
+    cost: free
+    exams: [boki-3, boki-2, boki-1]
+    description: 紙の手形・小切手の廃止と新リース会計基準の適用に伴う改定内容の公式解説。ファクタリング、定率法、リースの借手処理などの仕訳例が載っている。
+  - title: 日商簿記検定 ネット試験について
+    url: https://www.kentei.ne.jp/33013
+    publisher: 日本商工会議所
+    lang: ja
+    kind: official
+    cost: free
+    exams: [boki-3, boki-2]
+    description: 2級・3級ネット試験の申込方法、出題形式、施行休止期間、金額入力や仕訳の解答方法などの注意事項。
+  - title: 簿記3級 サンプル問題
+    url: https://www.kentei.ne.jp/bookkeeping/sample/sample_3
+    publisher: 日本商工会議所
+    lang: ja
+    kind: pastExam
+    cost: free
+    exams: [boki-3]
+    description: 現行の出題形式に沿った第1問〜第3問の公式サンプル問題と答案用紙（PDF）。本番と同じ形式で通し演習ができる。
+  - title: 簿記2級 サンプル問題
+    url: https://www.kentei.ne.jp/bookkeeping/class-s/sample/sample-two
+    publisher: 日本商工会議所
+    lang: ja
+    kind: pastExam
+    cost: free
+    exams: [boki-2]
+    description: 第1問〜第5問の公式サンプル問題と答案用紙（PDF）。工業簿記の第4問・第5問の出題イメージをつかむのに役立つ。
+  - title: 簿記1級 過去問題（第158回〜）
+    url: https://www.kentei.ne.jp/bookkeeping/class1/1qkako
+    publisher: 日本商工会議所
+    lang: ja
+    kind: pastExam
+    cost: free
+    exams: [boki-1]
+    description: 第158回（2021年6月）以降の1級の試験問題を公式に公開。2級・3級の過去問題は公開されていない。
+  - title: 出題の意図・講評
+    url: https://www.kentei.ne.jp/bookkeeping/review
+    publisher: 日本商工会議所
+    lang: ja
+    kind: official
+    cost: free
+    exams: [boki-1, boki-2, boki-3]
+    description: 各回の出題のねらいと採点結果を踏まえた講評。近年は1級のみ公表されており、受験者が間違えやすい点がわかる。
+  - title: 簿記検定 受験者データ
+    url: https://www.kentei.ne.jp/bookkeeping/candidate-data
+    publisher: 日本商工会議所
+    lang: ja
+    kind: official
+    cost: free
+    exams: [boki-3, boki-2, boki-1]
+    description: 統一試験・ネット試験の受験者数、実受験者数、合格者数、合格率の公式データ。
+  - title: 2027年度試験日程カレンダー
+    url: https://www.kentei.ne.jp/calendar_2027
+    publisher: 日本商工会議所
+    lang: ja
+    kind: official
+    cost: free
+    exams: [boki-3, boki-2, boki-1]
+    description: 統一試験の実施日と受験料、ネット試験の施行休止期間。申込方法は受験地の商工会議所ごとに異なる。
+  - title: 日商公認 模擬試験サイト
+    url: https://boki.pckentei.com/
+    publisher: クレイポルド株式会社
+    lang: ja
+    kind: tool
+    cost: paid
+    exams: [boki-3, boki-2]
+    description: 日本商工会議所が公認するネット試験形式の模擬試験。本番と同様の操作画面で時間配分と入力操作を練習できる。
+  - title: 簿記3級 サンプル問題の解説（TAC）
+    url: https://www.tac-school.co.jp/kouza_boki/boki_sk_idx/past_exam_3.html
+    publisher: TAC株式会社
+    lang: ja
+    kind: article
+    cost: free
+    exams: [boki-3]
+    description: 公式サンプル問題の模範解答と解説。日本商工会議所のサンプル問題ページからも案内されている。
+  - title: 簿記2級 サンプル問題の解説（TAC）
+    url: https://www.tac-school.co.jp/kouza_boki/boki_sk_idx/past_exam_2.html
+    publisher: TAC株式会社
+    lang: ja
+    kind: article
+    cost: free
+    exams: [boki-2]
+    description: 2級の公式サンプル問題の模範解答と解説。サンプル問題を解いた後の答え合わせに使える。
+  - title: 日商簿記2・3級 サンプル問題 解説講義
+    url: https://www.net-school.co.jp/special/jcci_bokisample_kaisetsu/
+    publisher: ネットスクール株式会社
+    lang: ja
+    kind: video
+    cost: free
+    exams: [boki-3, boki-2]
+    description: 公式サンプル問題の解き方を講師が動画で解説。日本商工会議所のサンプル問題ページからも案内されている。
+  - title: FINACラーニング（旧 CPAラーニング）
+    url: https://www.cpa-learning.com/
+    publisher: CPA会計学院
+    lang: ja
+    kind: course
+    cost: free
+    exams: [boki-3, boki-2, boki-1]
+    description: 3級〜1級の講義動画、テキスト・問題集（PDF）、模擬試験を無料で利用できるe-learning。2026年11月にCPAラーニングから名称変更。
+  - title: パブロフ簿記
+    url: https://pboki.com/
+    publisher: よせだあつこ
+    lang: ja
+    kind: article
+    cost: free
+    exams: [boki-3, boki-2]
+    description: 3級・2級（商業簿記・工業簿記）の論点別解説、ネット試験の模擬問題と解き方、勉強法や電卓の使い方をまとめた学習サイト。
+  - title: 企業会計基準委員会（ASBJ） 企業会計基準一覧
+    url: https://www.asb-j.jp/jp/accounting_standards.html
+    publisher: 企業会計基準委員会
+    lang: ja
+    kind: official
+    cost: free
+    exams: [boki-1, boki-2]
+    description: 収益認識、リース、税効果、連結、企業結合などの会計基準の原文。1級の会計学の理論問題対策で条文を確認するのに使う。

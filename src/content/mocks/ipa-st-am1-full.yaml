@@ -1,0 +1,15 @@
+exam: ipa-st
+title: 科目A-1（午前I）本番形式（30問・50分）
+description: 高度試験に共通の科目A-1（旧 午前I）の過去問題から、本試験と同じ 30問・50分・四肢択一で出題します。テクノロジ系・マネジメント系・ストラテジ系の比率は本試験に合わせています。基準点は 60%（30問中18問）です。
+durationMin: 50
+passingRate: 0.6
+order: 6
+blueprint:
+  - topics: [am1-technology]
+    sections: [am1]
+    count: 17
+  - topics: [am1-management]
+    sections: [am1]
+    count: 5
+  - sections: [am1]
+    count: 8

@@ -1,0 +1,228 @@
+---
+import { render } from 'astro:content';
+
+import { t } from '../../../i18n';
+import ExamLayout from '../../../layouts/ExamLayout.astro';
+import { getExams, getGuide, type Exam } from '../../../lib/content';
+import type { GuideEntry } from '../../../lib/content';
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const exam of await getExams()) {
+    const guide = await getGuide(exam.id);
+    if (guide) paths.push({ params: { exam: exam.id }, props: { exam, guide } });
+  }
+  return paths;
+}
+
+interface Props {
+  exam: Exam;
+  guide: GuideEntry;
+}
+
+const { exam, guide } = Astro.props;
+const { Content, headings } = await render(guide);
+const toc = headings.filter((h) => h.depth === 2);
+---
+
+<ExamLayout
+  exam={exam}
+  tab="guide"
+  title={guide.data.title}
+  description={guide.data.summary}
+  searchable
+  searchKind="対策"
+>
+  <div class="guide">
+    <article>
+      <header class="head">
+        <h1>{guide.data.title}</h1>
+        <p class="lead">{guide.data.summary}</p>
+        <p class="meta">
+          {guide.data.studyHours && <span>学習時間の目安：{guide.data.studyHours}</span>}
+          <span>
+            {t.common.updated} {guide.data.updatedAt}
+          </span>
+        </p>
+      </header>
+
+      {guide.data.roadmap.length > 0 && (
+        <section class="roadmap" aria-labelledby="roadmap-title">
+          <h2 id="roadmap-title" class="section-title">
+            学習の流れ
+          </h2>
+          <ol>
+            {guide.data.roadmap.map((step, i) => (
+              <li>
+                <span class="step num">{i + 1}</span>
+                <div>
+                  <p class="step-title">
+                    {step.title}
+                    {step.period && <span class="period">{step.period}</span>}
+                  </p>
+                  <p class="step-detail">{step.detail}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )}
+
+      <div class="prose">
+        <Content />
+      </div>
+    </article>
+
+    {toc.length > 2 && (
+      <nav class="toc" aria-label="目次" data-pagefind-ignore>
+        <p class="toc-title">目次</p>
+        <ol>
+          {toc.map((h) => (
+            <li>
+              <a href={`#${h.slug}`}>{h.text}</a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+    )}
+  </div>
+</ExamLayout>
+
+<style>
+  .guide {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-6);
+  }
+
+  .guide > * {
+    min-width: 0;
+  }
+
+  @media (min-width: 64rem) {
+    .guide {
+      grid-template-columns: minmax(0, var(--prose-width)) 14rem;
+      justify-content: space-between;
+    }
+  }
+
+  .head {
+    display: grid;
+    gap: var(--s-3);
+    margin-bottom: var(--s-6);
+  }
+
+  h1 {
+    font-size: var(--fs-3xl);
+  }
+
+  .lead {
+    font-size: var(--fs-lg);
+    color: var(--ink-2);
+  }
+
+  .head .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-4);
+  }
+
+  .roadmap {
+    margin-bottom: var(--s-7);
+  }
+
+  .roadmap ol {
+    position: relative;
+    display: grid;
+    gap: var(--s-4);
+    padding: 0;
+    list-style: none;
+  }
+
+  .roadmap ol::before {
+    content: '';
+    position: absolute;
+    left: 0.95rem;
+    top: 1rem;
+    bottom: 1rem;
+    border-left: 1px dashed var(--rule-strong);
+  }
+
+  .roadmap li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 2rem 1fr;
+    gap: var(--s-3);
+  }
+
+  .step {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border: 1.5px solid var(--shu);
+    border-radius: 50%;
+    background: var(--paper);
+    color: var(--shu);
+    font-family: var(--font-serif);
+    font-weight: 700;
+  }
+
+  .step-title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--s-2);
+    font-weight: 700;
+  }
+
+  .period {
+    font-size: var(--fs-xs);
+    font-weight: 400;
+    color: var(--ink-3);
+  }
+
+  .step-detail {
+    font-size: var(--fs-sm);
+    color: var(--ink-2);
+  }
+
+  .toc {
+    position: sticky;
+    top: calc(var(--header-height) + var(--s-4));
+    align-self: start;
+    font-size: var(--fs-sm);
+  }
+
+  .toc-title {
+    font-weight: 700;
+    color: var(--ink-2);
+    padding-bottom: var(--s-2);
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .toc ol {
+    padding: 0;
+    list-style: none;
+  }
+
+  .toc li {
+    padding: var(--s-1) 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .toc a {
+    color: var(--ink-2);
+    text-decoration: none;
+  }
+
+  .toc a:hover {
+    color: var(--ai);
+  }
+
+  @media (max-width: 64rem) {
+    .toc {
+      display: none;
+    }
+  }
+</style>

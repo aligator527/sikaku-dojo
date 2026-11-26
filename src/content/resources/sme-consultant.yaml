@@ -1,0 +1,162 @@
+title: 中小企業診断士・経営
+items:
+  - title: 中小企業診断士試験
+    url: https://www.jf-cmca.jp/contents/007_shiken.html
+    publisher: 一般社団法人 日本中小企業診断士協会連合会
+    lang: ja
+    kind: official
+    cost: free
+    exams: [shindanshi]
+    description: 試験実施機関の試験情報トップ。年度ごとの試験日程、試験案内、正解と配点、合格発表、FAQ、過去の試験結果への入口。
+  - title: 中小企業診断士試験問題（過去問題）
+    url: https://www.jf-cmca.jp/contents/010_c_/shikenmondai.html
+    publisher: 一般社団法人 日本中小企業診断士協会連合会
+    lang: ja
+    kind: pastExam
+    cost: free
+    exams: [shindanshi]
+    description: 第1次試験の科目別の問題 PDF などを公開。協会サイトの掲載情報は事前の承諾なく複製・転載できないため、演習は公式の PDF で行う。
+  - title: 令和8年度 中小企業診断士第1次試験の正解と配点
+    url: https://www.jf-cmca.jp/contents/010_c_/010_c_r08_shiken/R08_1ji_shiken_kaitou.html
+    publisher: 一般社団法人 日本中小企業診断士協会連合会
+    lang: ja
+    kind: pastExam
+    cost: free
+    exams: [shindanshi]
+    description: 令和8年度第1次試験の科目別の正解と配点。過去問題の自己採点に使う。
+  - title: 令和8年度中小企業診断士第1次試験について（試験案内の概要）
+    url: https://www.jf-cmca.jp/contents/010_c_/010_c_r08_shiken/R08_1ji_shiken_about.html
+    publisher: 一般社団法人 日本中小企業診断士協会連合会
+    lang: ja
+    kind: official
+    cost: free
+    exams: [shindanshi]
+    description: 第1次試験の日程、試験科目ごとの試験時間と配点、実施地区、受験手数料、科目免除の概要。
+  - title: 令和8年度中小企業診断士第2次試験について（試験案内の概要）
+    url: https://www.jf-cmca.jp/contents/010_c_/010_c_r08_shiken/R08_2ji_shiken_about.html
+    publisher: 一般社団法人 日本中小企業診断士協会連合会
+    lang: ja
+    kind: official
+    cost: free
+    exams: [shindanshi]
+    description: 第2次試験の受験資格、事例I〜IVの時間割と配点、実施地区、合格発表日。
+  - title: 令和８年度からの中小企業診断士試験における改正点について
+    url: https://www.jf-cmca.jp/contents/010_c_/010_c_r08_shiken/R08_jyukentesuryokaitei_koujyutushikenhaishi.html
+    publisher: 一般社団法人 日本中小企業診断士協会連合会
+    lang: ja
+    kind: official
+    cost: free
+    exams: [shindanshi]
+    description: 令和8年度から第2次試験の口述試験が廃止されたことと、第1次・第2次試験の受験手数料の改定についての公式のお知らせ。
+  - title: 令和8年度中小企業診断士第1次試験案内（PDF）
+    url: https://www.jf-cmca.jp/attach/test/r08/r08_1ji_annai.pdf
+    publisher: 一般社団法人 日本中小企業診断士協会連合会
+    lang: ja
+    kind: official
+    cost: free
+    exams: [shindanshi]
+    description: 合格基準、科目合格と免除の仕組み、法令問題の基準日、7科目の「試験科目設置の目的と内容」（出題範囲）を収録した正式な試験案内。
+  - title: 令和8年度中小企業診断士第2次試験案内（PDF）
+    url: https://www.jf-cmca.jp/attach/test/r08/r08_2ji_annai.pdf
+    publisher: 一般社団法人 日本中小企業診断士協会連合会
+    lang: ja
+    kind: official
+    cost: free
+    exams: [shindanshi]
+    description: 第2次試験の出題テーマ、合格基準、出題の趣旨の公表予定、登録に必要な実務補習・実務従事の要件を収録。
+  - title: 試験に関するよくある質問（FAQ）
+    url: https://www.jf-cmca.jp/contents/013_c_faq/001_faq_shiken.html
+    publisher: 一般社団法人 日本中小企業診断士協会連合会
+    lang: ja
+    kind: official
+    cost: free
+    exams: [shindanshi]
+    description: 科目免除を申請した場合や欠席した場合の合格判定、科目合格の扱い、第2次試験の合格基準などの公式回答。
+  - title: 第1次試験科目合格パターン例（PDF）
+    url: https://www.jf-cmca.jp/attach/test/kamokugoukakupatterns.pdf
+    publisher: 一般社団法人 日本中小企業診断士協会連合会
+    lang: ja
+    kind: official
+    cost: free
+    exams: [shindanshi]
+    description: 科目合格と免除申請を組み合わせて3年以内に第1次試験合格を目指す場合のパターンを図示した資料。複数年計画を立てるときに確認する。
+  - title: 過去の試験結果・統計資料
+    url: https://www.jf-cmca.jp/contents/010_c_/001_shiken_kakokekka.html
+    publisher: 一般社団法人 日本中小企業診断士協会連合会
+    lang: ja
+    kind: official
+    cost: free
+    exams: [shindanshi]
+    description: 年度ごとの申込者数・受験者数・合格者数などの統計資料。
+  - title: 中小企業白書・小規模企業白書
+    url: https://www.chusho.meti.go.jp/pamflet/hakusyo/
+    publisher: 中小企業庁
+    lang: ja
+    kind: official
+    cost: free
+    exams: [shindanshi]
+    description: 中小企業の動向と政策をまとめた年次白書。第1次試験「中小企業経営・中小企業政策」の中心的な情報源で、最新版の数値と論点を確認する。
+  - title: 「稼ぐ力」強化し、「強い中小企業」に 26年版中小企業白書
+    url: https://j-net21.smrj.go.jp/news/nskto6000001wd4p.html
+    publisher: 独立行政法人 中小企業基盤整備機構（J-Net21）
+    lang: ja
+    kind: article
+    cost: free
+    exams: [shindanshi]
+    description: 2026年版中小企業白書の要点を紹介する J-Net21 の記事。白書本体を読む前に全体像をつかむのに向く。
+  - title: J-Net21（中小企業ビジネス支援サイト）
+    url: https://j-net21.smrj.go.jp/
+    publisher: 独立行政法人 中小企業基盤整備機構
+    lang: ja
+    kind: official
+    cost: free
+    exams: [shindanshi]
+    description: 支援施策、補助金・融資、起業や経営課題の解説記事を集めたポータル。中小企業政策が実際にどう使われているかを知るのに役立つ。
+  - title: 独立行政法人 中小企業基盤整備機構
+    url: https://www.smrj.go.jp/
+    publisher: 独立行政法人 中小企業基盤整備機構
+    lang: ja
+    kind: official
+    cost: free
+    exams: [shindanshi]
+    description: 中小企業支援の政策実施機関。共済制度、専門家派遣、中小企業大学校など、政策の担い手としての役割を確認できる。
+  - title: ミラサポplus
+    url: https://mirasapo-plus.go.jp/
+    publisher: 経済産業省 中小企業庁
+    lang: ja
+    kind: official
+    cost: free
+    exams: [shindanshi]
+    description: 中小企業向けの補助金・支援制度を検索・解説する中小企業庁の支援サイト。
+  - title: 中小企業基本法（e-Gov 法令検索）
+    url: https://laws.e-gov.go.jp/law/338AC0000000154
+    publisher: デジタル庁 e-Gov
+    lang: ja
+    kind: official
+    cost: free
+    exams: [shindanshi]
+    description: 中小企業者・小規模企業者の定義（第2条）や基本理念を条文で確認できる。
+  - title: 会社法（e-Gov 法令検索）
+    url: https://laws.e-gov.go.jp/law/417AC0000000086
+    publisher: デジタル庁 e-Gov
+    lang: ja
+    kind: official
+    cost: free
+    exams: [shindanshi]
+    description: 機関設計（第326条〜第328条）、取締役の員数（第331条）など、経営法務で問われる条文の確認に使う。
+  - title: 中小企業診断士の登録等及び試験に関する規則（e-Gov 法令検索）
+    url: https://laws.e-gov.go.jp/law/412M50000400192
+    publisher: デジタル庁 e-Gov
+    lang: ja
+    kind: official
+    cost: free
+    exams: [shindanshi]
+    description: 試験科目、受験手数料、登録の要件などを定めた省令。令和8年度からの口述試験廃止もこの規則の改正による。
+  - title: 教えて！にちぎん
+    url: https://www.boj.or.jp/about/education/oshiete/index.htm
+    publisher: 日本銀行
+    lang: ja
+    kind: article
+    cost: free
+    exams: [shindanshi]
+    description: 金融政策、物価、為替などをQ&A形式で解説する日本銀行のページ。経済学・経済政策のマクロ経済分野の背景知識に使える。

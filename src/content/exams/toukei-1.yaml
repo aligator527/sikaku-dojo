@@ -1,0 +1,85 @@
+name: 統計検定1級
+shortName: 統計1級
+family: toukei
+category: statistics
+level: 1級
+order: 22
+status: published
+summary: 大学専門課程（3・4年次）修了程度の統計学を、論述式で問う最上位級。数理統計の理論を問う「統計数理」と、分野別の応用力を問う「統計応用」の2科目で構成される。
+organizer:
+  name: 一般財団法人 統計質保証推進協会（認定：一般社団法人 日本統計学会）
+  url: https://www.toukei-kentei.jp/
+format:
+  short: PBT・論述式・90分×2科目
+  method: PBT（紙の問題冊子と解答冊子を使う筆記試験）
+  duration: 統計数理 90分（午前）、統計応用 90分（午後）
+  questions: 各科目 5問出題され、そのうち 3問を選択して解答
+  answerStyle: 論述式
+  passing: 科目ごとに合否を判定。「統計数理」と「統計応用」（少なくとも1分野）の両方に合格すると1級合格
+  schedule: 年1回（例年 11 月に実施。申込は例年 9 月頃から）。最新の日程は公式サイトで確認する
+  eligibility: 受験資格の制限なし
+  notes:
+    - 統計応用は申込時に人文科学・社会科学・理工学・医薬生物学の 4 分野から 1 分野を選ぶ。
+    - 片方の科目だけ合格した場合、合格の有効期間内（経過措置 9 年）にもう一方に合格すれば 1 級合格となる。
+    - 電卓は四則演算・百分率・平方根が計算できる普通電卓（一般電卓）または事務用電卓を 1 台まで。関数電卓は不可。
+    - 解答に必要な統計数値表は問題冊子に掲載される。
+    - 公式サイトで直近の試験問題と略解（PDF）が公開されている。
+choiceStyle: circled
+sections:
+  - id: math
+    name: 統計数理
+    description: 確率分布、推定・検定の理論、データ解析法の数理を論述で問う（90分・5問中3問選択）。
+  - id: applied
+    name: 統計応用
+    description: 研究デザイン・回帰・多変量解析などの共通事項に加え、選択した分野特有の手法を問う（90分・5問中3問選択）。
+topics:
+  - id: probability
+    name: 確率と確率分布（母関数・変数変換・順序統計量）
+    group: 統計数理
+  - id: limit-theorems
+    name: 極限定理と分布の近似
+    group: 統計数理
+  - id: estimation-theory
+    name: 推定論（十分統計量・最尤推定・クラーメル・ラオの不等式・区間推定）
+    group: 統計数理
+  - id: testing-theory
+    name: 検定論（ネイマン・ピアソンの補題・尤度比検定・多重検定・検定と信頼区間の双対性）
+    group: 統計数理
+  - id: data-analysis
+    name: データ解析法（分散分析と多重比較・分割表・ノンパラメトリック法・ベイズ法・欠測データ）
+    group: 統計応用（共通）
+  - id: design
+    name: 研究デザイン・標本調査法・実験計画法（観察研究と傾向スコア・サンプルサイズ設計）
+    group: 統計応用（共通）
+  - id: regression-multivariate
+    name: 重回帰分析と多変量解析
+    group: 統計応用（共通）
+  - id: stochastic-ts
+    name: 確率過程と時系列解析
+    group: 統計応用（共通）
+  - id: humanities
+    name: 人文科学（因子分析・項目反応理論・テストの信頼性・尺度構成・数量化と対応分析・多次元尺度法・調査法）
+    group: 統計応用（分野別）
+  - id: social
+    name: 社会科学（計量経済モデル・パネル分析・経済指数・所得分布・標本調査）
+    group: 統計応用（分野別）
+  - id: science-engineering
+    name: 理工学（線形推測・品質管理・実験計画・信頼性・抜取検査・測定の不確かさ）
+    group: 統計応用（分野別）
+  - id: medical
+    name: 医薬生物学（研究デザイン・効果の指標・生存時間解析・診断検査・メタアナリシス・多重性）
+    group: 統計応用（分野別）
+officialLinks:
+  - label: 統計検定1級 試験内容（公式）
+    url: https://www.toukei-kentei.jp/grade/grade1/
+  - label: 統計検定1級 試験要項（試験日・申込）
+    url: https://www.toukei-kentei.jp/info/grade1_apply/
+  - label: 統計検定1級 出題範囲表（PDF）
+    url: https://www.toukei-kentei.jp/hubfs/files/grade_range/grade1_hani_20150508_2.pdf
+  - label: 1級合格までの経過措置（PDF）
+    url: https://www.toukei-kentei.jp/hubfs/files/grade/grade1_tm.pdf
+  - label: 過去問題（1級の問題・略解 PDF）
+    url: https://www.toukei-kentei.jp/preparation/kakomon/
+tier: 4
+tools: [tables]
+updatedAt: '2026-11-26'

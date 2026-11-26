@@ -1,0 +1,10 @@
+exam: toukei-1
+title: 統計数理 論述演習（3題・90分）
+description: 本試験の「統計数理」と同じく、論述式の大問 3 題を 90 分で解きます（本試験は 5 題から 3 題を選択）。終了後に解答例と採点のポイントを見て自己採点してください。合格の目安は 60% です。
+durationMin: 90
+passingRate: 0.6
+order: 5
+blueprint:
+  - sections: [math]
+    formats: [essay]
+    count: 3

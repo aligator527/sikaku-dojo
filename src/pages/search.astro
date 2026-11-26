@@ -1,0 +1,30 @@
+---
+import Breadcrumbs from '../components/layout/Breadcrumbs.astro';
+import SearchApp from '../components/search/SearchApp';
+import { t } from '../i18n';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { routes } from '../lib/paths';
+---
+
+<BaseLayout title={t.search.title} description={t.search.placeholder}>
+  <div class="container page">
+    <Breadcrumbs items={[{ label: t.site.name, href: routes.home() }, { label: t.search.title }]} />
+    <h1 class="title">{t.search.title}</h1>
+    <SearchApp client:only="react">
+      <p slot="fallback" class="meta">
+        {t.common.loading}
+      </p>
+    </SearchApp>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-top: var(--s-5);
+  }
+
+  .title {
+    font-size: var(--fs-3xl);
+    margin: var(--s-3) 0 var(--s-5);
+  }
+</style>

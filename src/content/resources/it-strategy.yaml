@@ -1,0 +1,154 @@
+title: IT戦略・ITストラテジスト
+items:
+  - title: ITストラテジスト試験
+    url: https://www.ipa.go.jp/shiken/kubun/st.html
+    publisher: 独立行政法人 情報処理推進機構（IPA）
+    lang: ja
+    kind: official
+    cost: free
+    exams: [ipa-st]
+    description: 対象者像、業務と役割、期待する技術水準、科目A-1〜B-2 の試験時間・出題形式・出題数を掲載した公式ページ。2027年度からの新試験制度への移行予定も案内されている。
+  - title: 過去問題（問題冊子・解答例・採点講評）
+    url: https://www.ipa.go.jp/shiken/mondai-kaiotu/index.html
+    publisher: 独立行政法人 情報処理推進機構（IPA）
+    lang: ja
+    kind: pastExam
+    cost: free
+    exams: [ipa-st]
+    description: 年度別に問題冊子・解答例・採点講評の PDF を公開。午後の解答例には出題趣旨も載っている。過去問題は出典を明記すれば教育目的で許諾なく利用できる（IPA の FAQ を参照）。
+  - title: 令和7年度 春期試験 問題冊子・解答例・採点講評
+    url: https://www.ipa.go.jp/shiken/mondai-kaiotu/2025r07.html
+    publisher: 独立行政法人 情報処理推進機構（IPA）
+    lang: ja
+    kind: pastExam
+    cost: free
+    exams: [ipa-st]
+    description: ペーパー方式で実施された最後の ST の問題一式（午前I・午前II・午後I・午後II）。CBT 方式に移行した令和8年度以降の試験問題は非公開。
+  - title: 試験要綱・シラバス
+    url: https://www.ipa.go.jp/shiken/syllabus/gaiyou.html
+    publisher: 独立行政法人 情報処理推進機構（IPA）
+    lang: ja
+    kind: official
+    cost: free
+    exams: [ipa-st]
+    description: 試験要綱（出題範囲・配点・合格基準）と、試験区分ごとのシラバス（知識・技能の細目）をまとめたページ。
+  - title: 試験要綱 Ver.5.6
+    url: https://www.ipa.go.jp/shiken/syllabus/rcu1hd00000141gq-att/youkou_ver5_6.pdf
+    publisher: 独立行政法人 情報処理推進機構（IPA）
+    lang: ja
+    kind: official
+    cost: free
+    exams: [ipa-st]
+    description: CBT 方式に合わせて科目名を改めた版。配点（科目A-1 各3.4点、科目A-2 各4点、科目B-1 各50点）、科目B-2 の評価ランク、多段階選抜方式、科目A-2 の重点分野一覧表を確認できる。
+  - title: ITストラテジスト試験（レベル4）シラバス Ver.4.2
+    url: https://www.ipa.go.jp/shiken/syllabus/nq6ept00000014l7-att/syllabus_st_ver4_2.pdf
+    publisher: 独立行政法人 情報処理推進機構（IPA）
+    lang: ja
+    kind: official
+    cost: free
+    exams: [ipa-st]
+    description: 事業戦略の策定から情報システム戦略、個別システム化計画、実行管理と評価までの知識・技能の細目。論述のテーマ選びや経験の棚卸しの観点表としても使える。
+  - title: 令和8年度 応用情報技術者試験、高度試験及び情報処理安全確保支援士試験の申込受付期間及び試験実施期間について
+    url: https://www.ipa.go.jp/shiken/2026/ap_koudo_sc_kikan.html
+    publisher: 独立行政法人 情報処理推進機構（IPA）
+    lang: ja
+    kind: official
+    cost: free
+    exams: [ipa-st]
+    description: 令和8年度（前期・後期）の申込受付期間、科目A群・科目B群の実施期間、成績照会と合格発表の時期、科目A-1 免除の対象者、試験室への持込み制限を掲載。
+  - title: 応用情報技術者試験、高度試験及び情報処理安全確保支援士試験におけるCBT方式での実施について
+    url: https://www.ipa.go.jp/shiken/2026/ap_koudo_sc-cbt.html
+    publisher: 独立行政法人 情報処理推進機構（IPA）
+    lang: ja
+    kind: official
+    cost: free
+    exams: [ipa-st]
+    description: ペーパー方式から CBT 方式への移行の概要。科目名の変更（午前I→科目A-1 など）と、出題範囲・形式・試験時間に変更がないことを説明している。
+  - title: 科目A-1試験免除（高度試験、情報処理安全確保支援士試験）
+    url: https://www.ipa.go.jp/shiken/about/koudo_menjo.html
+    publisher: 独立行政法人 情報処理推進機構（IPA）
+    lang: ja
+    kind: official
+    cost: free
+    exams: [ipa-st]
+    description: 応用情報技術者試験の合格などで科目A-1（旧午前I）が2年間免除される制度の条件と申請方法。
+  - title: 試験制度の見直しについて
+    url: https://www.ipa.go.jp/shiken/minaoshi/index.html
+    publisher: 独立行政法人 情報処理推進機構（IPA）
+    lang: ja
+    kind: official
+    cost: free
+    exams: [ipa-st]
+    description: 2027年度から移行予定の新試験制度（プロフェッショナルデジタルスキル試験（仮称）など）の検討状況、シラバス案、サンプル問題への入口。
+  - title: 新試験制度のシラバスについて
+    url: https://www.ipa.go.jp/shiken/syllabus/henkou/2026/20260630.html
+    publisher: 独立行政法人 情報処理推進機構（IPA）
+    lang: ja
+    kind: official
+    cost: free
+    exams: [ipa-st]
+    description: プロフェッショナルデジタルスキル（マネジメント）試験（仮称）など、新試験区分のシラバス案を掲載。ビジネス変革やイノベーション戦略など、ST の学習と重なる分野を確認できる。
+  - title: 新試験制度のサンプル問題について
+    url: https://www.ipa.go.jp/shiken/syllabus/henkou/2026/20260622.html
+    publisher: 独立行政法人 情報処理推進機構（IPA）
+    lang: ja
+    kind: official
+    cost: free
+    exams: [ipa-st]
+    description: 新試験区分の科目A・科目B のサンプル問題。新しい出題形式のイメージをつかむための資料で、実際の試験と同じ作成プロセスを経たものではないと注記されている。
+  - title: よくある質問（試験の過去問題の使用方法）
+    url: https://www.ipa.go.jp/shiken/faq.html
+    publisher: 独立行政法人 情報処理推進機構（IPA）
+    lang: ja
+    kind: official
+    cost: free
+    exams: [ipa-st]
+    description: 過去問題を問題集やテキストに使う際の条件（出典の明記、改変した場合はその旨の明記など）を説明した FAQ。
+  - title: 応用情報技術者試験ドットコム
+    url: https://www.ap-siken.com/
+    publisher: 応用情報技術者試験ドットコム
+    lang: ja
+    kind: pastExam
+    cost: free
+    exams: [ipa-st]
+    description: 応用情報技術者試験の過去問題を解説付きで演習できる Web サイト。科目A-1（旧午前I）は応用情報の科目A と同じ技術レベル3の共通知識が出題範囲なので、免除がない人の対策に使える。
+  - title: DX白書
+    url: https://www.ipa.go.jp/publish/wp-dx/index.html
+    publisher: 独立行政法人 情報処理推進機構（IPA）
+    lang: ja
+    kind: official
+    cost: free
+    exams: [ipa-st]
+    description: 日米企業の DX の取組状況、戦略・人材・技術の課題を調査・分析した白書。論述で DX の企画や推進体制を書く際の背景知識になる。
+  - title: DX動向（企業等におけるDX推進状況調査分析）
+    url: https://www.ipa.go.jp/digital/chousa/dx-trend/index.html
+    publisher: 独立行政法人 情報処理推進機構（IPA）
+    lang: ja
+    kind: official
+    cost: free
+    exams: [ipa-st]
+    description: DX 白書を引き継ぎ、「戦略」「技術」「人材」の視点から国内外の企業の DX の取組・成果を調査分析したレポート。
+  - title: DX推進指標
+    url: https://www.ipa.go.jp/digital/dx-suishin/index.html
+    publisher: 独立行政法人 情報処理推進機構（IPA）
+    lang: ja
+    kind: tool
+    cost: free
+    exams: [ipa-st]
+    description: 経営者や社内の関係者が DX 推進の現状や課題の認識を共有し、アクションにつなげるための自己診断の指標。IPA が自己診断フォーマットの配布と結果の分析を行っている。
+  - title: デジタルスキル標準（DSS）
+    url: https://www.ipa.go.jp/jinzai/skill-standard/dss/index.html
+    publisher: 独立行政法人 情報処理推進機構（IPA）
+    lang: ja
+    kind: official
+    cost: free
+    exams: [ipa-st]
+    description: DX を推進する人材の役割と習得すべきスキルを定義した標準。ビジネスアーキテクトなど、IT 戦略に関わる人材類型の整理に使える。
+  - title: 情報システム・モデル取引・契約書
+    url: https://www.ipa.go.jp/digital/model/index.html
+    publisher: 独立行政法人 情報処理推進機構（IPA）
+    lang: ja
+    kind: official
+    cost: free
+    exams: [ipa-st]
+    description: ユーザ企業と IT ベンダの取引構造を透明化するため、各開発段階で双方が担うべき責務の解説とモデル契約書を示した資料（第二版・アジャイル開発版）。調達と契約の論点の確認に使える。

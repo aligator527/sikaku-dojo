@@ -1,0 +1,209 @@
+---
+import { familyName } from '../config/catalog';
+import Breadcrumbs from '../components/layout/Breadcrumbs.astro';
+import { t } from '../i18n';
+import {
+  formatBrief,
+  getFormulaSheet,
+  getGuide,
+  getMocks,
+  getQuestions,
+  getResources,
+  getTermsForExam,
+  type Exam,
+} from '../lib/content';
+import { renderMarkdown } from '../lib/markdown/render';
+import { routes } from '../lib/paths';
+import BaseLayout from './BaseLayout.astro';
+
+export type ExamTab = keyof typeof t.examTabs;
+
+interface Props {
+  exam: Exam;
+  tab: ExamTab;
+  /** Page title without the site name. Defaults to "<exam> <tab>". */
+  title?: string;
+  description?: string;
+  /** Extra breadcrumb after the tab (e.g. a single question). */
+  crumb?: string;
+  searchable?: boolean;
+  searchKind?: string;
+  /** Hide the big exam heading (used by focused pages like the mock runner). */
+  compact?: boolean;
+}
+
+const { exam, tab, title, description, crumb, searchable = false, searchKind, compact = false } = Astro.props;
+
+const [questions, terms, mocks, guide, resources, formulas] = await Promise.all([
+  getQuestions(exam.id),
+  getTermsForExam(exam.id),
+  getMocks(exam.id),
+  getGuide(exam.id),
+  getResources(exam.id),
+  getFormulaSheet(exam.id),
+]);
+
+const tabs: { id: ExamTab; href: string; count?: number; hidden?: boolean }[] = [
+  { id: 'overview', href: routes.exam(exam.id) },
+  { id: 'questions', href: routes.questions(exam.id), count: questions.length },
+  { id: 'drill', href: routes.drill(exam.id) },
+  { id: 'mock', href: routes.mocks(exam.id), count: mocks.length },
+  { id: 'glossary', href: routes.examGlossary(exam.id), count: terms.length },
+  { id: 'guide', href: routes.guide(exam.id), hidden: !guide },
+  { id: 'formulas', href: routes.formulas(exam.id), count: formulas?.count, hidden: !formulas },
+  { id: 'resources', href: routes.resources(exam.id), count: resources.length },
+];
+
+const noticeHtml = exam.notice ? await renderMarkdown(exam.notice) : undefined;
+const tabLabel = t.examTabs[tab];
+const crumbs = [
+  { label: t.site.name, href: routes.home() },
+  { label: t.nav.exams, href: routes.exams() },
+  { label: exam.name, href: routes.exam(exam.id) },
+  ...(tab !== 'overview' ? [{ label: tabLabel, href: tabs.find((x) => x.id === tab)?.href }] : []),
+  ...(crumb ? [{ label: crumb }] : []),
+];
+const pageTitle = title ?? (tab === 'overview' ? exam.name : `${exam.name} ${tabLabel}`);
+const filters: Record<string, string> = { 資格: exam.shortName };
+if (searchKind) filters['種類'] = searchKind;
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={description ?? exam.summary}
+  searchable={searchable}
+  searchFilters={filters}
+>
+  <div class:list={['exam-head', { compact }]} data-pagefind-ignore>
+    <div class="container">
+      <Breadcrumbs items={crumbs} />
+      {!compact && (
+        <div class="title-row">
+          <div>
+            <p class="eyebrow">{familyName(exam.family)}</p>
+            <p class="exam-name">
+              <a href={routes.exam(exam.id)}>{exam.name}</a>
+            </p>
+          </div>
+          <p class="facts">{formatBrief(exam)}</p>
+        </div>
+      )}
+    </div>
+    <nav class="tabs" aria-label={`${exam.shortName}のメニュー`}>
+      <ul class="container">
+        {tabs
+          .filter((x) => !x.hidden)
+          .map((x) => (
+            <li>
+              <a href={x.href} aria-current={x.id === tab ? 'page' : undefined}>
+                {t.examTabs[x.id]}
+                {x.count !== undefined && <span class="count num">{x.count}</span>}
+              </a>
+            </li>
+          ))}
+      </ul>
+    </nav>
+  </div>
+  <div class="container body">
+    {noticeHtml && <div class="notice" role="note" set:html={noticeHtml} data-pagefind-ignore />}
+    <slot />
+  </div>
+</BaseLayout>
+
+<style>
+  .exam-head {
+    background: var(--surface);
+    border-bottom: 1px solid var(--rule-strong);
+    padding-top: var(--s-4);
+  }
+
+  .title-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--s-2) var(--s-5);
+    padding: var(--s-3) 0 var(--s-4);
+  }
+
+  .exam-name {
+    font-family: var(--font-serif);
+    font-size: var(--fs-2xl);
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: 0.04em;
+  }
+
+  .exam-name a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .facts {
+    font-size: var(--fs-sm);
+    color: var(--ink-2);
+  }
+
+  .compact {
+    padding-top: var(--s-3);
+  }
+
+  .compact .tabs {
+    margin-top: var(--s-2);
+  }
+
+  .tabs ul {
+    display: flex;
+    gap: var(--s-1);
+    list-style: none;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .tabs a {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    padding: var(--s-2) var(--s-3) var(--s-3);
+    color: var(--ink-2);
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+  }
+
+  .tabs a:hover {
+    color: var(--ink);
+  }
+
+  .tabs a[aria-current='page'] {
+    color: var(--ink);
+    font-weight: 700;
+    border-bottom-color: var(--shu);
+  }
+
+  .count {
+    font-size: var(--fs-xs);
+    color: var(--ink-3);
+    font-weight: 400;
+  }
+
+  .body {
+    padding-top: var(--s-6);
+  }
+
+  .notice {
+    max-width: var(--prose-width);
+    margin-bottom: var(--s-6);
+    padding: var(--s-3) var(--s-4);
+    border-left: 3px solid var(--warn);
+    background: var(--warn-tint);
+    font-size: var(--fs-sm);
+  }
+
+  .notice :global(p + p) {
+    margin-top: var(--s-2);
+  }
+</style>

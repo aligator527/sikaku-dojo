@@ -1,0 +1,88 @@
+name: 統計検定 データサイエンスエキスパート
+shortName: 統計DSE
+family: toukei
+category: statistics
+level: DSエキスパート
+order: 23
+status: published
+summary: 大学専門レベルのデータサイエンス（統計・数学・計算・機械学習とその評価）を問う CBT 試験。数理・データサイエンス・AI 教育強化拠点コンソーシアムのモデルカリキュラム（応用基礎レベル）に準拠する。
+organizer:
+  name: 一般財団法人 統計質保証推進協会（認定：一般社団法人 日本統計学会）
+  url: https://www.toukei-kentei.jp/
+format:
+  short: CBT・90分・40問程度
+  method: CBT（コンピュータ上で解答。全国のテストセンターで受験）
+  duration: 90分
+  questions: 40問程度
+  answerStyle: 多肢選択問題と数値入力問題
+  passing: 100点満点中60点以上
+  schedule: 通年（CBT 方式。テストセンターの空き日程から選んで申し込む）
+  eligibility: 受験資格の制限なし
+  notes:
+    - 出題範囲表は 2026 年 1 月 1 日版（試験バージョン 202601 版）。生成 AI の基礎（Transformer・拡散モデル・基盤モデルなど）を含む。
+    - 範囲表に載るのは高度な項目のみで、統計検定 2 級・3 級・4 級、データサイエンス基礎・発展の範囲も出題対象になる。
+    - 1 つの大問（共通の問題文）に複数の小問がつく形式。SQL や Python のコードを読む問題も出題される。
+    - 電卓は四則演算・百分率・平方根が計算できる普通電卓（一般電卓）または事務用電卓 1 台のみ。統計数値表は会場で配布・回収される。
+    - 同じ種別を再受験するには、前回の受験から 7 日（168 時間）以上空ける必要がある。
+choiceStyle: circled
+topics:
+  - id: prob-inference
+    name: 確率分布と推測統計
+    group: 統計基礎
+  - id: bayes-computation
+    name: ベイズ理論と計算統計（ブートストラップ・MCMC・EM法）
+    group: 統計基礎
+  - id: linear-algebra
+    name: 線形代数（射影・固有値分解・特異値分解）
+    group: 数学基礎
+  - id: calculus-optimization
+    name: 微積分と最適化
+    group: 数学基礎
+  - id: data-engineering
+    name: データ収集・データ表現・データベース（SQL）
+    group: 計算基礎
+  - id: algorithms
+    name: アルゴリズムとプログラミング
+    group: 計算基礎
+  - id: supervised
+    name: 教師あり学習（回帰・判別・正則化・決定木）
+    group: モデリング・AIと評価
+  - id: unsupervised
+    name: 教師なし学習（クラスター分析・主成分分析・密度推定・対応分析と数量化）
+    group: モデリング・AIと評価
+  - id: model-evaluation
+    name: モデルの評価（評価指標・交差検証・情報量規準）
+    group: モデリング・AIと評価
+  - id: time-series-survival
+    name: 時系列解析と生存時間解析
+    group: モデリング・AIと評価
+  - id: text-analysis
+    name: テキストデータ解析
+    group: モデリング・AIと評価
+  - id: causal-inference
+    name: 因果推論とグラフィカルモデリング
+    group: モデリング・AIと評価
+  - id: deep-learning
+    name: 深層学習・強化学習と生成AI
+    group: モデリング・AIと評価
+  - id: ai-application
+    name: AIの応用・構築・運用
+    group: モデリング・AIと評価
+officialLinks:
+  - label: 統計検定 データサイエンスエキスパート 試験内容（公式）
+    url: https://www.toukei-kentei.jp/grade/ds_expert/
+  - label: データサイエンスエキスパート 出題範囲表（2026年1月1日版）（PDF）
+    url: https://www.toukei-kentei.jp/hubfs/files/grade_range/grade13_hani_20260101.pdf
+  - label: データサイエンスエキスパート サンプル問題（PDF）
+    url: https://www.toukei-kentei.jp/hubfs/files/grade/grade13_sample_exercises.pdf
+  - label: データサイエンスエキスパート サンプル問題の解説（PDF）
+    url: https://www.toukei-kentei.jp/hubfs/files/grade/grade13_sample_answer.pdf
+  - label: CBT 方式試験の試験要項（電卓・数値表・再受験ルール）
+    url: https://www.toukei-kentei.jp/info/other_grades_apply/
+tier: 3
+pathways:
+  - to: jdla-e
+    kind: related
+    note: 教師あり・教師なし学習と深層学習の範囲が重なる。E資格は深層学習の理論と実装が中心。
+tools: [tables]
+updatedAt: '2026-11-26'

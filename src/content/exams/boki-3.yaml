@@ -1,0 +1,94 @@
+name: 日商簿記検定3級
+shortName: 簿記3級
+family: boki
+category: accounting
+level: 3級
+order: 50
+status: published
+summary: 基本的な商業簿記を修得し、小規模な株式会社の日常取引の記帳から決算書の作成までを適切に処理できるかを問う試験。業種・職種を問わずビジネスパーソンの基礎知識として評価される。
+organizer:
+  name: 日本商工会議所・各地商工会議所
+  url: https://www.kentei.ne.jp/bookkeeping
+format:
+  short: ペーパー／ネット試験・60分
+  method: 統一試験（ペーパー）・ネット試験（CBT）・団体試験
+  duration: 60分
+  questions: 3題以内（第1問は仕訳15題）
+  answerStyle: ネット試験は選択式＋入力式（仕訳は勘定科目をプルダウンで選択）、統一試験は答案用紙に記入（仕訳は勘定科目を記号で解答）
+  passing: 100点満点中70点以上
+  schedule: 統一試験は年3回（6月・11月・2月）。ネット試験は統一試験前後の施行休止期間を除き、各試験会場が設定する日に随時受験できる
+  notes:
+    - 2027年3月31日までの試験の配点は第1問45点・第2問20点・第3問35点（大手予備校の公表値）。2027年4月1日以降は第1問45点・第2問25点・第3問30点に変わる（日本商工会議所発表）
+    - 2026年度（2027年3月31日まで）は2022年度適用の出題区分表、2027年度からは新しい出題区分表で出題される。新区分表では紙の手形・小切手に関する論点が削除され、普通預金が明記されたほか、「販売のつど売上原価勘定に振り替える方法」「有形固定資産の除却・廃棄」「定率法（償却率を示した簡易な出題）」が2級から移行する
+    - 電卓は四則演算機能のみのものを1台持ち込める（統一試験はそろばんも可、ネット試験はそろばん不可）
+    - ネット試験は試験終了後に自動採点され、その場で合否が判明する。ネット試験の合格と統一試験の合格は同じ扱い
+    - 計算用紙はネット試験ではA4用紙2枚が配布され、試験後に回収される
+choiceStyle: katakana
+sections:
+  - id: q1
+    name: 第1問
+    description: 仕訳15題（45点）。勘定科目は設問ごとに示された選択肢から選ぶ。
+  - id: q2
+    name: 第2問
+    description: 勘定記入、補助簿の選択・記入、伝票、語句の穴埋めなど帳簿組織と個別論点の理解を問う（2027年3月まで20点、2027年4月から25点）。
+  - id: q3
+    name: 第3問
+    description: 決算整理事項を反映した精算表、財務諸表（貸借対照表・損益計算書）、決算整理後残高試算表の作成（2027年3月まで35点、2027年4月から30点）。
+topics:
+  - id: basics
+    name: 簿記の基本原理（取引・勘定・仕訳）
+    group: 簿記の基本原理
+  - id: books-vouchers
+    name: 帳簿・証ひょう・伝票
+    group: 簿記の基本原理
+  - id: cash-deposits
+    name: 現金・預金（現金過不足・当座借越・小口現金）
+    group: 諸取引の処理
+  - id: receivables-payables
+    name: 売掛金・買掛金・電子記録債権等と貸倒れ
+    group: 諸取引の処理
+  - id: other-receivables-payables
+    name: その他の債権・債務（貸付金・未払金・前払金・仮払金・預り金など）
+    group: 諸取引の処理
+  - id: merchandise
+    name: 商品売買（三分法・返品・仕入帳・売上帳・商品有高帳）
+    group: 諸取引の処理
+  - id: fixed-assets
+    name: 有形固定資産（取得・売却・減価償却）
+    group: 諸取引の処理
+  - id: revenue-expense
+    name: 収益と費用（経過勘定を含む）
+    group: 諸取引の処理
+  - id: taxes
+    name: 税金（消費税・法人税等・固定資産税）
+    group: 諸取引の処理
+  - id: equity
+    name: 株式会社会計（資本金・利益準備金・剰余金の配当）
+    group: 株式会社会計
+  - id: closing-adjustments
+    name: 決算整理（売上原価・貸倒引当金・減価償却・経過勘定・貯蔵品）
+    group: 決算
+  - id: financial-statements
+    name: 試算表・精算表・財務諸表の作成と帳簿の締切
+    group: 決算
+officialLinks:
+  - label: 日本商工会議所 簿記3級
+    url: https://www.kentei.ne.jp/bookkeeping/class3
+  - label: 簿記3級 試験科目・注意事項
+    url: https://www.kentei.ne.jp/bookkeeping/class3/exam
+  - label: 簿記検定試験 出題区分表
+    url: https://www.kentei.ne.jp/bookkeeping/exam-list
+  - label: 簿記3級 サンプル問題
+    url: https://www.kentei.ne.jp/bookkeeping/sample/sample_3
+  - label: 日商簿記検定試験（2級・3級・簿記初級・原価計算初級）ネット試験について
+    url: https://www.kentei.ne.jp/33013
+  - label: 【重要】2027年度以降の日商簿記3級試験問題の配点について
+    url: https://www.kentei.ne.jp/51504
+  - label: 2026年度試験日程カレンダー
+    url: https://www.kentei.ne.jp/calendar_2026
+tier: 1
+pathways:
+  - to: boki-2
+    kind: next
+    note: 3級の商業簿記を土台に、工業簿記と連結会計・税効果会計などが加わる2級へ進む。
+updatedAt: '2026-11-26'

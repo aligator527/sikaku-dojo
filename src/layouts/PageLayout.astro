@@ -1,0 +1,54 @@
+---
+/**
+ * A standalone page outside the exam sections: breadcrumbs, a heading and a lead paragraph.
+ */
+import Breadcrumbs from '../components/layout/Breadcrumbs.astro';
+import { t } from '../i18n';
+import { routes } from '../lib/paths';
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  lead?: string;
+  description?: string;
+  /** Crumbs between the site root and this page. */
+  parents?: { label: string; href: string }[];
+  searchable?: boolean;
+  searchFilters?: Record<string, string>;
+}
+
+const { title, lead, description, parents = [], searchable, searchFilters } = Astro.props;
+---
+
+<BaseLayout
+  title={title}
+  description={description ?? lead}
+  searchable={searchable}
+  searchFilters={searchFilters}
+>
+  <div class="container page">
+    <Breadcrumbs items={[{ label: t.site.name, href: routes.home() }, ...parents, { label: title }]} />
+    <h1 class="title" data-pagefind-meta="title">
+      {title}
+    </h1>
+    {lead && <p class="meta lead">{lead}</p>}
+    <slot />
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-top: var(--s-5);
+    padding-bottom: var(--s-7);
+  }
+
+  .title {
+    font-size: var(--fs-3xl);
+    margin-top: var(--s-3);
+  }
+
+  .lead {
+    margin: var(--s-2) 0 var(--s-6);
+    max-width: 44rem;
+  }
+</style>

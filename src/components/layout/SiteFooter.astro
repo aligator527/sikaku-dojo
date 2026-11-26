@@ -1,0 +1,85 @@
+---
+import { t } from '../../i18n';
+import { routes } from '../../lib/paths';
+import { site } from '../../config/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer" data-pagefind-ignore>
+  <div class="container inner">
+    <div class="brand">
+      <p class="name">{t.site.name}</p>
+      <p class="meta">{t.site.tagline}</p>
+    </div>
+    <ul class="links">
+      <li>
+        <a href={routes.exams()}>{t.nav.exams}</a>
+      </li>
+      <li>
+        <a href={routes.roadmap()}>{t.roadmap.short}</a>
+      </li>
+      <li>
+        <a href={routes.glossary()}>{t.nav.glossary}</a>
+      </li>
+      <li>
+        <a href={routes.tools()}>{t.nav.tools}</a>
+      </li>
+      <li>
+        <a href={routes.me()}>{t.nav.me}</a>
+      </li>
+      <li>
+        <a href={routes.about()}>{t.nav.about}</a>
+      </li>
+      {site.repoUrl && (
+        <li>
+          <a href={site.repoUrl}>GitHub</a>
+        </li>
+      )}
+    </ul>
+    <p class="legal meta">
+      掲載している過去問題の著作権は各試験の主催者に帰属します。試験の最新情報は各公式サイトで確認してください。
+      <br />
+      統計検定®は一般財団法人統計質保証推進協会の登録商標です。その他の試験名称は各主催者の商標または登録商標です。当サイトはいずれの試験主催団体とも関係のない非公式の学習サイトです。
+      <br />© {year} {t.site.name}
+    </p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: var(--s-8);
+    border-top: 1px solid var(--rule-strong);
+    background: var(--surface-sunken);
+  }
+
+  .inner {
+    display: grid;
+    gap: var(--s-4);
+    padding-block: var(--s-6);
+  }
+
+  .name {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2) var(--s-5);
+    padding: 0;
+    list-style: none;
+    font-size: var(--fs-sm);
+  }
+
+  .links a {
+    color: var(--ink-2);
+  }
+
+  .legal {
+    font-size: var(--fs-xs);
+    line-height: 1.7;
+  }
+</style>

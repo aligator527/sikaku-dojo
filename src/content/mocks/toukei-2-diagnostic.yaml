@@ -1,0 +1,13 @@
+exam: toukei-2
+title: 2級 実力診断テスト（12問）
+description: データの分析（記述統計・相関・回帰・時系列）、データの収集と確率モデル、推測と線形モデルの 3 領域から 4 問ずつ出題します。本試験と同じく 1 問あたり約 2.5 分のペースで、配布されるものと同じ数値表の値（問題文に記載）と普通電卓の範囲の計算で解いてください。
+durationMin: 31
+passingRate: 0.6
+order: 10
+blueprint:
+  - topics: [descriptive, bivariate, simple-regression, time-series]
+    count: 4
+  - topics: [data-collection, probability, random-variables, sampling-distribution]
+    count: 4
+  - topics: [estimation, testing, chi-square, linear-model]
+    count: 4

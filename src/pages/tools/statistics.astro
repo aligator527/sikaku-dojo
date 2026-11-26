@@ -1,0 +1,14 @@
+---
+import StatsCalculator from '../../components/tools/StatsCalculator';
+import { t } from '../../i18n';
+import PageLayout from '../../layouts/PageLayout.astro';
+import { routes } from '../../lib/paths';
+---
+
+<PageLayout
+  title={t.tools.statistics.title}
+  lead={t.tools.statistics.lead}
+  parents={[{ label: t.tools.title, href: routes.tools() }]}
+>
+  <StatsCalculator client:load />
+</PageLayout>

@@ -1,0 +1,10 @@
+exam: suken-1
+title: 2次（数理技能）形式（4題・120分）
+description: 本試験の 2次（必須 2題＋選択 2題、120分）にならい、解答の過程を書く記述式の問題を 4題出題します。終了後に解答例と採点のポイントを見て自己採点してください。合格の目安は本試験と同じ 60% です。
+durationMin: 120
+passingRate: 0.6
+order: 6
+blueprint:
+  - sections: [niji]
+    formats: [essay]
+    count: 4

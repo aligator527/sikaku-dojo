@@ -1,0 +1,111 @@
+name: 中小企業診断士試験
+shortName: 中小企業診断士
+family: shindanshi
+category: management
+level: 第1次試験・第2次試験
+order: 60
+status: published
+summary: 中小企業の経営課題について診断・助言を行う専門家（経済産業大臣が登録する国家資格）になるための試験。経営に関する幅広い知識を問う第1次試験（7科目）と、事例企業への助言を記述する第2次試験（事例I〜IV）で構成される。
+organizer:
+  name: 一般社団法人 日本中小企業診断士協会連合会（経済産業大臣指定試験機関）
+  url: https://www.jf-cmca.jp/contents/007_shiken.html
+format:
+  short: 1次 マーク式7科目・2次 筆記4事例
+  method: 筆記（第1次試験はマークシート方式の多肢選択式、第2次試験は事例についての記述式）
+  duration: 第1次試験は2日間で7科目（各60分または90分）、第2次試験は1日で4科目（各80分）
+  questions: 第1次試験 7科目（各100点満点）／第2次試験 事例I〜IV（各100点満点）
+  answerStyle: 第1次試験は多肢選択式、第2次試験は短答式・論文式の記述
+  passing: 第1次試験は総点数の60%以上かつ満点の40%未満の科目がないこと（科目合格は満点の60%が基準）。第2次試験は総点数の60%以上かつ満点の40%未満の科目がないこと
+  schedule: 年1回。令和8年度は第1次試験が8月1日・2日、第2次試験が10月25日（合格発表は令和9年1月13日予定）
+  eligibility: 第1次試験は年齢・学歴などの制限なし。第2次試験は当年度または前年度の第1次試験合格者など
+  notes:
+    - 第1次試験の試験時間は、経済学・経済政策 60分、財務・会計 60分、企業経営理論 90分、運営管理 90分、経営法務 60分、経営情報システム 60分、中小企業経営・中小企業政策 90分
+    - 第1次試験の合格基準・科目合格基準は、上記を基準として「試験委員会が相当と認めた得点比率」とされている
+    - 科目合格した科目は、申請により翌年度と翌々年度の第1次試験で免除される。3年以内に7科目すべてに合格すれば第1次試験合格となる。免除した科目は合否判定の対象外で、得点は引き継がれない
+    - 第1次試験合格の有効期間は2年間で、合格年度とその翌年度に第2次試験を受験できる
+    - 令和8年度から第2次試験の口述試験が廃止され、第2次試験は筆記（事例I〜IV）のみで合否が決まる
+    - 受験申込みはインターネット（Web 申込システム）のみ。紙の試験案内は配布されない
+    - 登録には、申請日前3年以内に第2次試験に合格し、実務補習または実務従事を合計15日以上行う必要がある（第1次試験合格後に中小企業診断士養成課程を修了する方法もある）
+choiceStyle: katakana
+sections:
+  - id: economics
+    name: 第1次試験 A 経済学・経済政策
+    description: 60分・100点。マクロ経済指標、マクロ経済理論と経済政策、国際経済、市場メカニズム、市場の失敗など。
+  - id: finance
+    name: 第1次試験 B 財務・会計
+    description: 60分・100点。簿記の基礎、企業会計、原価計算、経営分析、投資評価・企業価値などのファイナンス。
+  - id: management
+    name: 第1次試験 C 企業経営理論
+    description: 90分・100点。経営戦略論、組織論（労働関連法規を含む）、マーケティング論。
+  - id: operations
+    name: 第1次試験 D 運営管理（オペレーション・マネジメント）
+    description: 90分・100点。生産管理と店舗・販売管理。
+  - id: law
+    name: 第1次試験 E 経営法務
+    description: 60分・100点。事業開始・会社設立及び倒産等、知的財産権、取引関係の法務、民法・会社法などの企業活動に関する法律、資本市場へのアクセス。
+  - id: information
+    name: 第1次試験 F 経営情報システム
+    description: 60分・100点。情報通信技術の基礎知識と経営情報管理。
+  - id: sme
+    name: 第1次試験 G 中小企業経営・中小企業政策
+    description: 90分・100点。各種統計等にみる中小企業の役割・経営の特質と、中小企業関連法規・中小企業政策の体系と内容。
+  - id: second
+    name: 第2次試験（筆記）
+    description: 事例I（組織・人事）、事例II（マーケティング・流通）、事例III（生産・技術）、事例IV（財務・会計）の4事例。各80分・100点。
+topics:
+  - id: econ-micro
+    name: ミクロ経済学（市場メカニズム・弾力性・市場の失敗）
+    group: 経済学・経済政策
+  - id: econ-macro
+    name: マクロ経済学と経済政策（国民所得・IS-LM・国際経済）
+    group: 経済学・経済政策
+  - id: accounting
+    name: 財務会計・原価計算・経営分析（CVP 分析を含む）
+    group: 財務・会計
+  - id: corporate-finance
+    name: ファイナンス（投資評価・企業価値・資本コスト）
+    group: 財務・会計
+  - id: strategy
+    name: 経営戦略論
+    group: 企業経営理論
+  - id: organization
+    name: 組織論（組織構造・モチベーション・人的資源管理）
+    group: 企業経営理論
+  - id: marketing
+    name: マーケティング論
+    group: 企業経営理論
+  - id: production
+    name: 生産管理
+    group: 運営管理
+  - id: retail
+    name: 店舗・販売管理
+    group: 運営管理
+  - id: business-law
+    name: 経営法務（会社法・知的財産権・取引関係の法務）
+    group: 経営法務
+  - id: information-systems
+    name: 経営情報システム（情報通信技術・経営情報管理）
+    group: 経営情報システム
+  - id: sme-policy
+    name: 中小企業経営・中小企業政策
+    group: 中小企業経営・中小企業政策
+  - id: case-studies
+    name: 第2次試験 事例I〜IV（診断及び助言に関する実務の事例）
+    group: 第2次試験
+officialLinks:
+  - label: 中小企業診断士試験（日本中小企業診断士協会連合会）
+    url: https://www.jf-cmca.jp/contents/007_shiken.html
+  - label: 令和8年度中小企業診断士第1次試験について（試験案内の概要）
+    url: https://www.jf-cmca.jp/contents/010_c_/010_c_r08_shiken/R08_1ji_shiken_about.html
+  - label: 令和8年度中小企業診断士第2次試験について（試験案内の概要）
+    url: https://www.jf-cmca.jp/contents/010_c_/010_c_r08_shiken/R08_2ji_shiken_about.html
+  - label: 令和8年度からの中小企業診断士試験における改正点について（口述試験の廃止）
+    url: https://www.jf-cmca.jp/contents/010_c_/010_c_r08_shiken/R08_jyukentesuryokaitei_koujyutushikenhaishi.html
+  - label: 令和8年度中小企業診断士第1次試験案内（PDF）
+    url: https://www.jf-cmca.jp/attach/test/r08/r08_1ji_annai.pdf
+  - label: 令和8年度中小企業診断士第2次試験案内（PDF）
+    url: https://www.jf-cmca.jp/attach/test/r08/r08_2ji_annai.pdf
+  - label: 試験に関するよくある質問（FAQ）
+    url: https://www.jf-cmca.jp/contents/013_c_faq/001_faq_shiken.html
+tier: 4
+updatedAt: '2026-11-26'

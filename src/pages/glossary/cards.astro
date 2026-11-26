@@ -1,0 +1,45 @@
+---
+import Flashcards from '../../components/glossary/Flashcards';
+import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
+import { t } from '../../i18n';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getExams } from '../../lib/content';
+import { routes } from '../../lib/paths';
+
+const exams = await getExams();
+---
+
+<BaseLayout title={t.glossary.cards} description={t.glossary.cardsLead}>
+  <div class="container page">
+    <Breadcrumbs
+      items={[
+        { label: t.site.name, href: routes.home() },
+        { label: t.glossary.title, href: routes.glossary() },
+        { label: t.glossary.cards },
+      ]}
+    />
+    <h1 class="title">{t.glossary.cards}</h1>
+    <p class="meta lead">{t.glossary.cardsLead}</p>
+    <Flashcards client:only="react" exams={exams.map((e) => ({ id: e.id, name: e.name }))}>
+      <p slot="fallback" class="meta">
+        {t.common.loading}
+      </p>
+    </Flashcards>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-top: var(--s-5);
+  }
+
+  .title {
+    font-size: var(--fs-3xl);
+    margin-top: var(--s-3);
+  }
+
+  .lead {
+    margin: var(--s-2) 0 var(--s-6);
+    max-width: 40rem;
+  }
+</style>

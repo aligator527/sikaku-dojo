@@ -1,0 +1,121 @@
+---
+import { ExternalLink } from '@lucide/astro';
+
+import { t } from '../../../i18n';
+import ExamLayout from '../../../layouts/ExamLayout.astro';
+import {
+  examPaths,
+  getResources,
+  RESOURCE_COST_LABEL,
+  RESOURCE_KIND_LABEL,
+  type Exam,
+  type Resource,
+} from '../../../lib/content';
+
+export const getStaticPaths = examPaths;
+
+interface Props {
+  exam: Exam;
+}
+
+const { exam } = Astro.props;
+const resources = await getResources(exam.id);
+const kinds = [...new Set(resources.map((r) => r.kind))] as Resource['kind'][];
+---
+
+<ExamLayout
+  exam={exam}
+  tab="resources"
+  description={`${exam.name}の学習に役立つ公式情報・教材・外部リンク集。`}
+>
+  <h1 class="section-title">
+    {t.examTabs.resources}
+    <small>{resources.length}件</small>
+  </h1>
+  <p class="meta intro">
+    外部サイトの内容・価格は変わることがあります。リンク切れは GitHub の Issue で知らせてください。
+  </p>
+  {resources.length === 0 && <p class="meta">まだ登録されていません。</p>}
+  {kinds.map((kind) => (
+    <section class="group">
+      <h2 class="group-title">{RESOURCE_KIND_LABEL[kind]}</h2>
+      <ul>
+        {resources
+          .filter((r) => r.kind === kind)
+          .map((r) => (
+            <li>
+              <a href={r.url} target="_blank" rel="noreferrer" class="title">
+                {r.title}
+                <ExternalLink size={13} aria-label={t.common.external} />
+              </a>
+              <p class="desc">{r.description}</p>
+              <p class="tags">
+                {r.publisher && <span class="meta">{r.publisher}</span>}
+                <span class="tag">{r.lang === 'ja' ? '日本語' : 'English'}</span>
+                <span class:list={['tag', { 'tag--accent': r.cost === 'free' }]}>
+                  {RESOURCE_COST_LABEL[r.cost]}
+                </span>
+              </p>
+            </li>
+          ))}
+      </ul>
+    </section>
+  ))}
+</ExamLayout>
+
+<style>
+  .intro {
+    margin-bottom: var(--s-6);
+  }
+
+  .group + .group {
+    margin-top: var(--s-6);
+  }
+
+  .group-title {
+    font-family: var(--font-sans);
+    font-size: var(--fs-sm);
+    font-weight: 700;
+    color: var(--ink-2);
+    letter-spacing: 0.08em;
+    padding-bottom: var(--s-1);
+    border-bottom: 1px solid var(--rule-strong);
+  }
+
+  ul {
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    display: grid;
+    gap: 2px;
+    padding: var(--s-3) 0;
+    border-bottom: 1px solid var(--rule);
+    max-width: 52rem;
+  }
+
+  .title {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-1);
+    font-weight: 700;
+  }
+
+  .desc {
+    font-size: var(--fs-sm);
+    color: var(--ink-2);
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-2);
+    margin-top: var(--s-1);
+  }
+
+  .tags .meta {
+    font-size: var(--fs-xs);
+  }
+</style>

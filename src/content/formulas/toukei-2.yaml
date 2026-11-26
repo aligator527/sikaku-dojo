@@ -1,0 +1,223 @@
+exam: toukei-2
+title: 統計検定2級 公式集
+intro: '統計検定2級でよく使う公式を、学習する順にまとめました。記述統計の分散 $s^2$ は $n$ で割る形、推定・検定の $s^2$ は $n-1$ で割る不偏分散です。$z_{\alpha}$、$t_{\alpha}(n-1)$、$\chi^2_{\alpha}(n-1)$、$F_{\alpha}(m, n)$ はそれぞれの分布の上側 $100\alpha\%$ 点を表します。'
+updatedAt: '2026-11-26'
+sections:
+  - title: 記述統計
+    topics: [descriptive]
+    items:
+      - name: 平均値
+        tex: '\bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i'
+        note: '度数分布表から求めるときは、階級値 $x_k$ と度数 $f_k$ を使って $\bar{x} = \frac{1}{n}\sum_{k} x_k f_k$ とします。外れ値の影響を強く受けるので、裾の長い分布では中央値と並べて見ます。'
+        term: sample-mean
+      - name: 分散と標準偏差
+        tex: 's^2 = \frac{1}{n}\sum_{i=1}^{n}(x_i-\bar{x})^2 = \overline{x^2} - \bar{x}^2,\qquad s = \sqrt{s^2}'
+        note: 'データの記述では $n$ で割ります。母分散を推定するときの不偏分散は $n-1$ で割るので、問題文がどちらで定義しているかを必ず確認します。$\overline{x^2} - \bar{x}^2$ は「2乗の平均 − 平均の2乗」で、順序を逆にすると負になります。単位や平均の大きさが違うデータの散らばりは、変動係数 $s/\bar{x}$（平均が正のデータのみ）で比べます。'
+      - name: 標準化と偏差値
+        tex: 'z_i = \frac{x_i-\bar{x}}{s},\qquad T_i = 50 + 10\,z_i'
+        note: '標準化した値（z 得点）は平均 0、標準偏差 1 になります。偏差値は平均 50、標準偏差 10 に変換したものです。分母は分散ではなく標準偏差です。'
+      - name: 1次変換と平均・分散
+        tex: 'y_i = a x_i + b \;\Rightarrow\; \bar{y} = a\bar{x} + b,\quad s_y^2 = a^2 s_x^2,\quad s_y = |a|\,s_x'
+        note: '単位の変換（円→千円、℃→℉ など）で使います。定数 $b$ を足しても散らばりは変わりません。標準偏差は $a$ 倍ではなく $|a|$ 倍です。'
+      - name: 歪度と尖度
+        tex: '\text{歪度} = \frac{1}{n}\sum_{i=1}^{n}\left(\frac{x_i-\bar{x}}{s}\right)^3,\qquad \text{尖度} = \frac{1}{n}\sum_{i=1}^{n}\left(\frac{x_i-\bar{x}}{s}\right)^4 - 3'
+        note: '右に裾が長い分布では歪度が正になり、平均値が中央値より大きくなりやすくなります。尖度は正規分布で 0 になるよう 3 を引く定義が一般的ですが、引かない定義（正規分布で 3）もあります。'
+
+  - title: 相関と回帰
+    topics: [bivariate, simple-regression]
+    items:
+      - name: 偏差平方和・偏差積和と共分散
+        tex: 'S_{xx} = \sum_{i=1}^{n}x_i^2 - n\bar{x}^2,\qquad S_{xy} = \sum_{i=1}^{n}x_iy_i - n\bar{x}\,\bar{y},\qquad s_{xy} = \frac{S_{xy}}{n} = \overline{xy} - \bar{x}\,\bar{y}'
+        note: '$S_{xx} = \sum (x_i-\bar{x})^2$、$S_{xy} = \sum (x_i-\bar{x})(y_i-\bar{y})$ を合計値から計算する形です。$\sum x_i$、$\sum x_i^2$、$\sum x_iy_i$ が与えられた問題ではこの形を使います。'
+      - name: 相関係数
+        tex: 'r_{xy} = \frac{s_{xy}}{s_x s_y} = \frac{S_{xy}}{\sqrt{S_{xx}\,S_{yy}}}'
+        note: '$-1 \leq r_{xy} \leq 1$。$n$ で割っても $n-1$ で割っても値は同じです。$x$ を $ax+b$、$y$ を $cy+d$ に変換すると、$ac > 0$ なら値は変わらず、$ac < 0$ なら符号だけが反転します。直線的な関係の強さしか測れず、因果関係も示しません。'
+        term: correlation-coefficient
+      - name: 偏相関係数
+        tex: 'r_{xy\cdot z} = \frac{r_{xy} - r_{xz}\,r_{yz}}{\sqrt{1-r_{xz}^2}\,\sqrt{1-r_{yz}^2}}'
+        note: '第3の変数 $z$ の影響を取り除いた $x$ と $y$ の相関です。$r_{xy}$ が大きくても偏相関が 0 に近ければ、$z$ を介した見かけの相関（疑似相関）が疑われます。分子で引くのは $z$ と各変数との相関の積です。'
+      - name: 回帰直線（最小二乗法）
+        tex: '\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x,\qquad \hat{\beta}_1 = \frac{S_{xy}}{S_{xx}} = r_{xy}\frac{s_y}{s_x},\qquad \hat{\beta}_0 = \bar{y} - \hat{\beta}_1\bar{x}'
+        note: '回帰直線は必ず点 $(\bar{x},\ \bar{y})$ を通ります。傾きの分母は説明変数 $x$ の偏差平方和で、$S_{yy}$ ではありません。$x$ を $y$ に回帰した直線は別の直線になります。'
+        term: regression-coefficient
+      - name: 決定係数
+        tex: 'R^2 = 1 - \frac{\sum_{i}(y_i-\hat{y}_i)^2}{\sum_{i}(y_i-\bar{y})^2} = \frac{\sum_{i}(\hat{y}_i-\bar{y})^2}{\sum_{i}(y_i-\bar{y})^2}'
+        note: '全変動 $S_T$ が回帰変動 $S_R$ と残差変動 $S_E$ に分かれる（$S_T = S_R + S_E$）ので、2 つの形は一致します。切片のある単回帰では $R^2 = r_{xy}^2$ で、相関係数そのものではありません。傾きの t 値とは $R^2 = t^2/\{t^2 + (n-2)\}$ の関係があります。'
+        term: coefficient-of-determination
+
+  - title: 時系列データ
+    topics: [time-series]
+    items:
+      - name: 成長率と平均成長率
+        tex: 'r_t = \frac{y_t - y_{t-1}}{y_{t-1}},\qquad \bar{r} = \sqrt[T]{(1+r_1)(1+r_2)\cdots(1+r_T)} - 1 = \left(\frac{y_T}{y_0}\right)^{1/T} - 1'
+        note: '複数期間の平均成長率は、成長率の算術平均ではなく $1 + r_t$ の幾何平均から 1 を引いて求めます。10% 増のあと 10% 減では元に戻らない（$1.1 \times 0.9 = 0.99$）ことを思い出すと間違えません。'
+      - name: 寄与度と寄与率
+        tex: '\text{寄与度}_k = \frac{y_{k,t} - y_{k,t-1}}{Y_{t-1}},\qquad \text{寄与率}_k = \frac{y_{k,t} - y_{k,t-1}}{Y_t - Y_{t-1}}'
+        note: '$Y_t = \sum_k y_{k,t}$ は全体の値です。寄与度の分母は全体の**前期**の値で、寄与度を合計すると全体の成長率になります。寄与率は寄与度を全体の成長率で割ったもので、合計は 1（100%）です。'
+      - name: ラスパイレス指数とパーシェ指数
+        tex: 'L_t = \frac{\sum_i p_{i,t}\,q_{i,0}}{\sum_i p_{i,0}\,q_{i,0}},\qquad P_t = \frac{\sum_i p_{i,t}\,q_{i,t}}{\sum_i p_{i,0}\,q_{i,t}}'
+        note: '$p$ は価格、$q$ は数量、添字 0 は基準時、$t$ は比較時です。ラスパイレス指数は基準時の数量で、パーシェ指数は比較時の数量で重み付けします（消費者物価指数はラスパイレス型）。100 倍して表すことが多いです。'
+
+  - title: 確率
+    topics: [probability]
+    items:
+      - name: 加法定理
+        tex: 'P(A \cup B) = P(A) + P(B) - P(A \cap B)'
+        note: '$A$ と $B$ が排反（同時に起こらない）のときだけ $P(A \cup B) = P(A) + P(B)$ となります。'
+      - name: 条件付き確率と乗法定理
+        tex: 'P(A \mid B) = \frac{P(A \cap B)}{P(B)},\qquad P(A \cap B) = P(B)\,P(A \mid B)'
+        note: '$P(B) > 0$ のときに定義されます。$P(A \mid B)$ と $P(B \mid A)$ は一般に異なります（「陽性のとき病気である確率」と「病気のとき陽性になる確率」）。'
+        term: conditional-probability
+      - name: 独立
+        tex: 'P(A \cap B) = P(A)\,P(B) \iff P(A \mid B) = P(A)'
+        note: '右の同値は $P(B) > 0$ のとき。排反と独立は別の概念で、$P(A) > 0,\ P(B) > 0$ で排反なら $P(A \cap B) = 0 \neq P(A)P(B)$ なので独立ではありません。'
+      - name: ベイズの定理
+        tex: 'P(A_i \mid B) = \frac{P(B \mid A_i)\,P(A_i)}{\sum_{j} P(B \mid A_j)\,P(A_j)}'
+        note: '$A_1, A_2, \ldots$ は互いに排反で全体を覆う事象です。分母は全確率の公式 $P(B) = \sum_j P(B \mid A_j)P(A_j)$ です。有病率が低いと、感度・特異度が高い検査でも陽性的中率は低くなります。'
+        term: bayes-theorem
+
+  - title: 確率変数の期待値と分散
+    topics: [random-variables]
+    items:
+      - name: 期待値と分散
+        tex: '\mathrm{E}[X] = \sum_{x} x\,p(x),\qquad \mathrm{V}[X] = \mathrm{E}\left[(X-\mu)^2\right] = \mathrm{E}[X^2] - \left(\mathrm{E}[X]\right)^2'
+        note: '連続型では和を積分 $\int x f(x)\,dx$ に置き換えます。1次変換では $\mathrm{E}[aX+b] = a\,\mathrm{E}[X] + b$、$\mathrm{V}[aX+b] = a^2\,\mathrm{V}[X]$ で、定数 $b$ は分散に影響しません。'
+      - name: 和と差の期待値・分散
+        tex: '\mathrm{E}[X \pm Y] = \mathrm{E}[X] \pm \mathrm{E}[Y],\qquad \mathrm{V}[X \pm Y] = \mathrm{V}[X] + \mathrm{V}[Y] \pm 2\operatorname{Cov}(X,Y)'
+        note: '期待値の式は独立でなくても成り立ちます。独立（無相関）なら共分散の項が消え、差の分散も $\mathrm{V}[X] + \mathrm{V}[Y]$ と**足し算**になります。'
+      - name: 共分散と相関係数
+        tex: '\operatorname{Cov}(X,Y) = \mathrm{E}[XY] - \mathrm{E}[X]\,\mathrm{E}[Y],\qquad \rho = \frac{\operatorname{Cov}(X,Y)}{\sqrt{\mathrm{V}[X]\,\mathrm{V}[Y]}}'
+        note: '独立なら $\operatorname{Cov}(X,Y) = 0$（無相関）ですが、逆は成り立ちません（$X$ が 0 に関して対称な分布で $Y = X^2$ とする例）。'
+      - name: 標本平均の期待値と分散
+        tex: '\mathrm{E}[\bar{X}] = \mu,\qquad \mathrm{V}[\bar{X}] = \frac{\sigma^2}{n}'
+        note: '$X_1, \ldots, X_n$ が独立に同じ分布（平均 $\mu$、分散 $\sigma^2$）に従うときです。標準誤差は $\sigma/\sqrt{n}$ で、$\sigma/n$ ではありません。大きさ $N$ の有限母集団からの非復元抽出では、分散に $(N-n)/(N-1)$ を掛けます。'
+        term: sample-mean
+
+  - title: 代表的な確率分布
+    topics: [random-variables]
+    items:
+      - name: 二項分布
+        tex: 'P(X=k) = {}_n\mathrm{C}_k\,p^k(1-p)^{n-k},\qquad \mathrm{E}[X] = np,\quad \mathrm{V}[X] = np(1-p)'
+        note: '成功確率 $p$ の独立な試行を $n$ 回行ったときの成功回数です。標本比率 $\hat{p} = X/n$ では $\mathrm{E}[\hat{p}] = p$、$\mathrm{V}[\hat{p}] = p(1-p)/n$ になります。'
+        term: binomial-distribution
+      - name: ポアソン分布
+        tex: 'P(X=k) = \frac{\lambda^k e^{-\lambda}}{k!}\ (k = 0, 1, 2, \ldots),\qquad \mathrm{E}[X] = \mathrm{V}[X] = \lambda'
+        note: '一定時間内のまれな事象の発生回数のモデルです。二項分布で $n$ が大きく $p$ が小さいとき、$\lambda = np$ として近似できます。独立なポアソン変数の和は $\mathrm{Po}(\lambda_1 + \lambda_2)$ に従います。'
+        term: poisson-distribution
+      - name: 一様分布
+        tex: 'f(x) = \frac{1}{b-a}\ (a \leq x \leq b),\qquad \mathrm{E}[X] = \frac{a+b}{2},\quad \mathrm{V}[X] = \frac{(b-a)^2}{12}'
+        note: '分散の分母は 12 です。離散一様分布（サイコロなど）の分散 $(k^2-1)/12$ と混同しないようにします。'
+      - name: 指数分布
+        tex: 'f(x) = \lambda e^{-\lambda x}\ (x \geq 0),\qquad \mathrm{E}[X] = \frac{1}{\lambda},\quad \mathrm{V}[X] = \frac{1}{\lambda^2}'
+        note: '待ち時間・寿命のモデルで、$P(X > x) = e^{-\lambda x}$ です。無記憶性 $P(X > s+t \mid X > s) = P(X > t)$ をもちます。パラメータを平均 $\theta = 1/\lambda$ で表す流儀もあるので、密度の形で確認します。'
+      - name: 正規分布と標準化
+        tex: 'X \sim N(\mu, \sigma^2) \;\Rightarrow\; Z = \frac{X-\mu}{\sigma} \sim N(0, 1)'
+        note: '$N(\mu, \sigma^2)$ の第2引数は分散です。$P(|Z| \leq 1.96) = 0.95$、$P(|Z| \leq 2.576) = 0.99$、上側 5% 点は 1.645。独立な正規変数の1次結合 $aX + bY$ も正規分布に従い、平均 $a\mu_X + b\mu_Y$、分散 $a^2\sigma_X^2 + b^2\sigma_Y^2$ です。'
+        term: normal-distribution
+
+  - title: 標本分布
+    topics: [sampling-distribution]
+    items:
+      - name: 中心極限定理
+        tex: 'Z = \frac{\bar{X}-\mu}{\sigma/\sqrt{n}} \xrightarrow{d} N(0, 1)\quad (n \to \infty)'
+        note: '母集団分布が正規分布でなくても、分散が有限なら $n$ が大きいとき $\bar{X}$ は近似的に $N(\mu, \sigma^2/n)$ に従います。二項分布 $B(n, p)$ も $N(np,\ np(1-p))$ で近似でき、半整数補正（$P(X \leq k)$ を $k + 0.5$ までの面積で近似）を使うと精度が上がります。'
+        term: central-limit-theorem
+      - name: 標本分散とカイ二乗分布
+        tex: '\frac{(n-1)s^2}{\sigma^2} = \frac{1}{\sigma^2}\sum_{i=1}^{n}(X_i-\bar{X})^2 \sim \chi^2(n-1)'
+        note: '正規母集団からの無作為標本で成り立ちます。$\bar{X}$ の代わりに既知の $\mu$ を使うと自由度は $n$ です。$\chi^2(k)$ の期待値は $k$、分散は $2k$。'
+      - name: t 分布
+        tex: 'T = \frac{\bar{X}-\mu}{s/\sqrt{n}} \sim t(n-1)'
+        note: '正規母集団で、$\sigma$ を不偏分散の平方根 $s$ で置き換えたときの分布です。自由度は $n$ ではなく $n-1$。自由度が大きくなると $N(0,1)$ に近づきます。'
+        term: t-distribution
+      - name: t 分布と F 分布の構成
+        tex: 'T = \frac{Z}{\sqrt{W/k}} \sim t(k),\qquad F = \frac{W_1/k_1}{W_2/k_2} \sim F(k_1, k_2)'
+        note: '$Z \sim N(0,1)$ と $W \sim \chi^2(k)$ は独立、$W_1 \sim \chi^2(k_1)$ と $W_2 \sim \chi^2(k_2)$ も独立です。$T^2 \sim F(1, k)$。下側の点は $F_{1-\alpha}(k_1, k_2) = 1/F_{\alpha}(k_2, k_1)$ と自由度を入れ替えて求めます。'
+
+  - title: 推定
+    topics: [estimation]
+    items:
+      - name: 不偏分散
+        tex: 's^2 = \frac{1}{n-1}\sum_{i=1}^{n}(X_i-\bar{X})^2,\qquad \mathrm{E}[s^2] = \sigma^2'
+        note: '$n$ で割った標本分散の期待値は $\frac{n-1}{n}\sigma^2$ で、母分散を小さめに推定します。なお $s$ は $\sigma$ の不偏推定量ではありません。'
+        term: unbiased-variance
+      - name: 母平均の信頼区間（σ 既知）
+        tex: '\bar{x} - z_{\alpha/2}\frac{\sigma}{\sqrt{n}} \leq \mu \leq \bar{x} + z_{\alpha/2}\frac{\sigma}{\sqrt{n}}'
+        note: '95% 区間では $z_{0.025} = 1.96$、99% 区間では $z_{0.005} = 2.576$。両側なので $\alpha$ ではなく $\alpha/2$ の点を使います（1.645 は片側 5% 点）。'
+      - name: 母平均の信頼区間（σ 未知）
+        tex: '\bar{x} - t_{\alpha/2}(n-1)\frac{s}{\sqrt{n}} \leq \mu \leq \bar{x} + t_{\alpha/2}(n-1)\frac{s}{\sqrt{n}}'
+        note: '$s$ は不偏分散の平方根で、自由度は $n-1$ です。区間の幅は $\sqrt{n}$ に反比例するので、幅を半分にするには標本サイズを 4 倍にします。'
+        term: confidence-interval
+      - name: 母比率の信頼区間
+        tex: '\hat{p} - z_{\alpha/2}\sqrt{\frac{\hat{p}(1-\hat{p})}{n}} \leq p \leq \hat{p} + z_{\alpha/2}\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}'
+        note: '$n$ が大きいときの正規近似です。区間推定では標準誤差に $\hat{p}$ を使い、検定では帰無仮説の値 $p_0$ を使います。'
+      - name: 母分散の信頼区間
+        tex: '\frac{(n-1)s^2}{\chi^2_{\alpha/2}(n-1)} \leq \sigma^2 \leq \frac{(n-1)s^2}{\chi^2_{1-\alpha/2}(n-1)}'
+        note: '正規母集団が前提です。上側点の大きい方 $\chi^2_{\alpha/2}$ で割った値が**下限**になります。区間は $s^2$ に関して左右対称ではありません。母分散の検定には $\chi^2 = (n-1)s^2/\sigma_0^2 \sim \chi^2(n-1)$ を使います。'
+      - name: 必要な標本サイズ
+        tex: 'n \geq \left(\frac{z_{\alpha/2}\,\sigma}{d}\right)^2,\qquad n \geq \left(\frac{z_{\alpha/2}}{d}\right)^2 p(1-p)'
+        note: '$d$ は許容する誤差（信頼区間の半幅）です。比率の見当がつかないときは $p(1-p)$ が最大になる $p = 0.5$ を使います。計算結果は切り上げて整数にします。'
+
+  - title: 検定（1標本）
+    topics: [testing]
+    items:
+      - name: 母平均の検定
+        tex: 'Z = \frac{\bar{X}-\mu_0}{\sigma/\sqrt{n}},\qquad T = \frac{\bar{X}-\mu_0}{s/\sqrt{n}} \sim t(n-1)'
+        note: '$\sigma$ が既知なら $Z$、未知なら $T$ を使います。両側検定は $|T| > t_{\alpha/2}(n-1)$、片側検定（$H_1: \mu > \mu_0$）は $T > t_{\alpha}(n-1)$ で棄却します。棄却域は対立仮説の向きで決まります。'
+      - name: 母比率の検定
+        tex: 'Z = \frac{\hat{p}-p_0}{\sqrt{p_0(1-p_0)/n}}'
+        note: '分母は帰無仮説の値 $p_0$ で計算します（信頼区間では $\hat{p}$）。$np_0$ と $n(1-p_0)$ が十分大きいときの正規近似です。'
+      - name: p 値
+        tex: 'p = P_{H_0}\left(|T| \geq |t_{\mathrm{obs}}|\right)\ (\text{両側}),\qquad p = P_{H_0}\left(T \geq t_{\mathrm{obs}}\right)\ (\text{片側})'
+        note: '$p \leq \alpha$ なら帰無仮説を棄却します。p 値は「帰無仮説が正しい確率」ではありません。分布が対称なら、両側の p 値は片側の p 値の 2 倍です。'
+        term: p-value
+      - name: 検出力
+        tex: '1-\beta = P(H_0\ \text{を棄却} \mid H_1),\qquad 1-\beta = \Phi\left(\frac{\mu_1-\mu_0}{\sigma/\sqrt{n}} - z_{\alpha}\right)'
+        note: '右の式は $\sigma$ 既知、$H_1: \mu = \mu_1 > \mu_0$ の片側 z 検定の場合で、$\Phi$ は標準正規分布の分布関数です。$\beta$ は第2種の過誤の確率。$n$ が大きいほど、効果 $\mu_1 - \mu_0$ が大きいほど検出力は上がります。'
+        term: statistical-power
+
+  - title: 検定（2標本）
+    topics: [testing]
+    items:
+      - name: 2標本 t 検定（等分散）
+        tex: 'T = \frac{\bar{X}-\bar{Y}}{s_p\sqrt{\frac{1}{m}+\frac{1}{n}}} \sim t(m+n-2),\qquad s_p^2 = \frac{(m-1)s_X^2 + (n-1)s_Y^2}{m+n-2}'
+        note: '2 群の母分散が等しいと仮定できるときです。プールした分散 $s_p^2$ は自由度で重み付けた平均で、単純平均ではありません。等分散を仮定できないときは、分母を $\sqrt{s_X^2/m + s_Y^2/n}$ にしたウェルチの検定を使います。'
+      - name: 対応のある t 検定
+        tex: 'T = \frac{\bar{d}}{s_d/\sqrt{n}} \sim t(n-1),\qquad d_i = x_i - y_i'
+        note: '同じ対象の前後比較など、ペアになったデータでは差 $d_i$ をとって1標本の t 検定にします。2標本 t 検定を使うと個体差が誤差に入り、検出力が落ちます。自由度は「ペアの数 − 1」です。'
+      - name: 母比率の差の検定
+        tex: 'Z = \frac{\hat{p}_1-\hat{p}_2}{\sqrt{\hat{p}(1-\hat{p})\left(\frac{1}{n_1}+\frac{1}{n_2}\right)}},\qquad \hat{p} = \frac{x_1+x_2}{n_1+n_2}'
+        note: '帰無仮説 $p_1 = p_2$ のもとで、2 群を合わせた比率 $\hat{p}$ を分母に使います。差の信頼区間では、分母を $\sqrt{\hat{p}_1(1-\hat{p}_1)/n_1 + \hat{p}_2(1-\hat{p}_2)/n_2}$ にします。'
+      - name: 等分散の F 検定
+        tex: 'F = \frac{s_X^2}{s_Y^2} \sim F(m-1,\ n-1)'
+        note: '正規母集団で、帰無仮説 $\sigma_X^2 = \sigma_Y^2$ のもとで成り立ちます。自由度は（分子の標本サイズ − 1, 分母の標本サイズ − 1）の順です。大きい方の分散を分子に置くと上側の点だけで判定でき、両側検定ならその点は $F_{\alpha/2}$ です。'
+
+  - title: カイ二乗検定
+    topics: [chi-square]
+    items:
+      - name: 適合度検定
+        tex: '\chi^2 = \sum_{i=1}^{k}\frac{(O_i-E_i)^2}{E_i} \sim \chi^2(k-1)'
+        note: '$O_i$ は観測度数、$E_i$ は期待度数で、近似的に成り立ちます。分布のパラメータを $m$ 個データから推定したときは、自由度が $k-1-m$ になります。期待度数が小さい（目安 5 未満）カテゴリはまとめます。'
+        term: chi-square-test
+      - name: 独立性の検定
+        tex: '\chi^2 = \sum_{i=1}^{r}\sum_{j=1}^{c}\frac{(O_{ij}-E_{ij})^2}{E_{ij}} \sim \chi^2\left((r-1)(c-1)\right),\qquad E_{ij} = \frac{n_{i\cdot}\,n_{\cdot j}}{n}'
+        note: '期待度数は「行の合計 × 列の合計 ÷ 総数」です。自由度は $rc - 1$ ではなく $(r-1)(c-1)$ です。'
+      - name: 2×2 分割表
+        tex: '\chi^2 = \frac{n(ad-bc)^2}{(a+b)(c+d)(a+c)(b+d)} \sim \chi^2(1)'
+        note: '$a, b$ が1行目、$c, d$ が2行目の度数です。イェーツの補正では $(ad-bc)^2$ を $(|ad-bc| - n/2)^2$ に置き換えます。補正なしの値は、母比率の差の z 検定の $Z^2$ に一致します。'
+
+  - title: 線形モデル
+    topics: [linear-model]
+    items:
+      - name: 回帰係数の t 検定
+        tex: 't = \frac{\hat{\beta}_1}{\mathrm{SE}(\hat{\beta}_1)} \sim t(n-2),\qquad \mathrm{SE}(\hat{\beta}_1) = \frac{\hat{\sigma}}{\sqrt{S_{xx}}},\qquad \hat{\sigma}^2 = \frac{S_E}{n-2}'
+        note: '帰無仮説 $\beta_1 = 0$ のもとでの分布です。信頼区間は $\hat{\beta}_1 \pm t_{\alpha/2}(n-2)\,\mathrm{SE}(\hat{\beta}_1)$。説明変数が $p$ 個の重回帰では、自由度が $n-p-1$ になります。'
+      - name: 回帰の F 検定
+        tex: 'F = \frac{S_R/p}{S_E/(n-p-1)} = \frac{R^2/p}{(1-R^2)/(n-p-1)} \sim F(p,\ n-p-1)'
+        note: '帰無仮説は「切片以外のすべての回帰係数が 0」です。$p$ は説明変数の数で、切片は数えません。単回帰（$p = 1$）では $F = t^2$ です。'
+      - name: 自由度調整済み決定係数
+        tex: '\bar{R}^2 = 1 - \frac{S_E/(n-p-1)}{S_T/(n-1)}'
+        note: '説明変数を増やすと $R^2$ は決して減らないので、変数の数が違うモデルを比べるときに使います。$\bar{R}^2$ は負になることもあります。'
+      - name: 一元配置分散分析
+        tex: 'F = \frac{S_A/(a-1)}{S_E/(N-a)} \sim F(a-1,\ N-a),\qquad S_A = \sum_{i=1}^{a} n_i(\bar{y}_{i\cdot}-\bar{y})^2,\quad S_E = \sum_{i=1}^{a}\sum_{j=1}^{n_i}(y_{ij}-\bar{y}_{i\cdot})^2'
+        note: '$a$ は群（水準）の数、$N$ は全データ数で、$S_T = S_A + S_E$ が成り立ちます。平方和をそのまま比べず、自由度で割った平均平方の比をとります。'
+        term: analysis-of-variance

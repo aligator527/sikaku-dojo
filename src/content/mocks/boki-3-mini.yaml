@@ -1,0 +1,11 @@
+exam: boki-3
+title: 3級 実力診断テスト（12問）
+description: 第1問形式の仕訳9問と、決算（精算表）・勘定記入・補助簿の3問をランダムな順で出題します。本試験の第1問と同じく、勘定科目は選択肢から選びます。
+durationMin: 30
+passingRate: 0.7
+order: 10
+blueprint:
+  - topics: [cash-deposits, receivables-payables, other-receivables-payables, merchandise, fixed-assets, taxes, equity]
+    count: 9
+  - topics: [financial-statements, revenue-expense, books-vouchers]
+    count: 3

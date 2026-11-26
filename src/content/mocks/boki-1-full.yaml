@@ -1,0 +1,15 @@
+exam: boki-1
+title: 1級 4科目 実力診断（28問・120分）
+description: 商業簿記・会計学・工業簿記・原価計算の 4 科目から、個別論点の計算・仕訳・理論を出題します。本試験は大問形式の 180分ですが、ここでは論点ごとの理解を短時間で確かめます。合格の目安は本試験と同じ 70% で、科目ごとの得点は結果の分野別得点で確認してください。
+durationMin: 120
+passingRate: 0.7
+order: 5
+blueprint:
+  - sections: [shogyo]
+    count: 8
+  - sections: [kaikeigaku]
+    count: 6
+  - sections: [kogyo]
+    count: 7
+  - sections: [genka]
+    count: 7

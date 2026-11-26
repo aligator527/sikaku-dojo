@@ -1,0 +1,106 @@
+---
+import 'katex/dist/katex.min.css';
+import '../styles/base.css';
+import '../styles/prose.css';
+
+import SiteFooter from '../components/layout/SiteFooter.astro';
+import SiteHeader from '../components/layout/SiteHeader.astro';
+import { t } from '../i18n';
+import { href } from '../lib/paths';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Index this page in site search (Pagefind). */
+  searchable?: boolean;
+  /** Pagefind filters, e.g. { 資格: '統計検定2級', 種類: '問題' }. */
+  searchFilters?: Record<string, string>;
+}
+
+const { title, description = t.site.description, searchable = false, searchFilters = {} } = Astro.props;
+const fullTitle = title ? `${title}｜${t.site.name}` : `${t.site.name}｜資格試験の問題演習と用語集`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:site_name" content={t.site.name} />
+    <meta name="theme-color" content="#f6f4ee" />
+    <link rel="icon" type="image/svg+xml" href={href('favicon.svg')} />
+    <link rel="apple-touch-icon" href={href('apple-touch-icon.png')} />
+    <link rel="manifest" href={href('manifest.webmanifest')} />
+    <link rel="sitemap" href={href('sitemap-index.xml')} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@600;700&display=swap"
+    />
+    <script is:inline>
+      (function () {
+        var theme;
+        try {
+          theme = localStorage.getItem('sikaku-dojo:theme');
+        } catch (e) {}
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">
+      {t.nav.skip}
+    </a>
+    <SiteHeader />
+    <main id="main" data-pagefind-body={searchable ? '' : undefined}>
+      {searchable &&
+        Object.entries(searchFilters).map(([key, value]) => (
+          <span hidden data-pagefind-filter={`${key}:${value}`} />
+        ))}
+      <slot />
+    </main>
+    <SiteFooter />
+    {import.meta.env.PROD && <script is:inline define:vars={{ sw: href('sw.js'), scope: href() }}>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () =>
+          navigator.serviceWorker.register(sw, { scope }).catch(() => {}),
+        );
+      }
+    </script>}
+  </body>
+</html>
+
+<style>
+  .skip-link {
+    position: absolute;
+    left: var(--s-4);
+    top: -3rem;
+    z-index: 50;
+    padding: var(--s-2) var(--s-3);
+    background: var(--ai);
+    color: var(--on-ai);
+    border-radius: var(--radius);
+  }
+
+  .skip-link:focus {
+    top: var(--s-2);
+  }
+
+  main {
+    display: block;
+    min-height: 60vh;
+  }
+</style>

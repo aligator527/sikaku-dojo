@@ -1,0 +1,419 @@
+#!/usr/bin/env node
+/**
+ * Fast, standalone content linter. It needs no Astro build, so it is safe to run while a
+ * dev server is up or while several authors work in parallel.
+ *
+ * It repeats the essentials of the zod schema and the integrity pass (src/lib/content/integrity.ts)
+ * and adds checks neither can do: TeX that KaTeX refuses to compile, choice labels typed into
+ * choice text, emoji, TeX inside double-quoted YAML, unknown keys, duplicated stems.
+ *
+ *   node scripts/validate-content.mjs                    # all content
+ *   node scripts/validate-content.mjs --exam toukei-2    # one exam (questions + formula sheet)
+ *   node scripts/validate-content.mjs path/to/a.md …     # specific files
+ *   add --quiet to hide warnings
+ */
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
+import { createRequire } from 'node:module';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import YAML from 'yaml';
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const contentDir = path.join(root, 'src/content');
+// Compile with the KaTeX build rehype-katex uses, so this check matches the site exactly.
+const katex = createRequire(import.meta.resolve('rehype-katex'))('katex');
+
+/* ------------------------------- CLI ------------------------------- */
+
+const args = process.argv.slice(2);
+const quiet = args.includes('--quiet');
+const examFilter = args.includes('--exam') ? args[args.indexOf('--exam') + 1] : undefined;
+const explicitFiles = args.filter(
+  (a, i) => !a.startsWith('--') && args[i - 1] !== '--exam' && /\.(md|ya?ml)$/.test(a),
+);
+
+/* ----------------------------- reporting ----------------------------- */
+
+const problems = [];
+const rel = (file) => path.relative(root, file);
+const error = (file, msg) => problems.push({ level: 'error', file: rel(file), msg });
+const warn = (file, msg) => problems.push({ level: 'warn', file: rel(file), msg });
+
+/* ------------------------------ loading ------------------------------ */
+
+const listFiles = (dir, re) =>
+  existsSync(dir)
+    ? readdirSync(dir, { recursive: true })
+        .map((f) => path.join(dir, String(f)))
+        .filter((f) => re.test(f) && statSync(f).isFile())
+        .sort()
+    : [];
+
+function parseYaml(file, source) {
+  const doc = YAML.parseDocument(source, { prettyErrors: true });
+  if (doc.errors.length) {
+    for (const e of doc.errors) error(file, `YAML: ${e.message.split('\n')[0]}`);
+    return undefined;
+  }
+  // In "double quoted" YAML, \f \n \t … are escapes, so TeX like "\frac" silently breaks.
+  YAML.visit(doc, {
+    Scalar(_, node) {
+      if (node.type === 'QUOTE_DOUBLE' && node.range) {
+        const raw = source.slice(node.range[0], node.range[1]);
+        if (raw.includes('\\'))
+          error(file, `backslash inside a double-quoted YAML string (${raw.slice(0, 40)}…); use '…' or |`);
+      }
+    },
+  });
+  return doc.toJS();
+}
+
+function readMarkdown(file) {
+  const text = readFileSync(file, 'utf8');
+  const m = /^---\r?\n([\s\S]*?)\r?\n---[ \t]*(?:\r?\n([\s\S]*))?$/.exec(text);
+  if (!m) {
+    error(file, 'missing front matter (--- … ---)');
+    return undefined;
+  }
+  const data = parseYaml(file, m[1]);
+  return data === undefined ? undefined : { data: data ?? {}, body: m[2] ?? '' };
+}
+
+const exams = new Map(
+  listFiles(path.join(contentDir, 'exams'), /\.yaml$/).map((f) => [
+    path.basename(f, '.yaml'),
+    YAML.parse(readFileSync(f, 'utf8')),
+  ]),
+);
+const glossaryIds = new Set(
+  listFiles(path.join(contentDir, 'glossary'), /\.md$/).map((f) => path.basename(f, '.md')),
+);
+
+/* ------------------------------ helpers ------------------------------ */
+
+/** Math in the same places remark-math finds it: $$display$$ and $inline$, outside code. */
+function checkMath(file, field, markdown) {
+  if (typeof markdown !== 'string' || !markdown.includes('$')) return;
+  let text = markdown.replace(/^(```|~~~)[^\n]*\n[\s\S]*?^\1[ \t]*$/gm, ' ').replace(/`[^`\n]+`/g, ' ');
+  const segments = [];
+  text = text.replace(/\$\$([\s\S]+?)\$\$/g, (_, tex) => (segments.push({ tex, display: true }), ' '));
+  text = text.replace(
+    /(?<!\\)\$((?:\\.|[^$\\\n])+?)\$/g,
+    (_, tex) => (segments.push({ tex, display: false }), ' '),
+  );
+  if (/(?<!\\)\$/.test(text)) warn(file, `${field}: unmatched "$" (escape a literal dollar as \\$)`);
+  for (const { tex, display } of segments) {
+    try {
+      katex.renderToString(tex, { displayMode: display, throwOnError: true, strict: 'ignore' });
+    } catch (e) {
+      const reason = String(e.message ?? e).replace(/^KaTeX parse error: /, '');
+      error(file, `${field}: KaTeX cannot compile "${tex.trim().slice(0, 60)}" — ${reason.slice(0, 120)}`);
+    }
+  }
+}
+
+function checkTex(file, field, tex) {
+  try {
+    katex.renderToString(tex, { displayMode: true, throwOnError: true, strict: 'ignore' });
+  } catch (e) {
+    error(file, `${field}: KaTeX cannot compile "${tex.slice(0, 60)}" — ${String(e.message).slice(0, 120)}`);
+  }
+}
+
+// Characters drawn as emoji by default, plus the variation selector that forces emoji style.
+// (Extended_Pictographic would also flag ↔ and ®, which are ordinary text here.)
+const EMOJI = /[\p{Emoji_Presentation}\u{1F000}-\u{1FAFF}\uFE0F]/u;
+function checkText(file, field, value) {
+  if (typeof value !== 'string') return;
+  if (EMOJI.test(value)) error(file, `${field}: contains an emoji`);
+  checkMath(file, field, value);
+}
+
+const isInt = (n) => Number.isInteger(n);
+const isUrl = (s) => {
+  try {
+    return Boolean(new URL(s));
+  } catch {
+    return false;
+  }
+};
+
+/* ----------------------------- questions ----------------------------- */
+
+const BASE_KEYS = [
+  'exam',
+  'section',
+  'topics',
+  'source',
+  'difficulty',
+  'points',
+  'order',
+  'passage',
+  'stem',
+  'tags',
+  'format',
+];
+const FORMAT_KEYS = {
+  single: ['choices', 'answer'],
+  multiple: ['choices', 'answer'],
+  numeric: ['answer', 'inputHint'],
+  journal: ['accounts', 'answer'],
+  essay: ['modelAnswer', 'rubric', 'charLimit'],
+};
+// A label typed into the choice text would be shown twice (labels are added by choiceStyle).
+const LABEL_PREFIX =
+  /^\s*(?:[ア-オ][\s.．、:：)）]|[(（][ア-オa-eA-E1-9][)）]|[a-eA-E][.．:：)）]\s|[1-9][.．:：)）]\s)/u;
+// o-001 / a-001, or IPA past papers: 2024-spring-am2-01, 2024-spring-pm1-02-3-1 (問2 設問3 (1))
+const SLUG = /^(?:[oa]-\d{3}|\d{4}-(?:spring|autumn)-(?:am1|am2|pm1|pm2)-\d{2}(?:-\d{1,2}){0,2})$/;
+const IPA_LABEL =
+  /^(?:令和|平成)(?:\d+|元)年度 (?:春期|秋期|特別) .+ (?:午前I|午前II|午後I|午後II) 問\d+(?: 設問\d+(?:\(\d+\))?)?$/u;
+
+const stemsByExam = new Map();
+
+function checkQuestion(file) {
+  const parsed = readMarkdown(file);
+  if (!parsed) return;
+  const { data: q, body } = parsed;
+  const folder = path.basename(path.dirname(file));
+  const slug = path.basename(file, '.md');
+
+  if (q.exam !== folder) error(file, `exam "${q.exam}" must match the folder "${folder}"`);
+  const exam = exams.get(q.exam);
+  if (!exam) return error(file, `unknown exam "${q.exam}"`);
+  if (!SLUG.test(slug)) warn(file, `file name "${slug}" does not follow o-001 / 2023-spring-am2-01`);
+
+  const format = q.format;
+  if (!FORMAT_KEYS[format]) return error(file, `unknown format "${format}"`);
+  for (const key of Object.keys(q)) {
+    if (!BASE_KEYS.includes(key) && !FORMAT_KEYS[format].includes(key))
+      error(file, `unknown key "${key}" for format ${format}`);
+  }
+
+  // where it belongs
+  if (!Array.isArray(q.topics) || q.topics.length === 0) error(file, 'topics must be a non-empty list');
+  for (const t of q.topics ?? [])
+    if (!exam.topics.some((x) => x.id === t)) error(file, `topic "${t}" is not defined in exams/${q.exam}`);
+  if (q.section !== undefined && !(exam.sections ?? []).some((s) => s.id === q.section))
+    error(file, `section "${q.section}" is not defined in exams/${q.exam}`);
+  if (q.difficulty !== undefined && ![1, 2, 3].includes(q.difficulty))
+    error(file, 'difficulty must be 1, 2 or 3');
+  if (q.points !== undefined && !(typeof q.points === 'number' && q.points > 0))
+    error(file, 'points must be > 0');
+  if (q.tags !== undefined && !Array.isArray(q.tags)) error(file, 'tags must be a list');
+
+  // source and copyright
+  const src = q.source;
+  if (!src || !['past', 'adapted', 'original'].includes(src.kind))
+    error(file, 'source.kind must be past | adapted | original');
+  else {
+    if (src.kind !== 'original' && !src.label) error(file, `${src.kind} questions need source.label (出典)`);
+    if (src.url !== undefined && !isUrl(src.url)) error(file, `source.url is not a URL`);
+    if (src.kind === 'past' && exam.family !== 'ipa')
+      error(
+        file,
+        'only IPA questions may be reproduced verbatim (source.kind: past); use adapted or original',
+      );
+    if (src.kind === 'past' && src.label && !IPA_LABEL.test(src.label))
+      warn(
+        file,
+        `source.label "${src.label}" should look like 令和5年度 春期 ITストラテジスト試験 午前II 問1`,
+      );
+  }
+
+  // text
+  if (typeof q.stem !== 'string' || !q.stem.trim()) error(file, 'stem is empty');
+  checkText(file, 'stem', q.stem);
+  checkText(file, 'passage', q.passage);
+  checkText(file, 'inputHint', q.inputHint);
+  checkText(file, 'explanation', body);
+  if (body.trim().length < 80) warn(file, 'explanation (body) is very short');
+
+  // answer
+  if (format === 'single' || format === 'multiple') {
+    const choices = q.choices;
+    if (!Array.isArray(choices) || choices.length < 2) return error(file, 'choices needs at least 2 items');
+    choices.forEach((c, i) => {
+      if (typeof c !== 'string' || !c.trim()) error(file, `choice ${i + 1} is empty or not a string`);
+      else {
+        checkText(file, `choice ${i + 1}`, c);
+        // "(ア) A　(イ) B" is a combination choice, not a stray label.
+        const combination = (c.match(/[(（][ア-オa-eA-EI-V1-9]+[)）]/gu) ?? []).length >= 2;
+        if (LABEL_PREFIX.test(c) && !combination)
+          warn(file, `choice ${i + 1} seems to start with a label: "${c.slice(0, 12)}"`);
+      }
+    });
+    const normalized = choices.map((c) => String(c).replace(/\s+/g, ''));
+    if (new Set(normalized).size !== normalized.length) error(file, 'two choices are identical');
+    if (choices.length > 6) warn(file, `${choices.length} choices — unusually many`);
+    const answers = format === 'single' ? [q.answer] : q.answer;
+    if (format === 'single' && !isInt(q.answer)) error(file, 'answer must be a 1-based integer');
+    if (format === 'multiple' && (!Array.isArray(q.answer) || q.answer.length === 0))
+      error(file, 'answer must be a non-empty list');
+    for (const a of answers ?? [])
+      if (!isInt(a) || a < 1 || a > choices.length) error(file, `answer ${a} is out of range`);
+    if (format === 'multiple' && new Set(q.answer).size !== q.answer.length)
+      error(file, 'answer has duplicates');
+  }
+
+  if (format === 'numeric') {
+    const a = q.answer;
+    if (!a || typeof a.value !== 'number' || !Number.isFinite(a.value))
+      error(file, 'answer.value must be a number');
+    else {
+      const tol = a.tolerance ?? 0;
+      if (typeof tol !== 'number' || tol < 0) error(file, 'answer.tolerance must be ≥ 0');
+      if (tol === 0 && !isInt(a.value))
+        warn(file, 'non-integer answer with tolerance 0 — learners must type it exactly');
+      if (tol > 0 && Math.abs(a.value) > 0 && tol / Math.abs(a.value) > 0.05)
+        warn(file, `tolerance ${tol} is more than 5% of the answer ${a.value}`);
+    }
+    if (a?.unit !== undefined && typeof a.unit !== 'string') error(file, 'answer.unit must be a string');
+  }
+
+  if (format === 'journal') {
+    const accounts = q.accounts;
+    if (!Array.isArray(accounts) || accounts.length < 2) error(file, 'accounts needs at least 2 items');
+    else if (new Set(accounts).size !== accounts.length) error(file, 'accounts has duplicates');
+    const sides = ['debit', 'credit'];
+    let lines = 0;
+    const totals = sides.map((side) => {
+      const list = q.answer?.[side];
+      if (!Array.isArray(list) || list.length === 0) {
+        error(file, `answer.${side} needs at least one line`);
+        return 0;
+      }
+      lines += list.length;
+      return list.reduce((sum, l) => {
+        if (!accounts?.includes(l.account)) error(file, `account "${l.account}" is not in accounts`);
+        if (!isInt(l.amount) || l.amount <= 0)
+          error(file, `${side} amount ${l.amount} must be a positive integer`);
+        return sum + (Number(l.amount) || 0);
+      }, 0);
+    });
+    if (totals[0] !== totals[1]) error(file, `debit total ${totals[0]} ≠ credit total ${totals[1]}`);
+    if (Array.isArray(accounts) && accounts.length < lines + 2)
+      warn(file, 'accounts offers almost no distractors (add plausible wrong accounts)');
+  }
+
+  if (format === 'essay') {
+    if (typeof q.modelAnswer !== 'string' || !q.modelAnswer.trim()) error(file, 'modelAnswer is empty');
+    checkText(file, 'modelAnswer', q.modelAnswer);
+    if (q.rubric !== undefined && !Array.isArray(q.rubric)) error(file, 'rubric must be a list');
+    (q.rubric ?? []).forEach((r, i) => checkText(file, `rubric ${i + 1}`, r));
+    if (q.charLimit !== undefined && !(isInt(q.charLimit) && q.charLimit > 0))
+      error(file, 'charLimit must be a positive integer');
+  }
+
+  // duplicates inside one exam
+  if (typeof q.stem === 'string') {
+    const key = (q.passage ?? '') + q.stem.replace(/\s+/g, '');
+    const seen = stemsByExam.get(q.exam) ?? new Map();
+    if (seen.has(key)) error(file, `same stem as ${seen.get(key)}`);
+    seen.set(key, slug);
+    stemsByExam.set(q.exam, seen);
+  }
+}
+
+/* ------------------------------ formulas ------------------------------ */
+
+function checkFormulaSheet(file) {
+  const data = parseYaml(file, readFileSync(file, 'utf8'));
+  if (!data) return;
+  const examId = path.basename(file, '.yaml');
+  const exam = exams.get(data.exam);
+  if (!exam) return error(file, `unknown exam "${data.exam}"`);
+  if (data.exam !== examId) error(file, `file name must equal the exam id "${data.exam}"`);
+  if (!data.title) error(file, 'title is required');
+  checkText(file, 'intro', data.intro);
+  if (!Array.isArray(data.sections) || data.sections.length === 0)
+    return error(file, 'sections must be a non-empty list');
+  data.sections.forEach((s, i) => {
+    const where = `sections[${i}]`;
+    if (!s.title) error(file, `${where}.title is required`);
+    for (const t of s.topics ?? [])
+      if (!exam.topics.some((x) => x.id === t))
+        error(file, `${where}: topic "${t}" is not defined in exams/${data.exam}`);
+    if (!Array.isArray(s.items) || s.items.length === 0)
+      return error(file, `${where}.items must be a non-empty list`);
+    s.items.forEach((item, j) => {
+      const w = `${where}.items[${j}]`;
+      for (const key of Object.keys(item))
+        if (!['name', 'tex', 'note', 'term'].includes(key)) error(file, `${w}: unknown key "${key}"`);
+      if (!item.name) error(file, `${w}.name is required`);
+      if (typeof item.tex !== 'string' || !item.tex.trim()) error(file, `${w}.tex is required`);
+      else checkTex(file, `${w}.tex`, item.tex);
+      checkText(file, `${w}.note`, item.note);
+      if (item.term && !glossaryIds.has(item.term))
+        error(file, `${w}: glossary term "${item.term}" does not exist`);
+    });
+  });
+}
+
+/* --------------------------- other markdown --------------------------- */
+
+function checkProse(file) {
+  const parsed = readMarkdown(file);
+  if (!parsed) return;
+  checkText(file, 'body', parsed.body);
+  if (typeof parsed.data.formula === 'string') checkTex(file, 'formula', parsed.data.formula);
+  checkText(file, 'summary', parsed.data.summary);
+}
+
+/* -------------------------------- run -------------------------------- */
+
+function route(file) {
+  const r = path.relative(contentDir, path.resolve(file));
+  if (r.startsWith('questions')) return checkQuestion(path.resolve(file));
+  if (r.startsWith('formulas')) return checkFormulaSheet(path.resolve(file));
+  if (r.startsWith('glossary') || r.startsWith('guides')) return checkProse(path.resolve(file));
+}
+
+let files;
+if (explicitFiles.length) files = explicitFiles;
+else if (examFilter) {
+  if (!exams.has(examFilter)) {
+    console.error(`unknown exam "${examFilter}"`);
+    process.exit(2);
+  }
+  files = [
+    ...listFiles(path.join(contentDir, 'questions', examFilter), /\.md$/),
+    ...listFiles(path.join(contentDir, 'formulas'), new RegExp(`${examFilter}\\.yaml$`)),
+  ];
+} else {
+  files = [
+    ...listFiles(path.join(contentDir, 'questions'), /\.md$/),
+    ...listFiles(path.join(contentDir, 'formulas'), /\.yaml$/),
+    ...listFiles(path.join(contentDir, 'glossary'), /\.md$/),
+    ...listFiles(path.join(contentDir, 'guides'), /\.md$/),
+  ];
+}
+
+// Duplicate detection needs every question of the exam, even when only some files were named.
+if (explicitFiles.length) {
+  const folders = new Set(
+    explicitFiles.filter((f) => f.includes(`questions${path.sep}`)).map((f) => path.dirname(path.resolve(f))),
+  );
+  const named = new Set(explicitFiles.map((f) => path.resolve(f)));
+  for (const dir of folders)
+    for (const f of listFiles(dir, /\.md$/))
+      if (!named.has(f)) {
+        const parsed = readMarkdown(f);
+        if (parsed?.data?.stem && parsed.data.exam) {
+          const seen = stemsByExam.get(parsed.data.exam) ?? new Map();
+          seen.set(
+            (parsed.data.passage ?? '') + String(parsed.data.stem).replace(/\s+/g, ''),
+            path.basename(f, '.md'),
+          );
+          stemsByExam.set(parsed.data.exam, seen);
+        }
+      }
+}
+
+for (const f of files) route(f);
+
+const errors = problems.filter((p) => p.level === 'error');
+const warnings = problems.filter((p) => p.level === 'warn');
+for (const p of quiet ? errors : problems)
+  console.log(`${p.level === 'error' ? 'ERROR' : 'warn '}  ${p.file}  ${p.msg}`);
+console.log(`\n${files.length} files checked: ${errors.length} errors, ${warnings.length} warnings`);
+process.exit(errors.length ? 1 : 0);

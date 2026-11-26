@@ -1,0 +1,145 @@
+title: 数学（大学レベル）
+items:
+  - title: 数学検定1級 概要・検定の出題内容
+    url: https://www.su-gaku.net/suken/examination/summary/1q/
+    publisher: 公益財団法人 日本数学検定協会
+    lang: ja
+    kind: official
+    cost: free
+    exams: [suken-1]
+    description: 1級の検定時間・問題数・合格基準と、解析・線形代数・確率統計・コンピュータなどの出題内容。過去問題へのリンクもある。
+  - title: 実用数学技能検定 検定概要
+    url: https://www.su-gaku.net/suken/examination/
+    publisher: 公益財団法人 日本数学検定協会
+    lang: ja
+    kind: official
+    cost: free
+    exams: [suken-1]
+    description: 受検資格、検定料、当日の持ち物（電卓の使用可否）、1次・2次の免除制度などの共通ルール。
+  - title: 検定日一覧
+    url: https://www.su-gaku.net/suken/schedule/
+    publisher: 公益財団法人 日本数学検定協会
+    lang: ja
+    kind: official
+    cost: free
+    exams: [suken-1]
+    description: 個人受検の検定日と申込期間。1級を実施する回は限られているので、対象級の欄を確認する。
+  - title: 検定過去問題
+    url: https://www.su-gaku.net/suken/support/past_questions/
+    publisher: 公益財団法人 日本数学検定協会
+    lang: ja
+    kind: pastExam
+    cost: free
+    exams: [suken-1]
+    description: 1級の1次・2次の検定問題、解答用紙、模範解答（2020年版）を PDF で公開。出題形式とレベルの確認に最初に解くとよい。
+  - title: 「記述式」について（問題例・採点例）
+    url: https://www.su-gaku.net/suken/feature/description_formula/
+    publisher: 公益財団法人 日本数学検定協会
+    lang: ja
+    kind: official
+    cost: free
+    exams: [suken-1]
+    description: 数検の記述式の採点方針。解法の過程を評価し、途中まで正しければ部分点を与える考え方が説明されている。
+  - title: 実用数学技能検定 1級［完全解説問題集］発見【第2版】
+    url: https://www.su-gaku.net/suken/support/book/hakken_1q/
+    publisher: 公益財団法人 日本数学検定協会
+    lang: ja
+    kind: textbook
+    cost: paid
+    exams: [suken-1]
+    description: 協会による1級の問題集。1次・2次の問題を詳しい解説つきで演習できる。
+  - title: 数検 関連書籍
+    url: https://www.su-gaku.net/suken/support/book/
+    publisher: 公益財団法人 日本数学検定協会
+    lang: ja
+    kind: textbook
+    cost: paid
+    exams: [suken-1]
+    description: 協会が紹介する学習書籍の一覧。1級向けの準拠テキスト（微分積分・線形代数・応用数学）や演習書も掲載されている。
+  - title: EMANの物理数学
+    url: https://eman-physics.net/math/contents.html
+    publisher: EMANの物理学
+    lang: ja
+    kind: article
+    cost: free
+    exams: [suken-1]
+    description: 線形代数、偏微分・ヤコビアン・テイラー展開、複素関数論（留数定理）、フーリエ解析、微分方程式を直感的に解説する無料の読み物。
+  - title: 高校数学の美しい物語
+    url: https://manabitimes.jp/math
+    lang: ja
+    kind: article
+    cost: free
+    exams: [suken-1]
+    description: 高校数学から大学初年級の数学まで、公式の証明や典型問題の解法を記事ごとに解説するサイト。
+  - title: 予備校のノリで学ぶ「大学の数学・物理」
+    url: https://www.youtube.com/@yobinori
+    publisher: YouTube
+    lang: ja
+    kind: video
+    cost: free
+    exams: [suken-1, jdla-e]
+    description: 大学の微分積分・線形代数・微分方程式などを短い動画で解説するチャンネル。独学のつまずきの解消に。
+  - title: MIT OpenCourseWare 18.06 Linear Algebra
+    url: https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/
+    publisher: Massachusetts Institute of Technology
+    lang: en
+    kind: course
+    cost: free
+    exams: [suken-1, jdla-e]
+    description: Gilbert Strang による線形代数の講義。動画・講義ノート・演習問題と解答が無料で公開されている。
+  - title: MIT OpenCourseWare 18.02 Multivariable Calculus
+    url: https://ocw.mit.edu/courses/18-02-multivariable-calculus-fall-2007/
+    publisher: Massachusetts Institute of Technology
+    lang: en
+    kind: course
+    cost: free
+    exams: [suken-1]
+    description: 偏微分、条件付き極値、重積分と変数変換、ベクトル解析の講義。試験と演習問題も公開されている。
+  - title: MIT OpenCourseWare 18.03 Differential Equations
+    url: https://ocw.mit.edu/courses/18-03-differential-equations-spring-2010/
+    publisher: Massachusetts Institute of Technology
+    lang: en
+    kind: course
+    cost: free
+    exams: [suken-1]
+    description: 1階・2階の線形微分方程式、ラプラス変換、連立微分方程式などの講義と演習。
+  - title: MIT OpenCourseWare 18.04 Complex Variables with Applications
+    url: https://ocw.mit.edu/courses/18-04-complex-variables-with-applications-spring-2018/
+    publisher: Massachusetts Institute of Technology
+    lang: en
+    kind: course
+    cost: free
+    exams: [suken-1]
+    description: 複素関数、コーシーの積分定理、ローラン展開、留数定理による実積分の計算までを扱う講義ノートと演習。
+  - title: Paul's Online Math Notes
+    url: https://tutorial.math.lamar.edu/
+    publisher: Lamar University
+    lang: en
+    kind: article
+    cost: free
+    exams: [suken-1]
+    description: 微分積分と微分方程式の講義ノートと演習問題（解答つき）。計算手順を一つずつ確認したいときに便利。
+  - title: Essence of linear algebra（3Blue1Brown）
+    url: https://www.3blue1brown.com/topics/linear-algebra
+    publisher: 3Blue1Brown
+    lang: en
+    kind: video
+    cost: free
+    exams: [suken-1, jdla-e]
+    description: 線形変換・行列式・固有値などを図形的なアニメーションで説明する動画シリーズ。直感的な理解を補う。
+  - title: Mathematics for Machine Learning
+    url: https://mml-book.github.io/
+    publisher: Cambridge University Press
+    lang: en
+    kind: textbook
+    cost: free
+    exams: [jdla-e]
+    description: 機械学習に必要な線形代数・解析・確率・最適化をまとめた教科書。著者のサイトで PDF が無料公開されている。
+  - title: Wolfram|Alpha
+    url: https://www.wolframalpha.com/
+    publisher: Wolfram Research
+    lang: en
+    kind: tool
+    cost: partial
+    exams: [suken-1]
+    description: 積分・級数・固有値・微分方程式などを数式処理で計算できるツール。自分で解いた答えの検算に使う（途中式の表示は有料機能）。

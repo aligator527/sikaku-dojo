@@ -1,0 +1,253 @@
+exam: toukei-jun1
+title: 統計検定準1級 公式集
+intro: '準1級で使う公式を、学習する順にまとめました。記述統計や基本的な推定・検定の公式は2級の公式集にあります。$\ell(\theta)$ は対数尤度、$I(\theta)$ は1観測あたりのフィッシャー情報量、$p$ は切片を除く説明変数の数、$z_{\alpha}$ などは上側 $100\alpha\%$ 点を表します。'
+updatedAt: '2026-11-26'
+sections:
+  - title: 分布と母関数
+    topics: [probability-distributions]
+    items:
+      - name: 積率母関数
+        tex: 'M_X(t) = \mathrm{E}\left[e^{tX}\right],\qquad \mathrm{E}[X^k] = M_X^{(k)}(0),\qquad M_{X+Y}(t) = M_X(t)\,M_Y(t)'
+        note: '最後の式は $X$ と $Y$ が独立のとき。積率母関数が一致すれば分布も一致するので、再生性の証明に使います。正規分布は $e^{\mu t + \sigma^2t^2/2}$、ポアソン分布は $e^{\lambda(e^t-1)}$、二項分布は $(1-p+pe^t)^n$ です。'
+      - name: ガンマ分布
+        tex: 'f(x) = \frac{x^{\alpha-1}e^{-x/\beta}}{\Gamma(\alpha)\,\beta^{\alpha}}\ (x > 0),\qquad \mathrm{E}[X] = \alpha\beta,\quad \mathrm{V}[X] = \alpha\beta^2'
+        note: 'ここでの $\beta$ は尺度パラメータです。レート $\lambda = 1/\beta$ で書く流儀では $\mathrm{E}[X] = \alpha/\lambda$、$\mathrm{V}[X] = \alpha/\lambda^2$ になるので、密度の形で確認します。$\alpha = 1$ が指数分布、$\alpha = k/2,\ \beta = 2$ が $\chi^2(k)$。積率母関数は $(1-\beta t)^{-\alpha}$ です。'
+        term: gamma-function
+      - name: ベータ分布
+        tex: 'f(x) = \frac{x^{a-1}(1-x)^{b-1}}{B(a,b)}\ (0 < x < 1),\qquad \mathrm{E}[X] = \frac{a}{a+b},\quad \mathrm{V}[X] = \frac{ab}{(a+b)^2(a+b+1)}'
+        note: '$B(a,b) = \Gamma(a)\Gamma(b)/\Gamma(a+b)$。$a = b = 1$ で一様分布になります。二項分布の成功確率の共役事前分布として使います。'
+      - name: 全期待値の公式と全分散の公式
+        tex: '\mathrm{E}[X] = \mathrm{E}\left[\mathrm{E}[X \mid Y]\right],\qquad \mathrm{V}[X] = \mathrm{E}\left[\mathrm{V}[X \mid Y]\right] + \mathrm{V}\left[\mathrm{E}[X \mid Y]\right]'
+        note: '階層モデル（例：$X \mid \lambda \sim \mathrm{Po}(\lambda)$ で $\lambda$ がガンマ分布）の期待値・分散を求めるときに使います。分散は「条件付き分散の期待値」と「条件付き期待値の分散」の和で、片方を忘れやすいので注意します。'
+
+  - title: 変数変換と順序統計量
+    topics: [probability-distributions]
+    items:
+      - name: 1変数の変数変換
+        tex: 'f_Y(y) = f_X\left(g^{-1}(y)\right)\left|\frac{d}{dy}g^{-1}(y)\right|'
+        note: '$Y = g(X)$ で $g$ が単調なときです。絶対値を忘れると、減少関数のとき密度が負になります。単調でないとき（$Y = X^2$ など）は分布関数から求めます。'
+      - name: 2変数の変数変換
+        tex: 'f_{U,V}(u,v) = f_{X,Y}\left(x(u,v),\ y(u,v)\right)\left|\frac{\partial(x,y)}{\partial(u,v)}\right|'
+        note: 'ヤコビアンは、元の変数 $(x,y)$ を新しい変数 $(u,v)$ で微分した行列式の絶対値です。逆向きの $\partial(u,v)/\partial(x,y)$ を使うなら逆数にします。和 $X+Y$ の分布は $U = X+Y,\ V = X$ とおいて $V$ を積分消去します。'
+        term: jacobian
+      - name: 順序統計量の密度
+        tex: 'f_{X_{(k)}}(x) = \frac{n!}{(k-1)!\,(n-k)!}F(x)^{k-1}\left\{1-F(x)\right\}^{n-k}f(x)'
+        note: '独立同分布の標本を小さい順に並べた $k$ 番目の値です。最大値は $F_{X_{(n)}}(x) = F(x)^n$、最小値は $1 - \{1-F(x)\}^n$ と分布関数から求めると速いです。一様分布 $U(0,1)$ では $X_{(k)} \sim \mathrm{Beta}(k,\ n-k+1)$ です。'
+
+  - title: 極限定理とデルタ法
+    topics: [limit-theorems]
+    items:
+      - name: チェビシェフの不等式
+        tex: 'P\left(|X-\mu| \geq k\sigma\right) \leq \frac{1}{k^2}'
+        note: '分布の形によらず成り立つ評価です。$\bar{X}$ に適用すると $P(|\bar{X}-\mu| \geq \varepsilon) \leq \sigma^2/(n\varepsilon^2) \to 0$ となり、大数の弱法則が導けます。'
+      - name: 中心極限定理
+        tex: '\sqrt{n}\left(\bar{X}_n-\mu\right) \xrightarrow{d} N(0,\ \sigma^2)'
+        note: '独立同分布で分散が有限なら、元の分布によらず成り立ちます。$\sigma$ を一致推定量 $s$ で置き換えても極限は変わりません（スラツキーの定理）。'
+        term: central-limit-theorem
+      - name: デルタ法
+        tex: '\sqrt{n}\left(g(T_n)-g(\theta)\right) \xrightarrow{d} N\left(0,\ g^{\prime}(\theta)^2\sigma^2\right)'
+        note: '$\sqrt{n}(T_n - \theta) \xrightarrow{d} N(0, \sigma^2)$ で、$g$ が微分可能かつ $g^{\prime}(\theta) \neq 0$ のとき成り立ちます。分散には $g^{\prime}(\theta)^2$ を、標準誤差には $|g^{\prime}(\theta)|$ を掛けます。例：対数オッズ $\log\{\hat{p}/(1-\hat{p})\}$ の分散は $1/\{np(1-p)\}$ で近似できます。'
+        term: delta-method
+      - name: フィッシャーの z 変換
+        tex: 'z = \frac{1}{2}\log\frac{1+r}{1-r} \;\approx\; N\left(\frac{1}{2}\log\frac{1+\rho}{1-\rho},\ \frac{1}{n-3}\right)'
+        note: '2変量正規分布からの標本相関係数 $r$ の近似分布です。$\rho \neq 0$ の検定や相関係数の信頼区間に使い、区間は $z$ の尺度で作ってから $r$ に戻します。分散は $1/n$ ではなく $1/(n-3)$ です。'
+
+  - title: マルコフ連鎖とポアソン過程
+    topics: [stochastic-processes]
+    items:
+      - name: 推移確率行列
+        tex: 'p_{ij} = P(X_{t+1}=j \mid X_t=i),\qquad P(X_{t+n}=j \mid X_t=i) = \left(P^n\right)_{ij}'
+        note: '推移確率行列 $P$ は各**行**の和が 1 です。状態の分布を行ベクトル $\boldsymbol{\pi}^{(t)}$ で表すと $\boldsymbol{\pi}^{(t+1)} = \boldsymbol{\pi}^{(t)}P$ と、右から $P$ を掛けます。'
+        term: markov-chain
+      - name: 定常分布
+        tex: '\boldsymbol{\pi}P = \boldsymbol{\pi},\qquad \sum_{i}\pi_i = 1'
+        note: '既約かつ非周期的な有限マルコフ連鎖では定常分布が一意に存在し、初期分布によらずそこに収束します。$\boldsymbol{\pi}P = \boldsymbol{\pi}$ の連立方程式は 1 本が従属なので、和が 1 の条件と組み合わせて解きます。'
+      - name: ポアソン過程
+        tex: 'P\left(N(t)=k\right) = \frac{(\lambda t)^k e^{-\lambda t}}{k!}\quad (k = 0, 1, 2, \ldots)'
+        note: '強度 $\lambda$（単位時間あたりの平均発生数）のポアソン過程では、長さ $t$ の区間の発生数が $\mathrm{Po}(\lambda t)$ に従い、到着間隔は平均 $1/\lambda$ の指数分布に従います。$k$ 番目の到着時刻は形状 $k$、尺度 $1/\lambda$ のガンマ分布です。'
+
+  - title: 最尤法とフィッシャー情報量
+    topics: [estimation]
+    items:
+      - name: 尤度方程式
+        tex: '\ell(\theta) = \sum_{i=1}^{n}\log f(x_i;\theta),\qquad \frac{\partial \ell(\theta)}{\partial \theta}\bigg|_{\theta=\hat{\theta}} = 0'
+        note: '正規分布では $\hat{\mu} = \bar{x}$、$\hat{\sigma}^2 = \frac{1}{n}\sum(x_i-\bar{x})^2$（$n$ で割るので不偏ではない）。一様分布 $U(0,\theta)$ のように台がパラメータに依存すると微分では求まらず、$\hat{\theta} = \max_i x_i$ です。不変性により、$g(\theta)$ の最尤推定量は $g(\hat{\theta})$ です。'
+        term: maximum-likelihood-estimation
+      - name: フィッシャー情報量
+        tex: 'I(\theta) = \mathrm{E}\left[\left(\frac{\partial}{\partial\theta}\log f(X;\theta)\right)^2\right] = -\mathrm{E}\left[\frac{\partial^2}{\partial\theta^2}\log f(X;\theta)\right]'
+        note: '1観測あたりの情報量で、$n$ 個の独立な観測では $nI(\theta)$ になります。2つ目の形（2階微分の期待値に負号）の方が計算しやすいことが多いです。'
+        term: fisher-information
+      - name: 代表的な分布のフィッシャー情報量
+        tex: '\mathrm{Bin}(1,p):\ \frac{1}{p(1-p)},\quad \mathrm{Po}(\lambda):\ \frac{1}{\lambda},\quad N(\mu,\sigma^2)\ \text{の}\ \mu:\ \frac{1}{\sigma^2},\quad \mathrm{Exp}(\lambda):\ \frac{1}{\lambda^2}'
+        note: 'いずれも1観測あたりで、指数分布は密度 $\lambda e^{-\lambda x}$（レート表示）の場合です。正規分布の $\sigma^2$ に関する情報量は $1/(2\sigma^4)$。逆数を $n$ で割ると最尤推定量の漸近分散になり、たとえば $\hat{p}$ では $p(1-p)/n$ です。'
+      - name: 最尤推定量の漸近正規性
+        tex: '\sqrt{n}\left(\hat{\theta}-\theta\right) \xrightarrow{d} N\left(0,\ \frac{1}{I(\theta)}\right)'
+        note: '正則条件のもとで成り立ちます。標準誤差は $1/\sqrt{nI(\hat{\theta})}$ で推定し、近似信頼区間 $\hat{\theta} \pm z_{\alpha/2}/\sqrt{nI(\hat{\theta})}$ を作ります。$I(\theta)$ が1観測あたりか $n$ 観測分かを取り違えないようにします。'
+      - name: クラメール・ラオの不等式
+        tex: '\mathrm{V}[\hat{\theta}] \geq \frac{1}{nI(\theta)}'
+        note: '$\hat{\theta}$ が $\theta$ の不偏推定量で、正則条件が成り立つときの下限です。等号が成り立つ推定量を有効推定量といいます（正規分布の $\bar{X}$ など）。最尤推定量は漸近的にこの下限を達成します。'
+
+  - title: 検定
+    topics: [testing]
+    items:
+      - name: 検定に必要な標本サイズ
+        tex: 'n \geq \left(\frac{(z_{\alpha} + z_{\beta})\,\sigma}{\mu_1-\mu_0}\right)^2'
+        note: '$\sigma$ 既知の片側 z 検定で、有意水準 $\alpha$ と検出力 $1-\beta$ を確保する標本サイズです。両側検定では $z_{\alpha}$ を $z_{\alpha/2}$ に替えます（近似）。検出したい差が半分になると、必要な $n$ は 4 倍です。'
+        term: statistical-power
+      - name: 尤度比検定
+        tex: '-2\log\Lambda = 2\left\{\ell(\hat{\theta}) - \ell(\hat{\theta}_0)\right\} \xrightarrow{d} \chi^2(q)'
+        note: '$\hat{\theta}$ は制約なしの最尤推定量、$\hat{\theta}_0$ は帰無仮説のもとでの最尤推定量、$q$ は帰無仮説で固定されるパラメータの数です。入れ子になった一般化線形モデルの逸脱度の差も、同じ $\chi^2$ 近似で検定します。'
+      - name: ボンフェローニ補正
+        tex: 'p_i \leq \frac{\alpha}{m}\ \ \text{のとき}\ H_{0i}\ \text{を棄却}'
+        note: '$m$ 個の検定を行うとき、全体で第1種の過誤を1つでも犯す確率を $\alpha$ 以下に抑えます。検定どうしが相関していても成り立ちますが、保守的（検出力が低い）です。'
+      - name: ウィルコクソンの順位和検定
+        tex: '\mathrm{E}[W] = \frac{m(m+n+1)}{2},\qquad \mathrm{V}[W] = \frac{mn(m+n+1)}{12}'
+        note: '$W$ は大きさ $m$ の群の順位和（全体 $m+n$ 個で順位付け、同順位なし）です。標本が大きいときは $(W - \mathrm{E}[W])/\sqrt{\mathrm{V}[W]}$ を標準正規分布で近似します。マン・ホイットニーの $U = W - m(m+1)/2$ と同等です。'
+
+  - title: 重回帰と回帰診断・正則化
+    topics: [regression]
+    items:
+      - name: 最小二乗推定量
+        tex: '\hat{\boldsymbol{\beta}} = (X^{\top}X)^{-1}X^{\top}\boldsymbol{y},\qquad \mathrm{V}[\hat{\boldsymbol{\beta}}] = \sigma^2(X^{\top}X)^{-1}'
+        note: '$X$ は切片の列を含む $n \times (p+1)$ 行列で、列が1次独立（$X^{\top}X$ が正則）なことが条件です。$\sigma^2$ は $\hat{\sigma}^2 = S_E/(n-p-1)$ で推定します。'
+      - name: 分散拡大係数（VIF）
+        tex: '\mathrm{VIF}_j = \frac{1}{1-R_j^2}'
+        note: '$R_j^2$ は $x_j$ をほかの説明変数で回帰したときの決定係数です。目安として 10 を超えると多重共線性が疑われ、係数の標準誤差が大きくなります。'
+        term: multicollinearity
+      - name: クックの距離
+        tex: 'D_i = \frac{e_i^2}{(p+1)\,\hat{\sigma}^2}\cdot\frac{h_{ii}}{(1-h_{ii})^2}'
+        note: '$e_i$ は残差、$h_{ii}$ はハット行列 $H = X(X^{\top}X)^{-1}X^{\top}$ の対角成分（てこ比）で、$\sum_i h_{ii} = p+1$ です。残差とてこ比の両方が大きい観測ほど影響が大きく、$D_i > 1$（または $4/n$）が目安です。'
+      - name: リッジ回帰
+        tex: '\hat{\boldsymbol{\beta}}_{\mathrm{ridge}} = \arg\min_{\boldsymbol{\beta}}\left\{\|\boldsymbol{y}-X\boldsymbol{\beta}\|^2 + \lambda\|\boldsymbol{\beta}\|^2\right\} = (X^{\top}X + \lambda I)^{-1}X^{\top}\boldsymbol{y}'
+        note: '説明変数を標準化し、切片には罰則をかけないのが普通です。$\lambda > 0$ なら多重共線性があっても逆行列が存在します。係数は 0 に向かって縮小されますが、ちょうど 0 にはなりません。'
+      - name: ラッソ
+        tex: '\hat{\boldsymbol{\beta}}_{\mathrm{lasso}} = \arg\min_{\boldsymbol{\beta}}\left\{\|\boldsymbol{y}-X\boldsymbol{\beta}\|^2 + \lambda\sum_{j=1}^{p}|\beta_j|\right\}'
+        note: 'L1 罰則により一部の係数がちょうど 0 になり、変数選択を兼ねます。一般に閉じた形の解はありません。誤差項を $\frac{1}{2n}$ 倍する流儀もあり、その場合は $\lambda$ の値の意味が変わります。'
+
+  - title: 一般化線形モデルと生存時間解析
+    topics: [glm]
+    items:
+      - name: ロジスティック回帰
+        tex: '\log\frac{p}{1-p} = \beta_0 + \beta_1x_1 + \cdots + \beta_px_p'
+        note: '$x_j$ が 1 増えるとオッズが $e^{\beta_j}$ 倍になります（$e^{\beta_j}$ はオッズ比）。確率 $p$ が $e^{\beta_j}$ 倍になるわけではありません。'
+        term: logistic-regression
+      - name: ポアソン回帰
+        tex: '\log\mathrm{E}[Y] = \log t + \beta_0 + \beta_1x_1 + \cdots + \beta_px_p'
+        note: '$\log t$ は観察期間や人数などのオフセット（係数を 1 に固定）で、不要なら省きます。$e^{\beta_j}$ は率比です。分散が平均より大きい（過分散）ときは、負の二項回帰や疑似ポアソンモデルを検討します。'
+      - name: ハザード関数と生存関数
+        tex: 'h(t) = \frac{f(t)}{S(t)} = -\frac{d}{dt}\log S(t),\qquad S(t) = \exp\left(-\int_0^t h(u)\,du\right)'
+        note: '$S(t) = P(T > t)$ です。ハザードが一定値 $\lambda$ なら指数分布で、$S(t) = e^{-\lambda t}$ になります。'
+      - name: カプラン・マイヤー推定量
+        tex: '\hat{S}(t) = \prod_{t_j \leq t}\left(1-\frac{d_j}{n_j}\right)'
+        note: '$t_j$ はイベントの発生時刻、$d_j$ はその時刻のイベント数、$n_j$ はその直前のリスク集合の大きさ（まだ観察中の人数）です。打ち切りの時刻では $\hat{S}$ は下がりませんが、以降の $n_j$ は減ります。'
+        term: kaplan-meier-estimator
+      - name: 比例ハザードモデル
+        tex: 'h(t \mid \boldsymbol{x}) = h_0(t)\exp\left(\beta_1x_1 + \cdots + \beta_px_p\right)'
+        note: '$e^{\beta_j}$ はハザード比で、時間によらず一定と仮定します（比例ハザード性）。ベースラインハザード $h_0(t)$ を特定せずに、部分尤度で $\boldsymbol{\beta}$ を推定します。'
+
+  - title: 分散分析と標本調査
+    topics: [anova-doe]
+    items:
+      - name: 二元配置分散分析の自由度
+        tex: '\phi_A = a-1,\quad \phi_B = b-1,\quad \phi_{A \times B} = (a-1)(b-1),\quad \phi_E = ab(r-1)'
+        note: '各セルに $r$ 回の繰り返しがある場合で、総自由度は $abr - 1$ です。繰り返しがない（$r = 1$）と交互作用と誤差を分離できず、誤差の自由度は $(a-1)(b-1)$ になります。$F$ は各要因の平均平方を誤差の平均平方で割って求めます。'
+      - name: 有限母集団修正
+        tex: '\mathrm{V}[\bar{y}] = \left(1-\frac{n}{N}\right)\frac{S^2}{n},\qquad S^2 = \frac{1}{N-1}\sum_{i=1}^{N}(Y_i-\bar{Y})^2'
+        note: '大きさ $N$ の母集団から $n$ 個を非復元単純無作為抽出したときの標本平均の分散です。$N$ で割る母分散 $\sigma^2$ で書くと $\frac{N-n}{N-1}\cdot\frac{\sigma^2}{n}$。抽出率 $n/N$ が小さければ修正は無視できます。'
+      - name: 層別抽出とネイマン配分
+        tex: '\mathrm{V}[\bar{y}_{\mathrm{st}}] = \sum_{h} W_h^2\left(1-\frac{n_h}{N_h}\right)\frac{S_h^2}{n_h},\qquad n_h = n\,\frac{N_hS_h}{\sum_{k}N_kS_k}'
+        note: '$W_h = N_h/N$ は層の大きさの割合で、$\bar{y}_{\mathrm{st}} = \sum_h W_h\bar{y}_h$ です。右の式は分散を最小にするネイマン配分で、比例配分 $n_h = nN_h/N$ と違い、ばらつき $S_h$ の大きい層に多く配分します。'
+
+  - title: モデル選択
+    topics: [model-selection]
+    items:
+      - name: AIC
+        tex: '\mathrm{AIC} = -2\ell(\hat{\theta}) + 2k'
+        note: '$\ell(\hat{\theta})$ は最大対数尤度、$k$ は推定したパラメータの数で、小さいほど良いモデルです。正規線形回帰では $-2\ell(\hat{\theta}) = n\log(S_E/n) + \text{定数}$。誤差分散 $\sigma^2$ を $k$ に数えるかどうかは流儀によりますが、同じ流儀で比べれば順位は変わりません。'
+        term: aic
+      - name: BIC
+        tex: '\mathrm{BIC} = -2\ell(\hat{\theta}) + k\log n'
+        note: '$n \geq 8$ では $\log n > 2$ なので AIC より罰則が重く、選ばれるモデルが小さくなりやすいです。対数は自然対数です。'
+      - name: 1個抜き交差検証（線形回帰）
+        tex: '\mathrm{CV} = \frac{1}{n}\sum_{i=1}^{n}\left(\frac{y_i-\hat{y}_i}{1-h_{ii}}\right)^2'
+        note: '最小二乗法による線形回帰では、$n$ 回当てはめ直さなくても、全データでの残差 $y_i - \hat{y}_i$ とてこ比 $h_{ii}$ から計算できます。$K$ 分割交差検証は各分割の予測誤差の平均です。'
+        term: cross-validation
+
+  - title: 多変量解析
+    topics: [multivariate]
+    items:
+      - name: 主成分分析
+        tex: '\Sigma\boldsymbol{u}_j = \lambda_j\boldsymbol{u}_j,\qquad \text{寄与率}_j = \frac{\lambda_j}{\sum_{k=1}^{p}\lambda_k}'
+        note: '$\Sigma$ は分散共分散行列（または相関行列）、$\lambda_j$ は第 $j$ 主成分の分散で、$\|\boldsymbol{u}_j\| = 1$ です。相関行列を使うと固有値の和は変数の数 $p$ になります。単位の異なる変数では相関行列を使います。'
+        term: principal-component-analysis
+      - name: マハラノビス距離
+        tex: 'D^2 = (\boldsymbol{x}-\boldsymbol{\mu})^{\top}\Sigma^{-1}(\boldsymbol{x}-\boldsymbol{\mu})'
+        note: '変数間の相関と尺度を考慮した距離です。$\boldsymbol{x} \sim N_p(\boldsymbol{\mu}, \Sigma)$ なら $D^2 \sim \chi^2(p)$。判別分析では、各群の平均とのマハラノビス距離が最も小さい群に分類します。'
+      - name: 2変量正規分布の条件付き分布
+        tex: 'X_1 \mid X_2 = x_2 \sim N\left(\mu_1 + \rho\frac{\sigma_1}{\sigma_2}(x_2-\mu_2),\ \sigma_1^2(1-\rho^2)\right)'
+        note: '条件付き期待値は $x_2$ の1次式（回帰直線）で、条件付き分散は $x_2$ によらず一定です。多変量では平均 $\boldsymbol{\mu}_1 + \Sigma_{12}\Sigma_{22}^{-1}(\boldsymbol{x}_2-\boldsymbol{\mu}_2)$、分散 $\Sigma_{11} - \Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21}$ になります。'
+      - name: 因子分析モデル
+        tex: '\Sigma = \Lambda\Lambda^{\top} + \Psi'
+        note: '$\Lambda$ は因子負荷行列、$\Psi$ は独自分散を並べた対角行列です（因子は互いに無相関で分散 1 と仮定）。標準化した変数では、共通性 $h_j^2 = \sum_k \lambda_{jk}^2$ と独自分散 $\psi_j$ の和が 1 です。$\Lambda$ には回転の不定性があり、一意に決まりません。'
+
+  - title: 時系列解析
+    topics: [time-series]
+    items:
+      - name: AR(1) モデル
+        tex: 'X_t = \phi X_{t-1} + \varepsilon_t,\qquad \mathrm{V}[X_t] = \frac{\sigma^2}{1-\phi^2},\qquad \rho(k) = \phi^{k}'
+        note: '$\varepsilon_t$ は分散 $\sigma^2$ のホワイトノイズで、$|\phi| < 1$ のとき定常です。自己相関は指数的に減衰し、偏自己相関はラグ 2 以降 0 になります。'
+      - name: MA(1) モデル
+        tex: 'X_t = \varepsilon_t + \theta\varepsilon_{t-1},\qquad \rho(1) = \frac{\theta}{1+\theta^2},\qquad \rho(k) = 0\ (k \geq 2)'
+        note: '自己相関はラグ 2 以降で 0 になります（MA($q$) ではラグ $q$ の後で切れる）。$|\rho(1)| \leq 1/2$ です。$X_t = \varepsilon_t - \theta\varepsilon_{t-1}$ と書く流儀では符号が逆になります。'
+      - name: AR(p) の定常条件
+        tex: '1 - \phi_1 z - \phi_2 z^2 - \cdots - \phi_p z^p = 0\ \ \text{の解がすべて}\ |z| > 1'
+        note: '特性方程式の根が単位円の外にあれば定常です。AR(2) では $\rho(1) = \phi_1/(1-\phi_2)$、$\rho(k) = \phi_1\rho(k-1) + \phi_2\rho(k-2)$（ユール・ウォーカー方程式）が成り立ちます。'
+
+  - title: 分割表と欠測データ
+    topics: [contingency]
+    items:
+      - name: オッズ比の信頼区間
+        tex: '\log\widehat{\mathrm{OR}} \pm z_{\alpha/2}\sqrt{\frac{1}{a}+\frac{1}{b}+\frac{1}{c}+\frac{1}{d}},\qquad \widehat{\mathrm{OR}} = \frac{ad}{bc}'
+        note: 'オッズ比は対数をとった尺度で正規近似し、区間の両端を指数変換して戻します（区間は $\widehat{\mathrm{OR}}$ について左右非対称）。区間が 1 を含むかどうかで関連の有無を判断します。'
+      - name: マクネマー検定
+        tex: '\chi^2 = \frac{(b-c)^2}{b+c} \sim \chi^2(1)'
+        note: '対応のある2値データ（同じ人の前後の回答など）で、$b, c$ は回答が変わった不一致セルの度数です。一致セル $a, d$ は使いません。独立性の検定を当てはめるのは誤りです。'
+      - name: EM アルゴリズム
+        tex: 'Q(\theta \mid \theta^{(t)}) = \mathrm{E}_{\boldsymbol{z} \mid \boldsymbol{x},\,\theta^{(t)}}\left[\log f(\boldsymbol{x},\boldsymbol{z};\theta)\right],\qquad \theta^{(t+1)} = \arg\max_{\theta}Q(\theta \mid \theta^{(t)})'
+        note: '欠測値や潜在変数 $\boldsymbol{z}$ があるときの最尤法です。E ステップで完全データの対数尤度の条件付き期待値をとり、M ステップでそれを最大化します。観測データの尤度は反復ごとに減りませんが、局所最大に収束することがあります。'
+
+  - title: ベイズ法とシミュレーション
+    topics: [bayes-computation]
+    items:
+      - name: 事後分布
+        tex: '\pi(\theta \mid \boldsymbol{x}) = \frac{f(\boldsymbol{x} \mid \theta)\,\pi(\theta)}{\int f(\boldsymbol{x} \mid \theta)\,\pi(\theta)\,d\theta} \propto f(\boldsymbol{x} \mid \theta)\,\pi(\theta)'
+        note: '事後分布は「尤度 × 事前分布」に比例します。分母は $\theta$ によらない定数なので、$\theta$ を含む部分（核）だけを見て既知の分布に一致させると計算が速くなります。'
+        term: bayes-theorem
+      - name: ベータ・二項モデル
+        tex: '\theta \sim \mathrm{Beta}(a,\ b),\ \ X \mid \theta \sim \mathrm{Bin}(n,\ \theta) \;\Rightarrow\; \theta \mid X=x \sim \mathrm{Beta}(a+x,\ b+n-x)'
+        note: '事後平均 $\frac{a+x}{a+b+n}$ は、事前平均 $\frac{a}{a+b}$ と標本比率 $\frac{x}{n}$ の加重平均です。$b$ に加えるのは失敗の数 $n - x$ です。'
+      - name: 正規・正規モデル
+        tex: '\mu \mid \boldsymbol{x} \sim N\left(\frac{\frac{n}{\sigma^2}\bar{x} + \frac{1}{\tau^2}\mu_0}{\frac{n}{\sigma^2} + \frac{1}{\tau^2}},\ \frac{1}{\frac{n}{\sigma^2} + \frac{1}{\tau^2}}\right)'
+        note: '$X_i \mid \mu \sim N(\mu, \sigma^2)$（$\sigma^2$ 既知）、事前分布 $\mu \sim N(\mu_0, \tau^2)$ の場合です。事後平均は精度（分散の逆数）で重み付けた平均で、事後の精度は事前の精度とデータの精度の和です。'
+      - name: メトロポリス・ヘイスティングス法
+        tex: '\alpha(\theta, \theta^{*}) = \min\left\{1,\ \frac{\pi(\theta^{*})\,q(\theta \mid \theta^{*})}{\pi(\theta)\,q(\theta^{*} \mid \theta)}\right\}'
+        note: '現在値 $\theta$ から提案分布 $q(\cdot \mid \theta)$ で候補 $\theta^{*}$ を出し、確率 $\alpha$ で採択します。目標分布 $\pi$ は比だけで計算するので、正規化定数が分からなくても使えます。提案分布が対称なら $q$ は約分されます（メトロポリス法）。'
+      - name: ブートストラップ標準誤差
+        tex: '\widehat{\mathrm{SE}}_{\mathrm{boot}} = \sqrt{\frac{1}{B-1}\sum_{b=1}^{B}\left(\hat{\theta}^{*}_{b} - \bar{\theta}^{*}\right)^2}'
+        note: '元の標本から同じ大きさ $n$ の標本を**復元**抽出して $\hat{\theta}^{*}_b$ を $B$ 回計算し、そのばらつきで標準誤差を推定します。パーセンタイル法の信頼区間は $\hat{\theta}^{*}$ の分位点で作ります。'
+        term: bootstrap
+
+  - title: 統計的因果推論
+    topics: [causal-inference]
+    items:
+      - name: 平均処置効果
+        tex: '\mathrm{ATE} = \mathrm{E}\left[Y(1) - Y(0)\right]'
+        note: '$Y(1), Y(0)$ は処置を受けた場合・受けなかった場合の潜在結果で、同じ個体で両方を観測することはできません。無作為化されていれば $\mathrm{E}[Y \mid T=1] - \mathrm{E}[Y \mid T=0]$ で推定できますが、観察研究では交絡のため一般に一致しません。'
+      - name: バックドア調整公式
+        tex: 'P\left(Y=y \mid \mathrm{do}(X=x)\right) = \sum_{z} P(Y=y \mid X=x,\ Z=z)\,P(Z=z)'
+        note: '$Z$ がバックドア基準を満たす（$X$ の子孫を含まず、$X$ から $Y$ へのバックドアパスをすべて遮断する）ときに成り立ちます。重みは $P(Z=z)$ で、$P(Z=z \mid X=x)$ ではありません。中間変数や合流点で調整すると偏りが生じます。'
+        term: confounding
+      - name: 傾向スコアと IPW 推定量
+        tex: 'e(\boldsymbol{x}) = P(T=1 \mid \boldsymbol{x}),\qquad \widehat{\mathrm{ATE}} = \frac{1}{n}\sum_{i=1}^{n}\left\{\frac{T_iY_i}{e(\boldsymbol{x}_i)} - \frac{(1-T_i)Y_i}{1-e(\boldsymbol{x}_i)}\right\}'
+        note: '処置群は $1/e$、対照群は $1/(1-e)$ で重み付けます（逆にしない）。測定された共変量で交絡が説明できること（強く無視できる割り当て）が前提で、未測定の交絡は補正できません。$e$ が 0 や 1 に近い個体があると推定が不安定になります。'
+        term: propensity-score

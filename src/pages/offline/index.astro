@@ -1,0 +1,38 @@
+---
+import OfflineFallback from '../../components/offline/OfflineFallback';
+import { t } from '../../i18n';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { examContext, getExams } from '../../lib/content';
+
+const exams = (await getExams()).map((e) => ({ ...examContext(e), name: e.name }));
+---
+
+<BaseLayout title={t.offline.pageTitle} description={t.offline.pageLead}>
+  <meta slot="head" name="robots" content="noindex" />
+  <div class="container page">
+    <OfflineFallback client:load exams={exams} />
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-top: var(--s-6);
+    padding-bottom: var(--s-7);
+  }
+
+  .page :global(.offline-title) {
+    font-size: var(--fs-3xl);
+  }
+
+  .page :global(.offline-lead) {
+    margin: var(--s-2) 0 var(--s-6);
+    max-width: 44rem;
+  }
+
+  .page :global(.offline-links) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-4);
+    margin-top: var(--s-6);
+  }
+</style>

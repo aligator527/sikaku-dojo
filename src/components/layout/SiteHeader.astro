@@ -1,0 +1,188 @@
+---
+import { BookA, Calculator, ChartNoAxesColumn, Library, Moon, Search, Sun } from '@lucide/astro';
+
+import { t } from '../../i18n';
+import { routes } from '../../lib/paths';
+
+const path = Astro.url.pathname;
+const items = [
+  { href: routes.exams(), label: t.nav.exams, icon: Library, match: [routes.exams()] },
+  { href: routes.glossary(), label: t.nav.glossary, icon: BookA, match: [routes.glossary()] },
+  { href: routes.tools(), label: t.nav.tools, icon: Calculator, match: [routes.tools()] },
+  { href: routes.me(), label: t.nav.me, icon: ChartNoAxesColumn, match: [routes.me()] },
+  { href: routes.search(), label: t.nav.search, icon: Search, match: [routes.search()] },
+];
+const isActive = (match: string[]) => match.some((m) => path.startsWith(m));
+---
+
+<header class="site-header" data-pagefind-ignore>
+  <div class="container inner">
+    <a class="brand" href={routes.home()}>
+      <span class="seal" aria-hidden="true">
+        道
+      </span>
+      <span class="name">{t.site.name}</span>
+    </a>
+    <nav aria-label="メイン">
+      <ul>
+        {items.map(({ href, label, icon: Icon, match }) => (
+          <li>
+            <a href={href} aria-current={isActive(match) ? 'page' : undefined}>
+              <Icon size={17} aria-hidden="true" />
+              <span class="label">{label}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+    <button class="theme" type="button" data-theme-toggle aria-label={t.nav.theme} title={t.nav.theme}>
+      <Moon size={17} class="icon-moon" aria-hidden="true" />
+      <Sun size={17} class="icon-sun" aria-hidden="true" />
+    </button>
+  </div>
+</header>
+
+<script>
+  const KEY = 'sikaku-dojo:theme';
+  document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = next;
+      try {
+        localStorage.setItem(KEY, next);
+      } catch {
+        /* storage disabled */
+      }
+    });
+  });
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: color-mix(in srgb, var(--paper) 92%, transparent);
+    backdrop-filter: saturate(1.2) blur(6px);
+    border-bottom: 1px solid var(--rule-strong);
+  }
+
+  .inner {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+    height: var(--header-height);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    color: var(--ink);
+    text-decoration: none;
+    margin-right: auto;
+  }
+
+  .seal {
+    display: grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border: 2px solid var(--shu);
+    border-radius: 2px;
+    color: var(--shu);
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1;
+    transform: rotate(-4deg);
+  }
+
+  .name {
+    white-space: nowrap;
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: var(--fs-lg);
+    letter-spacing: 0.08em;
+  }
+
+  nav ul {
+    display: flex;
+    gap: var(--s-1);
+    padding: 0;
+    list-style: none;
+  }
+
+  nav a {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    height: var(--header-height);
+    padding: 0 var(--s-2);
+    color: var(--ink-2);
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+  }
+
+  nav a:hover {
+    color: var(--ink);
+  }
+
+  nav a[aria-current='page'] {
+    color: var(--ink);
+    border-bottom-color: var(--shu);
+  }
+
+  .theme {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--ink-2);
+  }
+
+  .theme:hover {
+    color: var(--ink);
+    background: var(--surface-sunken);
+  }
+
+  .icon-sun {
+    display: none;
+  }
+
+  :global(:root[data-theme='dark']) .icon-sun {
+    display: inline-block;
+  }
+
+  :global(:root[data-theme='dark']) .icon-moon {
+    display: none;
+  }
+
+  @media (max-width: 40rem) {
+    .label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+    }
+
+    nav a {
+      padding: 0 var(--s-2);
+    }
+
+    nav ul {
+      gap: 0;
+    }
+
+    .inner {
+      gap: var(--s-2);
+    }
+  }
+</style>

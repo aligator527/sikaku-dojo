@@ -1,0 +1,40 @@
+---
+import Breadcrumbs from '../components/layout/Breadcrumbs.astro';
+import MeDashboard, { type MeExam } from '../components/me/MeDashboard';
+import { t } from '../i18n';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { examContext, getExams } from '../lib/content';
+import { routes } from '../lib/paths';
+
+const exams: MeExam[] = (await getExams()).map((exam) => ({
+  id: exam.id,
+  name: exam.name,
+  shortName: exam.shortName,
+  href: routes.exam(exam.id),
+  drillHref: routes.drill(exam.id),
+  topics: examContext(exam).topics,
+}));
+---
+
+<BaseLayout title={t.me.title} description="解答履歴・弱点分野・模擬試験の成績・ブックマーク。">
+  <div class="container page">
+    <Breadcrumbs items={[{ label: t.site.name, href: routes.home() }, { label: t.me.title }]} />
+    <h1 class="title">{t.me.title}</h1>
+    <MeDashboard client:only="react" exams={exams}>
+      <p slot="fallback" class="meta">
+        {t.common.loading}
+      </p>
+    </MeDashboard>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-top: var(--s-5);
+  }
+
+  .title {
+    font-size: var(--fs-3xl);
+    margin: var(--s-3) 0 var(--s-6);
+  }
+</style>

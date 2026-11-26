@@ -1,0 +1,52 @@
+---
+import { Layers } from '@lucide/astro';
+
+import GlossaryIndex from '../../components/glossary/GlossaryIndex';
+import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
+import { t } from '../../i18n';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getExams, getTerms, toTermRow } from '../../lib/content';
+import { routes } from '../../lib/paths';
+
+const [terms, exams] = await Promise.all([getTerms(), getExams()]);
+---
+
+<BaseLayout title={t.glossary.title} description={`${t.glossary.lead}（${terms.length}語）`}>
+  <div class="container page">
+    <Breadcrumbs items={[{ label: t.site.name, href: routes.home() }, { label: t.glossary.title }]} />
+    <div class="head">
+      <div>
+        <h1 class="title">{t.glossary.title}</h1>
+        <p class="meta">{t.glossary.lead}</p>
+      </div>
+      <a class="btn btn--ghost" href={routes.flashcards()}>
+        <Layers size={16} aria-hidden="true" />
+        {t.glossary.cards}
+      </a>
+    </div>
+    <GlossaryIndex
+      client:load
+      terms={terms.map(toTermRow)}
+      exams={exams.map((e) => ({ id: e.id, name: e.name }))}
+    />
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-top: var(--s-5);
+  }
+
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--s-4);
+    margin: var(--s-3) 0 var(--s-6);
+  }
+
+  .title {
+    font-size: var(--fs-3xl);
+  }
+</style>

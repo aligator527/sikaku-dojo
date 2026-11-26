@@ -1,0 +1,46 @@
+---
+import MockList, { type MockSummary } from '../../../../components/mock/MockList';
+import { t } from '../../../../i18n';
+import ExamLayout from '../../../../layouts/ExamLayout.astro';
+import { createRng, drawFromBlueprint } from '../../../../domain/sampling';
+import { examPaths, getMocks, getQuestions, type Exam } from '../../../../lib/content';
+
+export const getStaticPaths = examPaths;
+
+interface Props {
+  exam: Exam;
+}
+
+const { exam } = Astro.props;
+const [mocks, questions] = await Promise.all([getMocks(exam.id), getQuestions(exam.id)]);
+
+// The same draw the runner makes, with a fixed seed: only the count matters here.
+const countFor = (m: (typeof mocks)[number]) =>
+  m.questions ? m.questions.length : drawFromBlueprint(questions, m.blueprint ?? [], createRng(1)).length;
+
+const summaries: MockSummary[] = mocks.map((m) => ({
+  id: m.id,
+  slug: m.slug,
+  title: m.title,
+  description: m.description,
+  durationMin: m.durationMin,
+  passingRate: m.passingRate,
+  questionCount: countFor(m),
+}));
+---
+
+<ExamLayout
+  exam={exam}
+  tab="mock"
+  description={`${exam.name}の模擬試験。制限時間つきで解き、分野別に採点します。`}
+>
+  <h1 class="section-title">{t.mock.title}</h1>
+  <p class="lead meta">{t.mock.lead}</p>
+  <MockList client:load examId={exam.id} mocks={summaries} totalQuestions={questions.length} />
+</ExamLayout>
+
+<style>
+  .lead {
+    margin-bottom: var(--s-5);
+  }
+</style>

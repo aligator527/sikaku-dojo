@@ -1,0 +1,228 @@
+---
+import { getCollection, render } from 'astro:content';
+
+import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
+import { t } from '../../i18n';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getExams, getQuestions, getTerms, type Term, type TermEntry } from '../../lib/content';
+import { excerpt } from '../../lib/markdown/excerpt';
+import { routes } from '../../lib/paths';
+
+export async function getStaticPaths() {
+  const terms = await getTerms();
+  const entries = await getCollection('glossary');
+  return entries.map((entry) => ({
+    params: { term: entry.id },
+    props: { entry, term: terms.find((x) => x.id === entry.id)! },
+  }));
+}
+
+interface Props {
+  entry: TermEntry;
+  term: Term;
+}
+
+const { entry, term } = Astro.props;
+const { Content } = await render(entry);
+const [allTerms, exams] = await Promise.all([getTerms(), getExams()]);
+const related = term.related
+  .map((id) => allTerms.find((x) => x.id === id))
+  .filter((x): x is Term => Boolean(x));
+const termExams = exams.filter((e) => term.exams.includes(e.id));
+
+// Questions that mention the term (or an alias) in their stem.
+const needles = [term.term, ...term.aliases].filter((n) => n.length >= 2);
+const stems = await getCollection('questions', (q) => term.exams.includes(q.data.exam.id));
+const mentioned = new Set(
+  stems
+    .filter((q) => needles.some((n) => q.data.stem.includes(n) || (q.body ?? '').includes(n)))
+    .map((q) => q.id),
+);
+const relatedQuestions = (
+  await Promise.all(termExams.map(async (exam) => (await getQuestions(exam.id)).map((q) => ({ exam, q }))))
+)
+  .flat()
+  .filter(({ q }) => mentioned.has(q.id))
+  .slice(0, 12);
+const stemById = new Map(stems.map((s) => [s.id, s.data.stem]));
+---
+
+<BaseLayout
+  title={`${term.term}（${term.reading}）`}
+  description={`${term.term}${term.en ? `（${term.en}）` : ''}：${term.summary}`}
+  searchable
+  searchFilters={{ 種類: '用語' }}
+>
+  <div class="container page">
+    <Breadcrumbs
+      items={[
+        { label: t.site.name, href: routes.home() },
+        { label: t.glossary.title, href: routes.glossary() },
+        { label: term.term },
+      ]}
+    />
+    <article class="term">
+      <header class="head">
+        <p class="reading">{term.reading}</p>
+        <h1 data-pagefind-meta="title">{term.term}</h1>
+        {term.en && <p class="en">{term.en}</p>}
+        {term.aliases.length > 0 && (
+          <p class="meta">
+            {t.glossary.aliases}：{term.aliases.join('、')}
+          </p>
+        )}
+        <p class="summary">{term.summary}</p>
+      </header>
+
+      {term.formulaHtml && (
+        <section class="formula" aria-label={t.glossary.formula}>
+          <Fragment set:html={term.formulaHtml} />
+        </section>
+      )}
+
+      <div class="prose">
+        <Content />
+      </div>
+
+      <footer class="foot" data-pagefind-ignore>
+        <section>
+          <h2 class="foot-title">{t.glossary.exams}</h2>
+          <ul class="chips">
+            {termExams.map((e) => (
+              <li>
+                <a class="tag" href={routes.examGlossary(e.id)}>
+                  {e.shortName}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+        {related.length > 0 && (
+          <section>
+            <h2 class="foot-title">{t.glossary.related}</h2>
+            <ul class="related">
+              {related.map((r) => (
+                <li>
+                  <a href={routes.term(r.id)}>{r.term}</a>
+                  <span class="meta">{r.summary}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+        {relatedQuestions.length > 0 && (
+          <section>
+            <h2 class="foot-title">{t.glossary.relatedQuestions}</h2>
+            <ul class="related">
+              {relatedQuestions.map(({ exam, q }) => (
+                <li>
+                  <a href={routes.question(exam.id, q.slug)}>
+                    {exam.shortName} {t.question.number(q.order)}
+                  </a>
+                  <span class="meta">{excerpt(stemById.get(q.id) ?? '', 50)}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+      </footer>
+    </article>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-top: var(--s-5);
+  }
+
+  .term {
+    max-width: var(--prose-width);
+    margin-top: var(--s-4);
+  }
+
+  .head {
+    display: grid;
+    gap: var(--s-1);
+    padding-bottom: var(--s-5);
+    margin-bottom: var(--s-5);
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .reading {
+    font-size: var(--fs-sm);
+    color: var(--ink-3);
+    letter-spacing: 0.1em;
+  }
+
+  h1 {
+    font-size: var(--fs-3xl);
+  }
+
+  .en {
+    font-style: italic;
+    color: var(--ink-2);
+  }
+
+  .summary {
+    margin-top: var(--s-3);
+    font-size: var(--fs-lg);
+  }
+
+  .formula {
+    margin-bottom: var(--s-5);
+    padding: var(--s-3) var(--s-4);
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+
+  .foot {
+    display: grid;
+    gap: var(--s-5);
+    margin-top: var(--s-7);
+    padding-top: var(--s-5);
+    border-top: 1px solid var(--rule-strong);
+  }
+
+  .foot-title {
+    font-family: var(--font-sans);
+    font-size: var(--fs-sm);
+    color: var(--ink-2);
+    margin-bottom: var(--s-2);
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2);
+    padding: 0;
+    list-style: none;
+  }
+
+  .chips a {
+    text-decoration: none;
+    color: var(--ai);
+  }
+
+  .related {
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--rule);
+  }
+
+  .related li {
+    display: grid;
+    gap: 2px;
+    padding: var(--s-2) 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .related a {
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .related .meta {
+    font-size: var(--fs-xs);
+  }
+</style>

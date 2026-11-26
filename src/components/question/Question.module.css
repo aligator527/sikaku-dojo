@@ -1,0 +1,486 @@
+/* Shared styles for every question-related island (practice, drill, mock, review). */
+
+.question {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--s-5);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.number {
+  font-family: var(--font-serif);
+  font-size: var(--fs-2xl);
+  font-weight: 700;
+  line-height: 1;
+  margin-right: var(--s-2);
+}
+
+.passage {
+  padding: var(--s-4) var(--s-5);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  background: var(--surface-sunken);
+}
+
+.passageLabel {
+  display: block;
+  margin-bottom: var(--s-2);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--ink-3);
+}
+
+.stem {
+  font-size: var(--fs-md);
+}
+
+/* ---------------- choices ---------------- */
+
+.choices {
+  display: grid;
+  gap: var(--s-2);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.choice {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr) 1.75rem;
+  align-items: start;
+  gap: var(--s-2);
+  padding: var(--s-3) var(--s-3) var(--s-3) var(--s-3);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  cursor: pointer;
+  transition:
+    border-color 120ms ease,
+    background-color 120ms ease;
+}
+
+.choice:hover {
+  border-color: var(--ai);
+}
+
+.choice input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.choice:has(input:focus-visible) {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.choice:has(input:checked) {
+  border-color: var(--ai);
+  background: var(--ai-tint);
+}
+
+.choiceLabel {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid var(--rule-strong);
+  border-radius: 50%;
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  line-height: 1;
+  background: var(--paper);
+}
+
+.choice:has(input:checked) .choiceLabel {
+  border-color: var(--ai);
+  background: var(--ai);
+  color: var(--on-ai);
+}
+
+.choiceText {
+  padding-top: 0.1rem;
+  min-width: 0;
+}
+
+.choiceMark {
+  display: grid;
+  place-items: center;
+  align-self: center;
+}
+
+.locked {
+  cursor: default;
+}
+
+.locked:hover {
+  border-color: var(--rule-strong);
+}
+
+.choice.isCorrect,
+.choice.isCorrect:has(input:checked) {
+  border-color: var(--ok);
+  background: var(--ok-tint);
+}
+
+.choice.isWrong,
+.choice.isWrong:has(input:checked) {
+  border-color: var(--ng);
+  background: var(--ng-tint);
+}
+
+.choice.isWrong:has(input:checked) .choiceLabel {
+  border-color: var(--ng);
+  background: var(--ng);
+  color: var(--surface);
+}
+
+.choice.isCorrect:has(input:checked) .choiceLabel {
+  border-color: var(--ok);
+  background: var(--ok);
+  color: var(--surface);
+}
+
+.markOk {
+  color: var(--ok);
+}
+
+.markNg {
+  color: var(--ng);
+}
+
+/* ---------------- inputs ---------------- */
+
+.numeric {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.numeric input {
+  width: min(16rem, 100%);
+  font-variant-numeric: tabular-nums;
+}
+
+.hint {
+  flex-basis: 100%;
+  font-size: var(--fs-sm);
+  color: var(--ink-3);
+}
+
+.essay textarea {
+  width: 100%;
+  min-height: 10rem;
+  padding: var(--s-3);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  line-height: 1.8;
+  resize: vertical;
+}
+
+.charCount {
+  margin-top: var(--s-1);
+  text-align: right;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+
+.overLimit {
+  color: var(--shu);
+  font-weight: 700;
+}
+
+/* ---------------- journal (仕訳) ---------------- */
+
+.journal {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--s-3);
+}
+
+@media (min-width: 52rem) {
+  .journal {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.journalSide {
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.journalSide h4 {
+  padding: var(--s-2) var(--s-3);
+  font-family: var(--font-sans);
+  font-size: var(--fs-sm);
+  background: var(--surface-sunken);
+  border-bottom: 1px solid var(--rule);
+}
+
+.journalRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 8.5rem 2rem;
+  gap: var(--s-2);
+  align-items: center;
+  padding: var(--s-2) var(--s-3);
+  border-bottom: 1px solid var(--rule);
+}
+
+.journalRow select,
+.journalRow input {
+  width: 100%;
+  min-width: 0;
+}
+
+.journalRow input {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.journalFoot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--s-1) var(--s-3);
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+
+.iconButton {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border: 0;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--ink-3);
+}
+
+.iconButton:hover {
+  background: var(--surface-sunken);
+  color: var(--ink);
+}
+
+.journalTable {
+  width: 100%;
+  font-size: var(--fs-sm);
+  font-variant-numeric: tabular-nums;
+  background: var(--surface);
+}
+
+.journalTable th,
+.journalTable td {
+  padding: var(--s-1) var(--s-3);
+  border: 1px solid var(--rule-strong);
+}
+
+.journalTable th {
+  background: var(--surface-sunken);
+  font-weight: 700;
+  text-align: center;
+}
+
+.amount {
+  text-align: right;
+}
+
+/* ---------------- actions & verdict ---------------- */
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.spacer {
+  flex: 1;
+}
+
+.verdict {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2) var(--s-4);
+  padding: var(--s-3) var(--s-4);
+  border-left: 4px solid;
+  background: var(--surface);
+}
+
+.verdictOk {
+  border-color: var(--ok);
+  background: var(--ok-tint);
+}
+
+.verdictNg {
+  border-color: var(--ng);
+  background: var(--ng-tint);
+}
+
+.verdictPending {
+  border-color: var(--warn);
+  background: var(--warn-tint);
+}
+
+.verdictWord {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-family: var(--font-serif);
+  font-size: var(--fs-xl);
+  font-weight: 700;
+}
+
+.verdictOk .verdictWord {
+  color: var(--ok);
+}
+
+.verdictNg .verdictWord {
+  color: var(--ng);
+}
+
+.answerKey {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--s-2);
+  font-size: var(--fs-md);
+}
+
+.answerKeyLabel {
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
+
+.answerKeyValue {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: var(--fs-lg);
+}
+
+/* ---------------- explanation ---------------- */
+
+.explain {
+  border-top: 1px solid var(--rule-strong);
+}
+
+.explain > summary {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-3) 0;
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  color: var(--ai);
+  cursor: pointer;
+  list-style: none;
+}
+
+.explain > summary::-webkit-details-marker {
+  display: none;
+}
+
+.explain > summary svg {
+  transition: transform 150ms ease;
+}
+
+.explain[open] > summary svg {
+  transform: rotate(90deg);
+}
+
+.explainBody {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--s-5);
+  padding-bottom: var(--s-4);
+}
+
+.explainTitle {
+  font-size: var(--fs-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.explainTitle::before {
+  content: '';
+  width: 0.35em;
+  height: 1em;
+  background: var(--shu);
+}
+
+.modelAnswer {
+  padding: var(--s-4);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.rubric {
+  padding-left: 1.4em;
+  font-size: var(--fs-sm);
+}
+
+.selfGrade {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--s-2);
+}
+
+.selfGradeButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+
+.history {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+
+/* ---------- keyboard hints ---------- */
+
+.keyHints {
+  display: none;
+  flex-wrap: wrap;
+  gap: var(--s-1) var(--s-4);
+  margin-top: var(--s-2);
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .keyHints {
+    display: flex;
+  }
+}
+
+.keyHints kbd {
+  display: inline-block;
+  min-width: 1.4em;
+  padding: 0 0.3em;
+  margin: 0 0.1em;
+  border: 1px solid var(--rule-strong);
+  border-bottom-width: 2px;
+  border-radius: 3px;
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 0.95em;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--ink-2);
+}

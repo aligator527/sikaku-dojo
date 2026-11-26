@@ -1,0 +1,150 @@
+---
+import { ArrowLeft, ArrowRight, List } from '@lucide/astro';
+import { getCollection } from 'astro:content';
+
+import QuestionPage from '../../../../components/question/QuestionPage';
+import { t } from '../../../../i18n';
+import ExamLayout from '../../../../layouts/ExamLayout.astro';
+import { examContext, getExams, getQuestions, topicName, type Exam } from '../../../../lib/content';
+import type { Question } from '../../../../domain/question';
+import { excerpt } from '../../../../lib/markdown/excerpt';
+import { routes } from '../../../../lib/paths';
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const exam of await getExams()) {
+    const questions = await getQuestions(exam.id);
+    const stems = new Map(
+      (await getCollection('questions', (e) => e.data.exam.id === exam.id)).map((e) => [e.id, e.data.stem]),
+    );
+    for (const [i, question] of questions.entries()) {
+      paths.push({
+        params: { exam: exam.id, slug: question.slug },
+        props: {
+          exam,
+          question,
+          prev: questions[i - 1],
+          next: questions[i + 1],
+          summary: excerpt(stems.get(question.id) ?? '', 110),
+        },
+      });
+    }
+  }
+  return paths;
+}
+
+interface Props {
+  exam: Exam;
+  question: Question;
+  prev?: Question;
+  next?: Question;
+  summary: string;
+}
+
+const { exam, question, prev, next, summary } = Astro.props;
+const label = t.question.number(question.order);
+const mainTopic = topicName(exam, question.topics[0]!).split(/[（(]/)[0];
+const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
+---
+
+<ExamLayout
+  exam={exam}
+  tab="questions"
+  title={`${exam.shortName} ${label}（${mainTopic}）`}
+  description={`${exam.name} ${label}：${summary}`}
+  crumb={label}
+  searchable
+  searchKind="問題"
+>
+  <div class="question-page">
+    <QuestionPage client:load question={question} exam={examContext(exam)} pageUrl={pageUrl} />
+    {question.source.kind === 'past' && (
+      <p class="meta notice">
+        {t.question.pastNotice}
+        {question.source.url && (
+          <>
+            {' '}
+            <a href={question.source.url} target="_blank" rel="noreferrer">
+              {t.question.source}：{question.source.label}
+            </a>
+          </>
+        )}
+      </p>
+    )}
+    <nav class="pager" aria-label="問題の移動" data-pagefind-ignore>
+      {prev ? (
+        <a href={routes.question(exam.id, prev.slug)} rel="prev">
+          <ArrowLeft size={16} aria-hidden="true" />
+          <span>
+            <small>{t.question.prev}</small>
+            {t.question.number(prev.order)}
+          </span>
+        </a>
+      ) : (
+        <span />
+      )}
+      <a href={routes.questions(exam.id)} class="to-list">
+        <List size={16} aria-hidden="true" />
+        {t.question.list}
+      </a>
+      {next ? (
+        <a href={routes.question(exam.id, next.slug)} rel="next" class="next">
+          <span>
+            <small>{t.question.next}</small>
+            {t.question.number(next.order)}
+          </span>
+          <ArrowRight size={16} aria-hidden="true" />
+        </a>
+      ) : (
+        <span />
+      )}
+    </nav>
+  </div>
+</ExamLayout>
+
+<style>
+  .question-page {
+    max-width: 50rem;
+  }
+
+  .notice {
+    margin-top: var(--s-4);
+    font-size: var(--fs-xs);
+  }
+
+  .pager {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: var(--s-3);
+    margin-top: var(--s-6);
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--rule-strong);
+  }
+
+  .pager a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    text-decoration: none;
+    font-weight: 700;
+  }
+
+  .pager small {
+    display: block;
+    font-size: var(--fs-xs);
+    font-weight: 400;
+    color: var(--ink-3);
+  }
+
+  .pager .next {
+    justify-self: end;
+    text-align: right;
+  }
+
+  .to-list {
+    font-size: var(--fs-sm);
+    font-weight: 500 !important;
+    color: var(--ink-2);
+  }
+</style>

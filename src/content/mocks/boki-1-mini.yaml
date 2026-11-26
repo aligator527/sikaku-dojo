@@ -1,0 +1,11 @@
+exam: boki-1
+title: 1級 論点チェック（6問）
+description: 商業簿記・会計学（減損・企業結合・退職給付・持分法）4問と、工業簿記・原価計算（配合差異・歩留差異、設備投資の意思決定）2問を出題します。
+durationMin: 40
+passingRate: 0.7
+order: 10
+blueprint:
+  - topics: [fixed-assets-impairment, equity-business-combination, retirement-benefits, consolidation]
+    count: 4
+  - topics: [standard-costing, decision-making]
+    count: 2

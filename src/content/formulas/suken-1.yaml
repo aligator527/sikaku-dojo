@@ -1,0 +1,218 @@
+exam: suken-1
+title: 数検1級 公式集
+intro: '数検1級の1次（計算技能）と2次（数理技能）でよく使う公式を分野別にまとめました。1次は電卓を使えないので、展開式や特殊な積分の値はそのまま使える形で覚えておくと速くなります。2次の記述では、公式を使う前に成り立つ条件（連続性・収束・正則性・互いに素など）を答案に書きます。$\log$ は自然対数を表します。'
+updatedAt: '2026-11-26'
+sections:
+  - title: 極限と級数
+    topics: [calculus-limits]
+    items:
+      - name: 主要な極限
+        tex: '\begin{aligned} &\lim_{x \to 0}\frac{\sin x}{x} = 1, \qquad \lim_{x \to 0}\frac{1-\cos x}{x^2} = \frac{1}{2}, \qquad \lim_{x \to \pm\infty}\left(1 + \frac{1}{x}\right)^{x} = e, \\ &\lim_{x \to 0}\frac{e^x - 1}{x} = 1, \qquad \lim_{x \to 0}\frac{\log(1+x)}{x} = 1 \end{aligned}'
+        note: '角度はラジアンです。$\lim_{x \to 0}(1+x)^{1/x} = e$ と同じ内容で、$\lim_{x \to \infty}\left(1 + \frac{a}{x}\right)^{x} = e^{a}$ もよく使います。$x \to \infty$ では $\frac{\sin x}{x} \to 0$ で、1 ではありません。$x \to \infty$ での増大の速さは $\log x \ll x^{a} \ll e^{x}$（$a > 0$）です。'
+      - name: ロピタルの定理
+        tex: '\lim_{x \to a}\frac{f(x)}{g(x)} = \lim_{x \to a}\frac{f^{\prime}(x)}{g^{\prime}(x)}'
+        note: '$\frac{0}{0}$ 型か $\frac{\infty}{\infty}$ 型で、右辺の極限が存在する（$\pm\infty$ も可）ときに使えます。$a$ の近く（$a$ 自身を除く）で $g^{\prime}(x) \neq 0$ が必要です。$0 \cdot \infty$ 型や $1^{\infty}$ 型は、分数の形にするか対数をとってから使います。右辺の極限がなくても左辺の極限があることはあります（$\frac{x + \sin x}{x}$、$x \to \infty$）。商の微分 $\left(\frac{f}{g}\right)^{\prime}$ と混同しないようにします。'
+      - name: 級数の収束判定
+        tex: '\lim_{n \to \infty}\left|\frac{a_{n+1}}{a_n}\right| = r\ \ \text{または}\ \ \lim_{n \to \infty}\sqrt[n]{|a_n|} = r \;\Rightarrow\; \begin{cases} r < 1: & \text{絶対収束} \\ r > 1: & \text{発散} \end{cases}'
+        note: '比判定法（ダランベール）と根判定法（コーシー）です。$r = 1$ のときは判定できません。$\sum \frac{1}{n^{p}}$ は $p > 1$ で収束、$p \leq 1$ で発散し、どちらも $r = 1$ になるので、比較判定法や積分判定法（$f$ が正で単調減少なら $\sum f(n)$ と $\int_1^{\infty} f(x)\,dx$ の収束・発散が一致）を使います。交代級数 $\sum (-1)^{n}b_n$ は、$b_n$ が単調減少して 0 に収束すれば収束します（ライプニッツの判定法）。'
+      - name: べき級数の収束半径
+        tex: 'R = \frac{1}{\displaystyle\limsup_{n \to \infty}\sqrt[n]{|a_n|}} = \lim_{n \to \infty}\left|\frac{a_n}{a_{n+1}}\right|'
+        note: 'べき級数 $\sum a_n (x-c)^n$ は $|x-c| < R$ で絶対収束し、$|x-c| > R$ で発散します。右の式は極限が存在するときだけ使えます。比の向きは $a_n / a_{n+1}$ で、比判定法とは逆です。端点 $|x-c| = R$ での収束は別に調べます（$\sum \frac{x^n}{n}$ は $x = -1$ で収束、$x = 1$ で発散）。$\sum a_n x^{2n}$ のように一部の次数しかないときは、$x^2$ を変数とみるか、比判定法を直接使います。'
+      - name: 代表的な級数の和
+        tex: '\sum_{n=1}^{\infty}\frac{1}{n^2} = \frac{\pi^2}{6},\qquad \sum_{n=1}^{\infty}\frac{(-1)^{n-1}}{n} = \log 2,\qquad \sum_{n=0}^{\infty}\frac{(-1)^{n}}{2n+1} = \frac{\pi}{4}'
+        note: '右の 2 つは $\log(1+x)$、$\arctan x$ のマクローリン展開に $x = 1$ を代入したものです（収束半径の端点なので、アーベルの定理で正当化します）。$\sum_{n=1}^{\infty}\frac{1}{n^4} = \frac{\pi^4}{90}$、$\sum_{n=1}^{\infty}\frac{1}{(2n-1)^2} = \frac{\pi^2}{8}$ もフーリエ級数から導けます。$\frac{1}{n(n+1)} = \frac{1}{n} - \frac{1}{n+1}$ のように部分分数分解で項が打ち消し合う形は、最初に疑う型です。'
+
+  - title: 微分法とテイラー展開
+    topics: [differential]
+    items:
+      - name: テイラーの定理
+        tex: 'f(x) = \sum_{k=0}^{n-1}\frac{f^{(k)}(a)}{k!}(x-a)^k + \frac{f^{(n)}(c)}{n!}(x-a)^n\qquad (c\ \text{は}\ a\ \text{と}\ x\ \text{の間の数})'
+        note: '最後の項がラグランジュの剰余項で、$f$ が $n$ 回微分可能なときに成り立ちます。剰余項の $c$ は $x$ に依存する点で、$f^{(n)}(a)$ ではありません。$a = 0$ の場合をマクローリン展開といいます。近似の誤差評価では、$|f^{(n)}(c)| \leq M$ となる上界 $M$ を使います。'
+        term: taylor-expansion
+      - name: 主要なマクローリン展開
+        tex: '\begin{aligned} e^x &= \sum_{n=0}^{\infty}\frac{x^n}{n!}, & \sin x &= \sum_{n=0}^{\infty}\frac{(-1)^n x^{2n+1}}{(2n+1)!}, & \cos x &= \sum_{n=0}^{\infty}\frac{(-1)^n x^{2n}}{(2n)!}, \\ \log(1+x) &= \sum_{n=1}^{\infty}\frac{(-1)^{n-1}x^n}{n}, & (1+x)^{\alpha} &= \sum_{n=0}^{\infty}\binom{\alpha}{n}x^n, & \arctan x &= \sum_{n=0}^{\infty}\frac{(-1)^n x^{2n+1}}{2n+1} \end{aligned}'
+        note: '$e^x$、$\sin x$、$\cos x$ はすべての実数 $x$ で収束します。$\log(1+x)$ は $-1 < x \leq 1$、$(1+x)^{\alpha}$ と $\frac{1}{1-x} = \sum x^n$ は $|x| < 1$、$\arctan x$ は $|x| \leq 1$ で成り立ちます。$\binom{\alpha}{n} = \frac{\alpha(\alpha-1)\cdots(\alpha-n+1)}{n!}$ は一般の実数 $\alpha$ に対する二項係数です。$\log(1+x)$ の展開を $n!$ で割ったり、定数項 1 を付けたりする誤りに注意します。'
+      - name: ライプニッツの公式
+        tex: '(fg)^{(n)} = \sum_{k=0}^{n}\binom{n}{k}f^{(k)}g^{(n-k)}'
+        note: '積の $n$ 階導関数で、係数は二項定理と同じです。一方が多項式（$x^2 e^x$ など）なら、多項式の側の高階導関数が途中から 0 になるので項が少なくなります。$\frac{1}{x^2-1}$ のような有理関数は、部分分数分解して $\left(\frac{1}{x-a}\right)^{(n)} = \frac{(-1)^n n!}{(x-a)^{n+1}}$ を使う方が速いこともあります。'
+      - name: 逆関数の微分と逆三角関数
+        tex: '\frac{dy}{dx} = \frac{1}{\dfrac{dx}{dy}},\qquad (\arcsin x)^{\prime} = \frac{1}{\sqrt{1-x^2}},\quad (\arccos x)^{\prime} = -\frac{1}{\sqrt{1-x^2}},\quad (\arctan x)^{\prime} = \frac{1}{1+x^2}'
+        note: '$\frac{dx}{dy} \neq 0$ のときに成り立ちます。右辺は $y$ の式になるので、$x$ の式に直して答えます。逆三角関数は主値（$\arcsin$ は $\left[-\frac{\pi}{2}, \frac{\pi}{2}\right]$、$\arccos$ は $[0, \pi]$）をとることが前提で、$\arcsin$、$\arccos$ の導関数は $|x| < 1$ で考えます。2 階導関数は $\frac{d^2x}{dy^2}$ の逆数ではなく、$\frac{d^2y}{dx^2} = -\frac{d^2x/dy^2}{(dx/dy)^3}$ です。'
+      - name: 陰関数と媒介変数表示の微分
+        tex: 'F(x, y) = 0 \;\Rightarrow\; \frac{dy}{dx} = -\frac{F_x}{F_y}\quad (F_y \neq 0),\qquad \frac{d^2y}{dx^2} = \frac{\dot{x}\ddot{y} - \ddot{x}\dot{y}}{\dot{x}^3}'
+        note: '陰関数定理により、$F_y \neq 0$ の点の近くで $y$ が $x$ の関数として定まります。負号を落としやすいので、$x^2 + y^2 = 1$ で $\frac{dy}{dx} = -\frac{x}{y}$ になることで検算します。曲線上の点 $(a, b)$ での接線は $F_x(a, b)(x-a) + F_y(a, b)(y-b) = 0$ です。右の式は媒介変数表示 $x = x(t)$、$y = y(t)$（ドットは $t$ での微分）の 2 階導関数で、$\frac{dy}{dx} = \frac{\dot{y}}{\dot{x}}$ をもう一度 $t$ で微分してから $\dot{x}$ で割ります。分母は $\dot{x}^2$ ではなく $\dot{x}^3$ です。'
+
+  - title: 積分の計算
+    topics: [integral]
+    items:
+      - name: 部分積分
+        tex: '\int_a^b f(x)\,g^{\prime}(x)\,dx = \Bigl[f(x)\,g(x)\Bigr]_a^b - \int_a^b f^{\prime}(x)\,g(x)\,dx'
+        note: '微分すると簡単になる方（多項式、$\log x$、逆三角関数）を $f$ に選びます。$e^{ax}\sin bx$ のような積は 2 回部分積分すると元の積分が現れるので、方程式として解きます。広義積分では、境界項 $\bigl[fg\bigr]$ の極限が有限であることを確かめます。'
+      - name: 置換積分
+        tex: '\int_a^b f(x)\,dx = \int_{\alpha}^{\beta} f\bigl(\varphi(t)\bigr)\,\varphi^{\prime}(t)\,dt\qquad \bigl(a = \varphi(\alpha),\ b = \varphi(\beta)\bigr)'
+        note: '積分区間も $t$ の値に変えます（変え忘れが最も多い誤りです）。$\varphi^{\prime}(t)$ も掛け忘れないようにします。$\sqrt{a^2 - x^2}$ には $x = a\sin t$、$\sqrt{x^2 + a^2}$ には $x = a\tan t$、三角関数の有理式には $t = \tan\frac{x}{2}$（$\sin x = \frac{2t}{1+t^2}$、$\cos x = \frac{1-t^2}{1+t^2}$、$dx = \frac{2\,dt}{1+t^2}$）が定石です。'
+      - name: 主要な不定積分
+        tex: '\begin{aligned} &\int\frac{dx}{x^2+a^2} = \frac{1}{a}\arctan\frac{x}{a}, & &\int\frac{dx}{\sqrt{a^2-x^2}} = \arcsin\frac{x}{a}, \\ &\int\frac{dx}{\sqrt{x^2+A}} = \log\left|x + \sqrt{x^2+A}\right|, & &\int\frac{dx}{x^2-a^2} = \frac{1}{2a}\log\left|\frac{x-a}{x+a}\right| \end{aligned}'
+        note: '積分定数は省略しています（$a > 0$、$A \neq 0$）。$\frac{1}{a}$ や $\frac{1}{2a}$ の係数を落としやすいので、微分して検算します。$\int\sqrt{a^2-x^2}\,dx = \frac{1}{2}\left(x\sqrt{a^2-x^2} + a^2\arcsin\frac{x}{a}\right)$ もよく使います。'
+      - name: ウォリスの公式
+        tex: '\int_0^{\pi/2}\sin^n x\,dx = \int_0^{\pi/2}\cos^n x\,dx = \begin{cases} \dfrac{(n-1)!!}{n!!}\cdot\dfrac{\pi}{2} & (n\ \text{が偶数}) \\[1.5ex] \dfrac{(n-1)!!}{n!!} & (n\ \text{が奇数}) \end{cases}'
+        note: '漸化式 $I_n = \frac{n-1}{n}I_{n-2}$（$n \geq 2$）と $I_0 = \frac{\pi}{2}$、$I_1 = 1$ から導かれます。$n!!$ は 1 つおきの積（$6!! = 6 \cdot 4 \cdot 2$、$5!! = 5 \cdot 3 \cdot 1$）で、$n!$ を 2 回とったものではありません。$\frac{\pi}{2}$ が付くのは偶数のときだけです。例えば $\int_0^{\pi/2}\sin^5 x\,dx = \frac{4 \cdot 2}{5 \cdot 3 \cdot 1} = \frac{8}{15}$ です。'
+
+  - title: 広義積分と特殊関数
+    topics: [integral]
+    items:
+      - name: ガンマ関数
+        tex: '\Gamma(s) = \int_0^{\infty}x^{s-1}e^{-x}\,dx\ \ (s > 0),\qquad \Gamma(s+1) = s\,\Gamma(s),\quad \Gamma(n) = (n-1)!,\quad \Gamma\left(\tfrac{1}{2}\right) = \sqrt{\pi}'
+        note: '指数は $s-1$ なので、$\Gamma(n)$ は $n!$ ではなく $(n-1)!$ です。置換すると $\int_0^{\infty}x^{n}e^{-ax}\,dx = \frac{n!}{a^{n+1}}$（$a > 0$）が得られます。半整数では $\Gamma\left(\frac{5}{2}\right) = \frac{3}{2} \cdot \frac{1}{2}\sqrt{\pi} = \frac{3\sqrt{\pi}}{4}$ のように漸化式を使います。相反公式 $\Gamma(s)\Gamma(1-s) = \frac{\pi}{\sin\pi s}$（$0 < s < 1$）もあります。'
+        term: gamma-function
+      - name: ベータ関数
+        tex: 'B(p, q) = \int_0^1 x^{p-1}(1-x)^{q-1}\,dx = \frac{\Gamma(p)\,\Gamma(q)}{\Gamma(p+q)} = 2\int_0^{\pi/2}\sin^{2p-1}\theta\,\cos^{2q-1}\theta\,d\theta'
+        note: '$p > 0$、$q > 0$ で収束します。指数が $p-1$、$q-1$ であることと、三角関数の形では指数が $2p-1$、$2q-1$ で係数 2 が付くことを間違えやすいので注意します。計算では $\int_0^1 x^{m}(1-x)^{n}\,dx = \frac{m!\,n!}{(m+n+1)!}$（$m, n$ は 0 以上の整数）の形をよく使います。'
+      - name: ガウス積分
+        tex: '\int_{-\infty}^{\infty}e^{-ax^2}\,dx = \sqrt{\frac{\pi}{a}},\qquad \int_{-\infty}^{\infty}x^2 e^{-ax^2}\,dx = \frac{1}{2a}\sqrt{\frac{\pi}{a}}\qquad (a > 0)'
+        note: '積分の 2 乗を重積分にして極座標に変換する（$dx\,dy = r\,dr\,d\theta$）ことで導きます。区間が $[0, \infty)$ なら値は半分です。$x^2$ を掛けた形は、左の式の両辺を $a$ で微分すると得られます。$x$ の奇数乗を掛けた $(-\infty, \infty)$ の積分は 0 です。$\Gamma\left(\frac{1}{2}\right) = \sqrt{\pi}$ と同じ内容です。'
+
+  - title: 多変数関数
+    topics: [multivariable]
+    items:
+      - name: 全微分と連鎖律
+        tex: 'dz = \frac{\partial f}{\partial x}\,dx + \frac{\partial f}{\partial y}\,dy,\qquad \frac{dz}{dt} = \frac{\partial f}{\partial x}\frac{dx}{dt} + \frac{\partial f}{\partial y}\frac{dy}{dt}'
+        note: '$z = f(x, y)$ が全微分可能（偏導関数が連続なら十分）なときに成り立ちます。偏微分可能でも全微分可能とは限りません。$x = x(u, v)$、$y = y(u, v)$ なら $\frac{\partial z}{\partial u} = f_x\frac{\partial x}{\partial u} + f_y\frac{\partial y}{\partial u}$ です。2 階偏導関数が連続なら $f_{xy} = f_{yx}$ です。'
+        term: chain-rule
+      - name: 2変数関数の極値判定
+        tex: 'f_x = f_y = 0,\quad D = f_{xx}f_{yy} - f_{xy}^2 \;\Rightarrow\; \begin{cases} D > 0,\ f_{xx} > 0: & \text{極小} \\ D > 0,\ f_{xx} < 0: & \text{極大} \\ D < 0: & \text{極値でない（鞍点）} \end{cases}'
+        note: 'まず停留点（$f_x = f_y = 0$ の点）をすべて求め、各点でヘッセ行列の行列式 $D$ の符号を調べます。$D = 0$ のときは判定できないので、直線や曲線に沿った値の変化を直接調べます。停留点でも極値とは限りません。3 変数以上では、ヘッセ行列の首座小行列式（または固有値）の符号で判定します。'
+        term: hessian-matrix
+      - name: ラグランジュの未定乗数法
+        tex: 'L(x, y, \lambda) = f(x, y) - \lambda\,g(x, y),\qquad \frac{\partial L}{\partial x} = \frac{\partial L}{\partial y} = 0,\quad g(x, y) = 0'
+        note: '条件 $g(x, y) = 0$ のもとでの $f$ の極値の**候補**を求める方法で、$(g_x, g_y) \neq (0, 0)$ の点で使えます（$g_x = g_y = 0$ となる点は別に調べます）。得られるのは必要条件なので、最大・最小は、条件を満たす点の集合が有界閉集合であることを確かめてから候補の値を比べて決めます。$\lambda$ の前の符号はどちらでも結果は同じです。'
+        term: lagrange-multiplier
+      - name: ヤコビアンと変数変換
+        tex: '\iint_D f(x, y)\,dx\,dy = \iint_E f\bigl(x(u, v), y(u, v)\bigr)\left|\frac{\partial(x, y)}{\partial(u, v)}\right|du\,dv,\qquad \frac{\partial(x, y)}{\partial(u, v)} = \begin{vmatrix} x_u & x_v \\ y_u & y_v \end{vmatrix}'
+        note: 'ヤコビアンには**絶対値**を付けます。極座標 $x = r\cos\theta$、$y = r\sin\theta$ では $dx\,dy = r\,dr\,d\theta$、3 次元の球座標では $dx\,dy\,dz = r^2\sin\theta\,dr\,d\theta\,d\varphi$ です。変換後の領域 $E$ を正しく求めることと、$r$ を掛け忘れないことが要点です。逆向きの変換とは $\frac{\partial(x, y)}{\partial(u, v)} = 1 \Big/ \frac{\partial(u, v)}{\partial(x, y)}$ の関係があります。'
+        term: jacobian
+
+  - title: 微分方程式
+    topics: [ode]
+    items:
+      - name: 変数分離形
+        tex: '\frac{dy}{dx} = f(x)\,g(y) \;\Rightarrow\; \int\frac{dy}{g(y)} = \int f(x)\,dx + C'
+        note: '$g(y)$ で割るので、$g(y_0) = 0$ となる定数解 $y = y_0$ が別にあります。答案ではこれを落とさないようにします。$\int\frac{dy}{y} = \log|y|$ から $y = Ce^{\cdots}$ とするとき、$C$ に正負と 0 を含めると定数解もまとめて書けます。同次形 $\frac{dy}{dx} = h\left(\frac{y}{x}\right)$ は $u = \frac{y}{x}$ と置くと変数分離形になります。'
+      - name: 1階線形微分方程式
+        tex: 'y^{\prime} + P(x)\,y = Q(x) \;\Rightarrow\; y = e^{-\int P(x)\,dx}\left(\int Q(x)\,e^{\int P(x)\,dx}\,dx + C\right)'
+        note: '両辺に積分因子 $e^{\int P\,dx}$ を掛けると左辺が $\bigl(y\,e^{\int P\,dx}\bigr)^{\prime}$ になることから導けます（定数変化法でも同じ結果になります）。$y^{\prime}$ の係数を 1 にしてから $P$ を読み取ります。$C$ をかっこの外に出すと一般解の形が変わってしまいます。ベルヌーイ型 $y^{\prime} + Py = Qy^{n}$（$n \neq 0, 1$）は $u = y^{1-n}$ と置くと 1 階線形になります。'
+      - name: 定数係数2階線形同次方程式
+        tex: 'y^{\prime\prime} + a y^{\prime} + b y = 0,\quad \lambda^2 + a\lambda + b = 0 \;\Rightarrow\; y = \begin{cases} C_1 e^{\lambda_1 x} + C_2 e^{\lambda_2 x} & (\text{異なる 2 実数解}) \\ (C_1 + C_2 x)\,e^{\lambda x} & (\text{重解}) \\ e^{px}(C_1\cos qx + C_2\sin qx) & (\lambda = p \pm qi) \end{cases}'
+        note: '特性方程式の解の種類で一般解の形が決まります。重解のときに $xe^{\lambda x}$ を付け忘れると、独立な解が 1 つ足りなくなります。虚数解 $p \pm qi$ のときは、実部 $p$ が指数関数に、虚部 $q$ が三角関数に入ります。$n$ 階でも同様で、$k$ 重解には $e^{\lambda x}, xe^{\lambda x}, \ldots, x^{k-1}e^{\lambda x}$ が対応します。'
+      - name: 非同次方程式の特殊解（未定係数法）
+        tex: 'y = y_h + y_p,\qquad R(x) = e^{\alpha x} \;\Rightarrow\; y_p = A\,x^{m}e^{\alpha x}\quad (m\ \text{は}\ \alpha\ \text{の特性根としての重複度})'
+        note: '一般解は、同次方程式の一般解 $y_h$ と、非同次方程式 $y^{\prime\prime} + ay^{\prime} + by = R(x)$ の特殊解 $y_p$ の和です。右辺が多項式・$e^{\alpha x}$・$\sin\beta x$・$\cos\beta x$ やそれらの積なら、同じ形の式に未定係数を置いて代入します。$\alpha$ が特性根でなければ $m = 0$ です。特性根と重なるのに $x^m$ を掛けないと、代入した左辺が 0 になって係数が決まりません。右辺が $\sin\beta x$ だけでも、$\cos\beta x$ の項を一緒に置きます。'
+
+  - title: 複素解析
+    topics: [complex]
+    items:
+      - name: コーシー・リーマンの方程式
+        tex: 'f(z) = u(x, y) + i\,v(x, y)\ \text{が正則} \iff u_x = v_y,\quad u_y = -v_x,\qquad f^{\prime}(z) = u_x + i\,v_x'
+        note: '同値は $u, v$ が全微分可能（偏導関数が連続なら十分）であることを前提とします。マイナスが付くのは $u_y = -v_x$ の方です。正則関数の実部・虚部は調和関数（$u_{xx} + u_{yy} = 0$）になるので、与えられた $u$ から CR 方程式で $v$ を求める問題がよく出ます。$\bar{z}$ はどこでも、$|z|^2$ は $z = 0$ 以外で CR 方程式を満たさず、どちらも正則ではありません。'
+      - name: コーシーの積分公式
+        tex: 'f^{(n)}(a) = \frac{n!}{2\pi i}\oint_C\frac{f(z)}{(z-a)^{n+1}}\,dz'
+        note: '$f$ が単純閉曲線 $C$ とその内部で正則、$a$ が $C$ の内部の点で、$C$ を反時計回りにまわるときに成り立ちます。$n = 0$ では $f(a) = \frac{1}{2\pi i}\oint_C\frac{f(z)}{z-a}\,dz$ です。分母の指数は $n+1$ で、$n!$ を掛け忘れやすい点に注意します。$C$ の内部で正則なら $\oint_C f(z)\,dz = 0$（コーシーの積分定理）です。'
+      - name: 留数の計算
+        tex: '\operatorname{Res}_{z=a}f(z) = \frac{1}{(k-1)!}\lim_{z \to a}\frac{d^{k-1}}{dz^{k-1}}\Bigl\{(z-a)^k f(z)\Bigr\},\qquad \operatorname{Res}_{z=a}\frac{p(z)}{q(z)} = \frac{p(a)}{q^{\prime}(a)}'
+        note: '左は $a$ が $k$ 位の極のとき、右は $q(a) = 0$、$q^{\prime}(a) \neq 0$ で $p$ が $a$ で正則なとき（1 位の極）です。留数はローラン展開の $(z-a)^{-1}$ の係数なので、真性特異点（$e^{1/z}$ の $z = 0$ など）では展開から直接読み取ります。左の式は位数を実際より高く見積もっても正しい値になりますが、低く見積もると誤ります。'
+      - name: 留数定理
+        tex: '\oint_C f(z)\,dz = 2\pi i\sum_{k}\operatorname{Res}_{z=a_k}f(z)'
+        note: '$f$ が $C$ の内部で有限個の孤立特異点 $a_k$ を除いて正則で、$C$ を反時計回りにまわるときです。和をとるのは $C$ の**内部**にある特異点だけで、外の極の留数は足しません。時計回りなら符号が逆になります。'
+        term: residue-theorem
+      - name: 実積分への応用
+        tex: '\begin{aligned} &\int_{-\infty}^{\infty}\frac{P(x)}{Q(x)}\,dx = 2\pi i\sum_{\operatorname{Im}a_k > 0}\operatorname{Res}_{z=a_k}\frac{P(z)}{Q(z)}, \\ &\int_0^{2\pi}R(\cos\theta, \sin\theta)\,d\theta = \oint_{|z|=1}R\left(\frac{z+z^{-1}}{2},\ \frac{z-z^{-1}}{2i}\right)\frac{dz}{iz} \end{aligned}'
+        note: '上は $P, Q$ が多項式で $\deg Q \geq \deg P + 2$、$Q$ が実軸上に零点をもたないときです（上半平面の大きな半円で閉じると、半円上の積分が 0 に近づく）。数えるのは上半平面の極だけです。$e^{i\alpha x}$（$\alpha > 0$）を掛けた積分は $\deg Q \geq \deg P + 1$ でよく（ジョルダンの補題）、実部・虚部から $\cos$、$\sin$ を含む積分を得ます。下は $z = e^{i\theta}$ と置く方法で、単位円の内部の極の留数を足します。'
+
+  - title: 行列と行列式
+    topics: [matrix]
+    items:
+      - name: 行列式の性質
+        tex: '\det(AB) = \det A\,\det B,\quad \det A^{\top} = \det A,\quad \det(cA) = c^{n}\det A,\quad \det A^{-1} = \frac{1}{\det A}'
+        note: '$A$、$B$ は $n$ 次正方行列です。$\det(cA)$ は $c$ 倍ではなく $c^n$ 倍です。ある行（列）の定数倍を他の行（列）に加えても値は変わらず、2 つの行を入れ替えると符号が反転します。$\det(A+B) = \det A + \det B$ は一般に成り立ちません。ブロック三角行列では $\det\begin{pmatrix} A & B \\ O & D \end{pmatrix} = \det A\,\det D$ です。'
+        term: determinant
+      - name: 逆行列と余因子行列
+        tex: 'A^{-1} = \frac{1}{\det A}\,\tilde{A},\quad \tilde{A}_{ij} = (-1)^{i+j}M_{ji},\qquad \begin{pmatrix} a & b \\ c & d \end{pmatrix}^{-1} = \frac{1}{ad-bc}\begin{pmatrix} d & -b \\ -c & a \end{pmatrix}'
+        note: '$\det A \neq 0$ のときだけ存在します。$M_{ji}$ は $A$ から第 $j$ 行と第 $i$ 列を除いた小行列式で、添字が**転置**になる点が要注意です。3 次以上では、掃き出し法 $(A \mid I) \to (I \mid A^{-1})$ の方が速く確実なことが多いです。積の逆行列は $(AB)^{-1} = B^{-1}A^{-1}$ と順序が入れ替わります。'
+      - name: ヴァンデルモンドの行列式
+        tex: '\begin{vmatrix} 1 & 1 & \cdots & 1 \\ x_1 & x_2 & \cdots & x_n \\ \vdots & \vdots & & \vdots \\ x_1^{n-1} & x_2^{n-1} & \cdots & x_n^{n-1} \end{vmatrix} = \prod_{1 \leq i < j \leq n}(x_j - x_i)'
+        note: '$x_1, \ldots, x_n$ がすべて異なるとき、かつそのときに限り 0 でないので、多項式補間の一意性の証明などに使います。各因子は「添字の大きい方 − 小さい方」で、すべて逆にすると $(-1)^{n(n-1)/2}$ だけ符号が変わります。3 次なら $(x_2-x_1)(x_3-x_1)(x_3-x_2)$ です。'
+      - name: 階数と連立1次方程式
+        tex: 'A\boldsymbol{x} = \boldsymbol{b}\ \text{が解をもつ} \iff \operatorname{rank}A = \operatorname{rank}(A \mid \boldsymbol{b}),\qquad \text{解の自由度} = n - \operatorname{rank}A'
+        note: '$n$ は未知数の個数です。解の自由度（任意定数の個数）は斉次方程式 $A\boldsymbol{x} = \boldsymbol{0}$ の解空間の次元 $\dim\ker A$ に等しく、次元定理 $\operatorname{rank}A + \dim\ker A = n$ から求まります。方程式の個数から引く誤りに注意します。$n$ 次正方行列なら、$\det A \neq 0 \iff \operatorname{rank}A = n \iff$ 解がただ 1 つ、です。'
+
+  - title: 固有値と対角化
+    topics: [eigen]
+    items:
+      - name: 固有方程式と固有値の和・積
+        tex: '\det(A - \lambda I) = 0,\qquad \sum_{i=1}^{n}\lambda_i = \operatorname{tr}A,\qquad \prod_{i=1}^{n}\lambda_i = \det A'
+        note: '固有値は重複も込めて、複素数の範囲で $n$ 個数えます。$A^k$ の固有値は $\lambda_i^k$、$A^{-1}$ の固有値は $\frac{1}{\lambda_i}$、$A + cI$ の固有値は $\lambda_i + c$ です。三角行列の固有値は対角成分です。固有ベクトルは零ベクトルを除き、定数倍の自由があります。'
+        term: eigenvalue
+      - name: 対角化と行列の累乗
+        tex: 'P^{-1}AP = \begin{pmatrix} \lambda_1 & & \\ & \ddots & \\ & & \lambda_n \end{pmatrix} = D,\qquad A^{k} = P\,D^{k}\,P^{-1}'
+        note: '$P$ の列には、各固有値 $\lambda_i$ に対応する固有ベクトルを $D$ と同じ順に並べます。対角化できるのは 1 次独立な固有ベクトルが $n$ 個あるとき（各固有値の重複度と固有空間の次元が等しいとき）で、固有値がすべて異なれば必ずできます。実対称行列は直交行列 $P$（$P^{-1} = P^{\top}$）で対角化できます。$A^k = P^{-1}D^kP$ と左右を逆にしないようにします。'
+      - name: ケイリー・ハミルトンの定理
+        tex: 'A^2 - (\operatorname{tr}A)\,A + (\det A)\,I = O\qquad \bigl(\text{一般に}\ \varphi_A(A) = O,\ \ \varphi_A(\lambda) = \det(\lambda I - A)\bigr)'
+        note: '2 次の場合、$A = \begin{pmatrix} a & b \\ c & d \end{pmatrix}$ で $A^2 - (a+d)A + (ad-bc)I = O$ です。$x^n$ を $\varphi_A(x)$ で割った余り $r(x)$ を求めれば $A^n = r(A)$ となり、高次の累乗や逆行列 $A^{-1} = \frac{1}{\det A}\bigl\{(\operatorname{tr}A)I - A\bigr\}$ の計算に使えます。$A$ がスカラー行列 $kI$ でなければ、$A^2 - pA + qI = O$ から $p = \operatorname{tr}A$、$q = \det A$ が導けますが、$A = kI$ のときはそうとは限りません。'
+      - name: 2次形式と正定値行列
+        tex: 'Q(\boldsymbol{x}) = \boldsymbol{x}^{\top}A\boldsymbol{x} = \sum_{i=1}^{n}\lambda_i y_i^2\qquad (\boldsymbol{x} = P\boldsymbol{y},\ P\ \text{は直交行列})'
+        note: '$A$ は実対称行列で、直交行列で対角化すると標準形になります。すべての固有値が正なら正定値（$\boldsymbol{x} \neq \boldsymbol{0}$ で $Q > 0$）で、首座小行列式がすべて正であることとも同値です。$\|\boldsymbol{x}\| = 1$ のもとでの $Q$ の最大値・最小値は、最大・最小の固有値です。2 次形式の行列は対称にとるので、$x_1x_2$ の係数は半分ずつ $a_{12}$ と $a_{21}$ に分けます。'
+        term: positive-definite-matrix
+
+  - title: 初等整数論
+    topics: [number-theory]
+    items:
+      - name: ユークリッドの互除法とベズーの等式
+        tex: '\gcd(a, b) = \gcd(b,\ a \bmod b),\qquad ax + by = \gcd(a, b)\ \text{は整数解をもつ}'
+        note: '余りが 0 になる直前の割る数が最大公約数です。互除法の計算を逆にたどると、$ax + by = d$（$d = \gcd(a, b)$）の解 $(x_0, y_0)$ が 1 組求まり、一般解は $x = x_0 + \frac{b}{d}k$、$y = y_0 - \frac{a}{d}k$（$k$ は整数）です。$ax + by = c$ が整数解をもつのは $d \mid c$ のときだけです。'
+      - name: フェルマーの小定理
+        tex: 'a^{p-1} \equiv 1 \pmod{p}\qquad (p\ \text{は素数},\ p \nmid a)'
+        note: '$a$ が $p$ の倍数でもよい形は $a^{p} \equiv a \pmod{p}$ です。累乗の余りは、指数を $p-1$ で割った余りに落としてから計算します（$2^{100} \bmod 7$ なら、$2^{6} \equiv 1$ より $2^{100} = (2^{6})^{16} \cdot 2^{4} \equiv 16 \equiv 2$）。逆は成り立たず、$a^{n-1} \equiv 1 \pmod{n}$ でも $n$ が素数とは限りません（カーマイケル数）。ウィルソンの定理 $(p-1)! \equiv -1 \pmod{p}$ も合わせて覚えます。'
+      - name: オイラーの定理とオイラー関数
+        tex: 'a^{\varphi(n)} \equiv 1 \pmod{n}\quad \bigl(\gcd(a, n) = 1\bigr),\qquad \varphi(n) = n\prod_{p \mid n}\left(1 - \frac{1}{p}\right)'
+        note: '$\varphi(n)$ は 1 以上 $n$ 以下で $n$ と互いに素な整数の個数で、積は $n$ の素因数 $p$ すべてにわたります。$n$ が素数 $p$ なら $\varphi(p) = p - 1$ となり、フェルマーの小定理になります。$\varphi(p^k) = p^{k} - p^{k-1}$、$\gcd(m, n) = 1$ なら $\varphi(mn) = \varphi(m)\varphi(n)$ です。例えば $\varphi(12) = 12 \cdot \frac{1}{2} \cdot \frac{2}{3} = 4$。$\gcd(a, n) \neq 1$ では成り立たないので、条件を確認します。'
+      - name: 中国剰余定理
+        tex: '\begin{aligned} &x \equiv a_i \pmod{m_i}\ \ (i = 1, \ldots, k) \;\Rightarrow\; x \equiv \sum_{i=1}^{k}a_i M_i y_i \pmod{M}, \\ &M = m_1 m_2 \cdots m_k,\quad M_i = \frac{M}{m_i},\quad M_i y_i \equiv 1 \pmod{m_i} \end{aligned}'
+        note: '$m_1, \ldots, m_k$ が**どの 2 つも互いに素**のとき、解は $\bmod M$ でただ 1 つです。$y_i$ は $M_i$ の $\bmod m_i$ での逆元で、互除法で求めます。互いに素でない法が混じると、解がないこともあります。小さな問題では、$x = a_1 + m_1 t$ を次の合同式に代入して順に解く方が速いです。'
+      - name: 約数の個数と総和
+        tex: 'n = p_1^{e_1}p_2^{e_2}\cdots p_r^{e_r} \;\Rightarrow\; d(n) = \prod_{i=1}^{r}(e_i + 1),\qquad \sigma(n) = \prod_{i=1}^{r}\frac{p_i^{e_i+1} - 1}{p_i - 1}'
+        note: '素因数分解が前提です。総和は $(1 + p_1 + \cdots + p_1^{e_1})\cdots(1 + p_r + \cdots + p_r^{e_r})$ を展開したもので、等比数列の和の公式を使っています。$d(n)$ は指数に 1 を足してから掛けます。$d(n)$ が奇数になるのは $n$ が平方数のときだけです。例えば $72 = 2^3 \cdot 3^2$ で $d(72) = 4 \cdot 3 = 12$、$\sigma(72) = 15 \cdot 13 = 195$ です。'
+
+  - title: 確率と統計
+    topics: [probability, statistics]
+    items:
+      - name: 離散分布の期待値と分散
+        tex: '\begin{array}{lll} \text{分布} & E[X] & V[X] \\ \hline B(n, p) & np & np(1-p) \\ \mathrm{Po}(\lambda) & \lambda & \lambda \\ \mathrm{Ge}(p) & 1/p & (1-p)/p^2 \end{array}'
+        note: '幾何分布は「初めて成功するまでの試行回数」$P(X = k) = (1-p)^{k-1}p$（$k \geq 1$）の場合で、「成功までの失敗の回数」で定義すると期待値は $\frac{1-p}{p}$ になります（分散は同じ）。二項分布の分散で $(1-p)$ を掛け忘れないようにします。和の分散が $V[X+Y] = V[X] + V[Y]$ となるのは、$X$ と $Y$ が独立（無相関）なときだけです。'
+        term: binomial-distribution
+      - name: 連続分布の期待値と分散
+        tex: '\begin{array}{lll} \text{分布} & E[X] & V[X] \\ \hline U(a, b) & (a+b)/2 & (b-a)^2/12 \\ \mathrm{Ex}(\lambda) & 1/\lambda & 1/\lambda^2 \\ N(\mu, \sigma^2) & \mu & \sigma^2 \\ \mathrm{Ga}(\alpha, \lambda) & \alpha/\lambda & \alpha/\lambda^2 \end{array}'
+        note: '指数分布の密度は $\lambda e^{-\lambda x}$（$x \geq 0$）、ガンマ分布は $\frac{\lambda^{\alpha}}{\Gamma(\alpha)}x^{\alpha-1}e^{-\lambda x}$ です。パラメータを平均 $\theta = 1/\lambda$（尺度）で表す流儀もあるので、密度の式で確認します。期待値・分散は、ガンマ関数の積分 $\int_0^{\infty}x^{s-1}e^{-\lambda x}\,dx = \frac{\Gamma(s)}{\lambda^{s}}$ に帰着させると速く求まります。正規分布の第2引数は分散です。'
+        term: normal-distribution
+      - name: 積率母関数
+        tex: 'M_X(t) = E\bigl[e^{tX}\bigr],\qquad E[X^{k}] = M_X^{(k)}(0),\qquad V[X] = M_X^{\prime\prime}(0) - \bigl\{M_X^{\prime}(0)\bigr\}^2'
+        note: '$t = 0$ の近くで有限な値をとるときに使えます。独立な確率変数の和では $M_{X+Y}(t) = M_X(t)\,M_Y(t)$ となるので、二項・ポアソン・正規分布の再生性の証明に使います。代表例は、二項分布 $(1-p+pe^t)^n$、ポアソン分布 $e^{\lambda(e^t-1)}$、正規分布 $e^{\mu t + \sigma^2t^2/2}$ です。$\log M_X(t)$ を 2 回微分して $t = 0$ とすると、分散が直接得られます。'
+      - name: 回帰直線と相関係数
+        tex: 'y - \bar{y} = \frac{s_{xy}}{s_x^2}(x - \bar{x}),\qquad r = \frac{s_{xy}}{s_x s_y}'
+        note: '$y$ の $x$ への回帰直線で、最小二乗法 $\sum_i\{y_i - (a + bx_i)\}^2 \to \min$ から得られ、点 $(\bar{x}, \bar{y})$ を通ります。傾きの分母は標準偏差 $s_x$ ではなく分散 $s_x^2$ です。$x$ の $y$ への回帰直線 $x - \bar{x} = \frac{s_{xy}}{s_y^2}(y - \bar{y})$ とは一般に別の直線で、2 つの回帰係数 $\frac{s_{xy}}{s_x^2}$ と $\frac{s_{xy}}{s_y^2}$ の積は $r^2$ です。$s$ を $n$ で割って定義したとき、残差の 2 乗和は $ns_y^2(1 - r^2)$ です。'
+        term: regression-coefficient
+
+  - title: 数値解析
+    topics: [numerical]
+    items:
+      - name: ニュートン法
+        tex: 'x_{n+1} = x_n - \frac{f(x_n)}{f^{\prime}(x_n)},\qquad e_{n+1} \approx \frac{f^{\prime\prime}(\alpha)}{2f^{\prime}(\alpha)}\,e_n^{2}'
+        note: '$e_n = x_n - \alpha$ は真の解 $\alpha$ との誤差で、単根の近くでは 2 次収束（正しい桁数が毎回ほぼ倍）します。初期値が解から遠いときや $f^{\prime}(x_n) \approx 0$ のときは、発散・振動することがあります。重根では 1 次収束に落ちます。$\sqrt{a}$ は $f(x) = x^2 - a$ として $x_{n+1} = \frac{1}{2}\left(x_n + \frac{a}{x_n}\right)$ で求めます。分子の $f$ と分母の $f^{\prime}$ を逆にしないようにします。'
+      - name: 台形公式と誤差
+        tex: 'T_n = \frac{h}{2}\Bigl\{f_0 + 2(f_1 + f_2 + \cdots + f_{n-1}) + f_n\Bigr\},\qquad \int_a^b f(x)\,dx - T_n = -\frac{(b-a)h^2}{12}f^{\prime\prime}(\xi)'
+        note: '$h = \frac{b-a}{n}$、$f_k = f(a + kh)$、$\xi$ は $(a, b)$ のある点です。両端の値は 1 倍、内側の点は 2 倍です。誤差は $h^2$ に比例するので、分割数を 2 倍にすると誤差は約 $\frac{1}{4}$ になります。$f^{\prime\prime} > 0$（下に凸）なら、台形公式の値は真の値より大きくなります。'
+      - name: シンプソンの公式と誤差
+        tex: '\begin{aligned} &S_n = \frac{h}{3}\Bigl\{f_0 + 4(f_1 + f_3 + \cdots + f_{n-1}) + 2(f_2 + f_4 + \cdots + f_{n-2}) + f_n\Bigr\}, \\ &\int_a^b f(x)\,dx - S_n = -\frac{(b-a)h^4}{180}f^{(4)}(\xi) \end{aligned}'
+        note: '分割数 $n$ は**偶数**で、$h = \frac{b-a}{n}$ です。係数は $1, 4, 2, 4, \ldots, 2, 4, 1$ で、奇数番目の点が 4、内側の偶数番目の点が 2 です。誤差は $h^4$ に比例し、3 次以下の多項式なら誤差なく積分できます。2 等分だけの基本形は $\frac{b-a}{6}\left\{f(a) + 4f\left(\frac{a+b}{2}\right) + f(b)\right\}$ です。'
+      - name: オイラー法とホイン法
+        tex: 'y_{n+1} = y_n + h\,f(x_n, y_n)\ \ (\text{オイラー法}),\qquad y_{n+1} = y_n + \frac{h}{2}\bigl\{k_1 + f(x_n + h,\ y_n + hk_1)\bigr\},\ \ k_1 = f(x_n, y_n)\ \ (\text{ホイン法})'
+        note: '微分方程式 $y^{\prime} = f(x, y)$ を刻み幅 $h$ で数値的に解く方法です。大域誤差はオイラー法が $O(h)$、ホイン法（改良オイラー法）が $O(h^2)$、4 次のルンゲ・クッタ法が $O(h^4)$ で、刻み幅を半分にすると誤差はそれぞれ約 $\frac{1}{2}$、$\frac{1}{4}$、$\frac{1}{16}$ になります。1 ステップあたりの局所誤差は、大域誤差より 1 つ高い次数です。'

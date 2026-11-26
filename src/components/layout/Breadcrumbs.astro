@@ -1,0 +1,52 @@
+---
+import { ChevronRight } from '@lucide/astro';
+
+interface Props {
+  items: { label: string; href?: string }[];
+}
+
+const { items } = Astro.props;
+---
+
+<nav class="crumbs" aria-label="パンくずリスト" data-pagefind-ignore>
+  <ol>
+    {items.map((item, i) => (
+      <li>
+        {i > 0 && <ChevronRight size={13} aria-hidden="true" />}
+        {item.href && i < items.length - 1 ? (
+          <a href={item.href}>{item.label}</a>
+        ) : (
+          <span aria-current={i === items.length - 1 ? 'page' : undefined}>{item.label}</span>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<style>
+  ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-1);
+    padding: 0;
+    list-style: none;
+    font-size: var(--fs-xs);
+    color: var(--ink-3);
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: var(--s-1);
+  }
+
+  a {
+    color: var(--ink-2);
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+</style>

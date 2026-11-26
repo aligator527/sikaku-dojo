@@ -1,0 +1,92 @@
+name: 統計検定準1級
+shortName: 統計準1級
+family: toukei
+category: statistics
+level: 準1級
+order: 21
+status: published
+summary: 2級までの統計学を土台に、多変量解析・回帰モデル・時系列・ベイズ法など実務で使う統計手法を正しく選び、結果を解釈できるかを問う CBT 試験。
+organizer:
+  name: 一般財団法人 統計質保証推進協会（認定：一般社団法人 日本統計学会）
+  url: https://www.toukei-kentei.jp/
+format:
+  short: CBT・90分・25〜30問
+  method: CBT（コンピュータ上で解答。全国のテストセンターで受験）
+  duration: 90分
+  questions: 25〜30問
+  answerStyle: 5肢選択問題と数値入力問題
+  passing: 100点満点中60点以上
+  schedule: 通年（CBT 方式。テストセンターの空き日程から選んで申し込む）
+  eligibility: 受験資格の制限なし
+  notes:
+    - 出題範囲表は 2027 年 1 月 1 日付で改訂される。新しい範囲表では「統計的因果推論」（因果ダイアグラム・バックドア基準など）が大項目として加わり、ポアソン回帰・Cook の距離・L2 正則化・BIC なども明記された。受験日に有効な範囲表を必ず確認すること。
+    - 持ち込める電卓は四則演算・百分率・平方根が計算できる普通電卓（一般電卓）または事務用電卓 1 台のみ。関数電卓は不可。
+    - 統計数値表は会場で「付表1〜4」のみ配布される（付表5 は配布されないが、配布された表だけで解答できるよう設計されている）。
+    - 公式問題集には PBT 時代に付表5 を使った問題が含まれており、現在の CBT の仕様とは異なる。
+    - 同じ種別を再受験するには、前回の受験から 7 日（168 時間）以上空ける必要がある。
+choiceStyle: circled
+topics:
+  - id: probability-distributions
+    name: 確率分布と母関数・変数変換
+    group: 確率と確率分布
+  - id: limit-theorems
+    name: 極限定理と漸近理論（デルタ法など）
+    group: 確率と確率分布
+  - id: stochastic-processes
+    name: マルコフ連鎖と確率過程の基礎（ポアソン過程・ブラウン運動）
+    group: 確率と確率分布
+  - id: estimation
+    name: 推定（最尤法・十分統計量・区間推定）
+    group: 統計的推測
+  - id: testing
+    name: 検定（検出力・尤度比検定・ノンパラメトリック法）
+    group: 統計的推測
+  - id: regression
+    name: 回帰分析（重回帰・回帰診断・正則化）
+    group: モデリング
+  - id: glm
+    name: 質的回帰・一般化線形モデル・生存時間解析
+    group: モデリング
+  - id: anova-doe
+    name: 分散分析・実験計画法・標本調査法
+    group: モデリング
+  - id: model-selection
+    name: モデル選択と正則化（AIC・BIC・Cp・交差検証・リッジとラッソ）
+    group: モデリング
+  - id: multivariate
+    name: 多変量解析（主成分・判別・クラスター・因子分析）
+    group: 多変量・時系列
+  - id: time-series
+    name: 時系列解析
+    group: 多変量・時系列
+  - id: contingency
+    name: 分割表と不完全データ（欠測・EM アルゴリズム）
+    group: 多変量・時系列
+  - id: bayes-computation
+    name: ベイズ法とシミュレーション（MCMC・ブートストラップ）
+    group: ベイズ・計算・因果
+  - id: causal-inference
+    name: 統計的因果推論（2027年範囲表で追加）
+    group: ベイズ・計算・因果
+officialLinks:
+  - label: 統計検定準1級 試験内容（公式）
+    url: https://www.toukei-kentei.jp/grade/grade_pre-1
+  - label: 統計検定準1級 出題範囲表（2027年1月1日以降）（PDF）
+    url: https://www.toukei-kentei.jp/hubfs/files/20.grade/grade_range/grade1semi_hani_20270101.pdf
+  - label: 統計検定準1級 出題範囲表（2026年12月31日まで）（PDF）
+    url: https://www.toukei-kentei.jp/hubfs/files/grade_range/grade1semi_hani_190628_2.pdf
+  - label: CBT 方式試験の試験要項（電卓・数値表・再受験ルール）
+    url: https://www.toukei-kentei.jp/info/other_grades_apply/
+tier: 3
+pathways:
+  - to: toukei-1
+    kind: next
+    note: 分布論・推定論・検定論の導出を論述でき、分野別の応用まで扱う最上位級へ。
+  - to: toukei-dse
+    kind: next
+    note: 統計モデルの知識を、機械学習・データエンジニアリングを含むデータサイエンスの実践へ広げる。
+  - to: jdla-e
+    kind: related
+    note: 最尤推定・正則化・情報量規準など、機械学習の数理的な基礎が重なる。
+tools: [tables]
+updatedAt: '2026-11-26'

@@ -1,0 +1,35 @@
+exam: toukei-dse
+title: DSエキスパート 本番形式模試（40問・90分）
+description: 本試験（CBT・90分・40問程度）と同じ分量で、出題範囲表の全 14 分野から多肢選択問題と数値入力問題を出題します。受験のたびに問題が入れ替わります。合格ラインは本試験と同じ 60% です。数値表が必要なときは「付表」ボタンを使ってください。
+durationMin: 90
+passingRate: 0.6
+order: 5
+blueprint:
+  - topics: [prob-inference]
+    count: 4
+  - topics: [bayes-computation]
+    count: 3
+  - topics: [linear-algebra]
+    count: 3
+  - topics: [calculus-optimization]
+    count: 3
+  - topics: [data-engineering]
+    count: 3
+  - topics: [algorithms]
+    count: 2
+  - topics: [supervised]
+    count: 4
+  - topics: [unsupervised]
+    count: 3
+  - topics: [model-evaluation]
+    count: 3
+  - topics: [time-series-survival]
+    count: 2
+  - topics: [text-analysis]
+    count: 2
+  - topics: [causal-inference]
+    count: 3
+  - topics: [deep-learning]
+    count: 3
+  - topics: [ai-application]
+    count: 2

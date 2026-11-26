@@ -1,0 +1,194 @@
+title: 統計学・データサイエンス
+items:
+  - title: 統計検定 公式サイト
+    url: https://www.toukei-kentei.jp/
+    publisher: 一般財団法人 統計質保証推進協会
+    lang: ja
+    kind: official
+    cost: free
+    exams: [toukei-2, toukei-jun1, toukei-1, toukei-dse]
+    description: 各級の試験概要・出題範囲表・電卓や数値表のルール・申込方法。受験前に最新の範囲表と試験要項を必ず確認する。
+  - title: 検定種別の目安（統計検定）
+    url: https://www.toukei-kentei.jp/grade/guideline
+    publisher: 一般財団法人 統計質保証推進協会
+    lang: ja
+    kind: official
+    cost: free
+    exams: [toukei-2, toukei-jun1, toukei-1, toukei-dse]
+    description: 4級から1級、データサイエンス系までの各種別のレベルと位置づけの一覧。どの級から受けるかを決めるのに使う。
+  - title: 過去問題（統計検定）
+    url: https://www.toukei-kentei.jp/preparation/kakomon/
+    publisher: 一般財団法人 統計質保証推進協会
+    lang: ja
+    kind: pastExam
+    cost: partial
+    exams: [toukei-1, toukei-jun1, toukei-2]
+    description: 1級は直近の試験問題と略解の PDF を無料で公開。準1級・2級の過去問は公式問題集（有料）に収録され、CBT の問題は公開されない。
+  - title: データサイエンスエキスパート サンプル問題（PDF）
+    url: https://www.toukei-kentei.jp/hubfs/files/grade/grade13_sample_exercises.pdf
+    publisher: 一般財団法人 統計質保証推進協会
+    lang: ja
+    kind: pastExam
+    cost: free
+    exams: [toukei-dse]
+    description: SQL・検定手順・Python コード・ロジスティック回帰の最尤法などを題材にした公式サンプル問題。解説 PDF と CBT の画面イメージ版も公式ページから入手できる。
+  - title: 公式テキスト・公式問題集の一覧
+    url: https://www.toukei-kentei.jp/preparation/books/
+    publisher: 一般財団法人 統計質保証推進協会
+    lang: ja
+    kind: official
+    cost: free
+    exams: [toukei-2, toukei-jun1, toukei-1, toukei-dse]
+    description: 各級の公式テキストと公式問題集（紙・POD・電子版）の一覧。どの年度の過去問がどの本に収録されているかを確認できる。
+  - title: 改訂版 日本統計学会公式認定 統計検定2級対応 統計学基礎
+    url: https://www.tokyo-tosho.co.jp/02227/
+    publisher: 東京図書
+    lang: ja
+    kind: textbook
+    cost: paid
+    exams: [toukei-2]
+    description: 2級の公式テキスト。出題範囲表に沿った構成で、試験の用語や記法に慣れるのに向く。説明は簡潔なので、他の入門書と併用するとよい。
+  - title: 日本統計学会公式認定 統計検定2級 公式問題集［CBT対応版］
+    url: https://books.jitsumu.co.jp/book/b614221.html
+    publisher: 実務教育出版
+    lang: ja
+    kind: pastExam
+    cost: paid
+    exams: [toukei-2]
+    description: CBT 方式に対応した 2 級の公式問題集。本番形式の演習と時間配分の練習に使う。
+  - title: 統計検定準1級対応 統計学実践ワークブック（増補版）
+    url: https://www.gakujutsu.co.jp/product/978-4-7806-1475-6/
+    publisher: 学術図書出版社
+    lang: ja
+    kind: textbook
+    cost: paid
+    exams: [toukei-jun1, toukei-1, toukei-dse]
+    description: 準1級の公式テキスト。範囲表に沿った章ごとに要点と例題がまとまっている。増補版は 2027 年からの新範囲表に合わせて統計的因果推論の章を追加。
+  - title: 日本統計学会公式認定 統計検定準1級 公式問題集
+    url: https://books.jitsumu.co.jp/book/b590880.html
+    publisher: 実務教育出版
+    lang: ja
+    kind: pastExam
+    cost: paid
+    exams: [toukei-jun1]
+    description: PBT 時代の準1級の過去問と解説。現在の CBT とは形式（数値表の付表5など）が異なる点に注意して、論点の確認に使う。
+  - title: 増訂版 日本統計学会公式認定 統計検定1級対応 統計学
+    url: https://www.tokyo-tosho.co.jp/02401/
+    publisher: 東京図書
+    lang: ja
+    kind: textbook
+    cost: paid
+    exams: [toukei-1]
+    description: 1級の公式テキスト。統計数理と統計応用（4分野）の範囲を一冊で概観できる。
+  - title: 日本統計学会公式認定 統計検定1級 公式問題集［2022〜2024年］
+    url: https://books.jitsumu.co.jp/book/b659411.html
+    publisher: 実務教育出版
+    lang: ja
+    kind: pastExam
+    cost: paid
+    exams: [toukei-1]
+    description: 1級の統計数理・統計応用の過去問と解説。論述答案の書き方の参考になる。前の年度をまとめた問題集もある。
+  - title: 統計検定データサイエンスエキスパート対応 データサイエンスエキスパート演習
+    url: https://www.tokyo-tosho.co.jp/02448/
+    publisher: 東京図書
+    lang: ja
+    kind: textbook
+    cost: paid
+    exams: [toukei-dse]
+    description: DSエキスパートの公式の演習書。出題範囲に沿った問題で、求められる水準を把握するのに使う。
+  - title: 統計学入門（基礎統計学Ⅰ）
+    url: https://www.utp.or.jp/book/b300857.html
+    publisher: 東京大学出版会
+    lang: ja
+    kind: textbook
+    cost: paid
+    exams: [toukei-2, toukei-jun1]
+    description: 記述統計から確率分布、推定・検定、回帰までを扱う定番の入門書。2級の公式テキストで分かりにくかった箇所の補強に向く。
+  - title: 現代数理統計学の基礎
+    url: https://www.kyoritsu-pub.co.jp/book/b10003681.html
+    publisher: 共立出版
+    lang: ja
+    kind: textbook
+    cost: paid
+    exams: [toukei-1, toukei-jun1]
+    description: 確率分布から推定・検定の理論、漸近理論までを数理的に扱う教科書。1級の統計数理や準1級の理論分野の学習に向く。
+  - title: 統計学の時間
+    url: https://bellcurve.jp/statistics/course/
+    publisher: 統計WEB（社会情報サービス）
+    lang: ja
+    kind: article
+    cost: free
+    exams: [toukei-2, toukei-jun1]
+    description: 記述統計から推定・検定、回帰分析、多変量解析までを項目ごとに解説する無料の Web 教材。用語や公式をすぐ確認したいときに便利。
+  - title: 講義ノート 統計学（統計的推定と検定）
+    url: https://noboru-murata.github.io/probability-statistics/pdfs/statistics.pdf
+    publisher: 村田昇（早稲田大学）
+    lang: ja
+    kind: textbook
+    cost: free
+    exams: [toukei-2, toukei-jun1]
+    description: 大学の講義で使われている推定・検定の講義ノート（PDF）。確率モデルから推定・検定までを数式で追いたいときに使える。
+  - title: 応用基礎レベル e ラーニング教材・講義動画
+    url: https://www.mi.u-tokyo.ac.jp/consortium/e-learning_ouyoukiso.html
+    publisher: 数理・データサイエンス・AI教育強化拠点コンソーシアム
+    lang: ja
+    kind: course
+    cost: free
+    exams: [toukei-dse, toukei-jun1]
+    description: DSエキスパートが準拠するモデルカリキュラム（応用基礎レベル）に対応したスライドと講義動画。データサイエンス基礎・データエンジニアリング基礎・AI 基礎の項目別に整理されている。
+  - title: 社会人のためのデータサイエンス入門
+    url: https://gacco.org/stat-japan/
+    publisher: 総務省統計局（gacco）
+    lang: ja
+    kind: course
+    cost: free
+    exams: [toukei-2, toukei-dse]
+    description: 総務省統計局によるデータサイエンスのオンライン講座。データの見方や統計の基本を動画で学べる。開講時期は講座ページで確認する。
+  - title: AIcia Solid Project
+    url: https://www.youtube.com/@AIcia_Solid
+    publisher: アイシア=ソリッド（YouTube）
+    lang: ja
+    kind: video
+    cost: free
+    exams: [toukei-jun1, toukei-dse, jdla-e]
+    description: 機械学習・統計・深層学習を解説する動画チャンネル。主成分分析や回帰モデル、ニューラルネットワークなどの直感をつかむのに向く。
+  - title: An Introduction to Statistical Learning
+    url: https://www.statlearning.com/
+    publisher: James, Witten, Hastie, Tibshirani（ほか）
+    lang: en
+    kind: textbook
+    cost: free
+    exams: [toukei-dse, toukei-jun1, jdla-e]
+    description: 回帰・分類・リサンプリング・正則化・木構造モデル・教師なし学習を扱う定番の教科書。著者サイトで PDF を無料公開している。
+  - title: Statistics for Applications（MIT 18.650）
+    url: https://ocw.mit.edu/courses/18-650-statistics-for-applications-fall-2016/
+    publisher: MIT OpenCourseWare
+    lang: en
+    kind: course
+    cost: free
+    exams: [toukei-jun1, toukei-1]
+    description: 最尤推定・検定・回帰・ベイズ統計などを数理的に扱う大学講義の動画とスライド。準1級・1級の理論分野の補強に向く。
+  - title: OpenIntro Statistics
+    url: https://www.openintro.org/book/os/
+    publisher: OpenIntro
+    lang: en
+    kind: textbook
+    cost: free
+    exams: [toukei-2]
+    description: 記述統計から推定・検定、回帰までを扱う入門教科書。PDF を無料で入手できる。演習問題が豊富。
+  - title: Seeing Theory
+    url: https://seeing-theory.brown.edu/
+    publisher: Brown University
+    lang: en
+    kind: tool
+    cost: free
+    exams: [toukei-2]
+    description: 確率分布・中心極限定理・信頼区間・回帰などを、ブラウザ上で動かしながら学べる可視化教材。
+  - title: The R Project for Statistical Computing
+    url: https://www.r-project.org/
+    publisher: R Foundation
+    lang: en
+    kind: tool
+    cost: free
+    exams: [toukei-2, toukei-jun1, toukei-1, toukei-dse]
+    description: 無料の統計解析ソフト。回帰分析や分散分析の出力を自分で作り、手計算と照合すると出力表の読み取り問題に強くなる。

@@ -1,0 +1,43 @@
+---
+import { t } from '../i18n';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { routes } from '../lib/paths';
+---
+
+<BaseLayout title="ページが見つかりません">
+  <div class="container page">
+    <p class="code num">404</p>
+    <h1>ページが見つかりません</h1>
+    <p class="meta">URL が変わったか、ページが削除された可能性があります。</p>
+    <p class="links">
+      <a class="btn" href={routes.exams()}>
+        {t.nav.exams}
+      </a>
+      <a class="btn btn--ghost" href={routes.search()}>
+        {t.nav.search}
+      </a>
+    </p>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    display: grid;
+    gap: var(--s-3);
+    padding-top: var(--s-8);
+  }
+
+  .code {
+    font-family: var(--font-serif);
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--shu);
+    line-height: 1;
+  }
+
+  .links {
+    display: flex;
+    gap: var(--s-2);
+    margin-top: var(--s-4);
+  }
+</style>

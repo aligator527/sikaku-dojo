@@ -1,0 +1,9 @@
+exam: suken-1
+title: 1次（計算技能）形式（7問・60分）
+description: 本試験の 1次と同じ 7問・60分で、答えだけを求める計算問題を出題します。解析・線形代数・確率統計などの分野からランダムに選ばれます。合格の目安は本試験と同じ 70% です。
+durationMin: 60
+passingRate: 0.7
+order: 5
+blueprint:
+  - sections: [ichiji]
+    count: 7

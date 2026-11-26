@@ -1,0 +1,13 @@
+exam: suken-1
+title: 数検1級 総合演習（全8問）
+description: 1次形式の計算問題5問と、2次形式の記述問題3問を分野ごとに出題します。記述問題は模範解答と採点ポイントで自己採点してください。本番の合格基準は1次が70%程度、2次が60%程度です。
+durationMin: 180
+passingRate: 0.65
+order: 10
+blueprint:
+  - topics: [calculus-limits, ode, probability]
+    count: 3
+  - topics: [eigen, matrix]
+    count: 2
+  - topics: [integral, complex, multivariable]
+    count: 3

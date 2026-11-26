@@ -1,0 +1,11 @@
+exam: boki-2
+title: 2級 実力診断テスト（10問）
+description: 商業簿記の仕訳（連結・税効果・リース・有価証券・外貨建取引）5問と、工業簿記の計算（総合原価計算・標準原価計算・直接原価計算・CVP分析）5問を出題します。
+durationMin: 45
+passingRate: 0.7
+order: 10
+blueprint:
+  - topics: [consolidation, tax-effect, securities, lease, receivables-fx]
+    count: 5
+  - topics: [process-costing, standard-costing, direct-costing-cvp]
+    count: 5

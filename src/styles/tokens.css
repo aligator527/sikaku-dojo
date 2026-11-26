@@ -1,0 +1,91 @@
+/*
+ * Design tokens.
+ * Palette: 和紙 paper, 墨 ink, 藍 (ai) for actions and links, 朱 (shu) for marks —
+ * the red ◯ a teacher draws next to a correct answer.
+ */
+:root {
+  color-scheme: light;
+
+  --paper: #f6f4ee;
+  --surface: #fffdf8;
+  --surface-sunken: #eeebe3;
+  --ink: #1e1d1a;
+  --ink-2: #4b4841;
+  --ink-3: #7a756b;
+  --rule: #e0dbcf;
+  --rule-strong: #c3bcac;
+
+  --ai: #1f4e79;
+  --ai-hover: #173b5c;
+  --ai-tint: #e5ecf3;
+  --on-ai: #ffffff;
+
+  --shu: #c0432a;
+  --shu-tint: #f7e6df;
+
+  --ok: var(--shu);
+  --ok-tint: var(--shu-tint);
+  --ng: #3c4f66;
+  --ng-tint: #e6e9ee;
+  --warn: #9a6b00;
+  --warn-tint: #f6edd6;
+
+  --focus: #2f73b5;
+
+  --font-sans:
+    'Noto Sans JP', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic UI', Meiryo, sans-serif;
+  --font-serif: 'Noto Serif JP', 'Hiragino Mincho ProN', 'Yu Mincho', serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', 'Cascadia Mono', Menlo, Consolas, monospace;
+
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-md: 1rem;
+  --fs-lg: 1.125rem;
+  --fs-xl: 1.375rem;
+  --fs-2xl: 1.75rem;
+  --fs-3xl: 2.25rem;
+
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.5rem;
+  --s-6: 2rem;
+  --s-7: 3rem;
+  --s-8: 4.5rem;
+
+  --radius: 3px;
+  --radius-lg: 6px;
+
+  --page-width: 72rem;
+  --prose-width: 44rem;
+  --header-height: 3.5rem;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --paper: #161513;
+  --surface: #1e1d1a;
+  --surface-sunken: #252320;
+  --ink: #ebe7de;
+  --ink-2: #c2bcb0;
+  --ink-3: #8e887c;
+  --rule: #33302a;
+  --rule-strong: #4a463d;
+
+  --ai: #8db3da;
+  --ai-hover: #b0cbe6;
+  --ai-tint: #1c2733;
+  --on-ai: #0f1a26;
+
+  --shu: #e0765c;
+  --shu-tint: #35211b;
+
+  --ng: #9fb0c4;
+  --ng-tint: #232a33;
+  --warn: #d8a93a;
+  --warn-tint: #2f2814;
+
+  --focus: #7fb0e6;
+}

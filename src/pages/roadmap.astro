@@ -1,0 +1,277 @@
+---
+import { ArrowRight } from '@lucide/astro';
+
+import { DEFAULT_GEOMETRY as g, edgePath, layoutRoadmap } from '../domain/roadmap';
+import { t } from '../i18n';
+import PageLayout from '../layouts/PageLayout.astro';
+import { getExams, getPathways, getQuestionCounts } from '../lib/content';
+import { routes } from '../lib/paths';
+
+const exams = (await getExams()).filter((e) => e.tier !== undefined);
+const pathways = await getPathways();
+const counts = await getQuestionCounts();
+const CATEGORY_ORDER = ['statistics', 'ai', 'math', 'it', 'management', 'accounting'];
+const TIERS = [1, 2, 3, 4];
+
+const layout = layoutRoadmap(
+  exams.map((e) => ({ id: e.id, category: e.category, tier: e.tier!, order: e.order })),
+  CATEGORY_ORDER,
+  TIERS,
+);
+const edges = pathways
+  .filter((p) => layout.nodes.has(p.from.id) && layout.nodes.has(p.to.id))
+  .map((p) => ({ ...p, d: edgePath(layout.nodes.get(p.from.id)!, layout.nodes.get(p.to.id)!) }));
+// Draw overlaps under the arrows.
+edges.sort((a, b) => (a.kind === b.kind ? 0 : a.kind === 'related' ? -1 : 1));
+---
+
+<PageLayout
+  title={t.roadmap.title}
+  lead={t.roadmap.lead}
+  parents={[{ label: t.nav.exams, href: routes.exams() }]}
+>
+  <p class="legend" aria-hidden="true">
+    <span>
+      <svg width="36" height="10">
+        <line x1="0" y1="5" x2="30" y2="5" class="edge-next" marker-end="url(#rm-arrow)"></line>
+      </svg>
+      {t.roadmap.legendNext}
+    </span>
+    <span>
+      <svg width="36" height="10">
+        <line x1="0" y1="5" x2="34" y2="5" class="edge-related"></line>
+      </svg>
+      {t.roadmap.legendRelated}
+    </span>
+    <span class="scroll-hint">{t.roadmap.scroll}</span>
+  </p>
+
+  <div class="map" tabindex="0" role="region" aria-label={t.roadmap.title}>
+    <svg
+      viewBox={`0 0 ${layout.width} ${layout.height}`}
+      width={layout.width}
+      height={layout.height}
+      role="img"
+      aria-labelledby="rm-desc"
+    >
+      <desc id="rm-desc">{t.roadmap.lead}</desc>
+      <defs>
+        <marker
+          id="rm-arrow"
+          viewBox="0 0 10 10"
+          refX="9"
+          refY="5"
+          markerWidth="7"
+          markerHeight="7"
+          orient="auto-start-reverse"
+        >
+          <path d="M0,0 L10,5 L0,10 z" class="arrow-head"></path>
+        </marker>
+      </defs>
+
+      {layout.rows.map((row) => (
+        <>
+          <line
+            class="tier-rule"
+            x1={g.left - 8}
+            x2={layout.width}
+            y1={row.y - g.rowGap / 2}
+            y2={row.y - g.rowGap / 2}
+          />
+          <text class="tier-label" x={4} y={row.y + g.nodeHeight / 2 + 4}>
+            {t.roadmap.tiers[row.tier]}
+          </text>
+        </>
+      ))}
+      {layout.groups.map((group) => (
+        <text class="group-label" x={group.x + group.width / 2} y={18} text-anchor="middle">
+          {t.roadmap.groups[group.category] ?? group.category}
+        </text>
+      ))}
+
+      {edges.map((e) => (
+        <path
+          d={e.d}
+          class={e.kind === 'next' ? 'edge-next' : 'edge-related'}
+          marker-end={e.kind === 'next' ? 'url(#rm-arrow)' : undefined}
+        >
+          <title>{`${e.from.shortName} → ${e.to.shortName}：${e.note}`}</title>
+        </path>
+      ))}
+
+      {exams.map((exam) => {
+        const n = layout.nodes.get(exam.id)!;
+        return (
+          <a href={routes.exam(exam.id)} class="node">
+            <rect x={n.x} y={n.y} width={g.nodeWidth} height={g.nodeHeight} rx="3" />
+            <text class="node-name" x={n.x + 12} y={n.y + 25}>
+              {exam.shortName}
+            </text>
+            <text class="node-meta" x={n.x + 12} y={n.y + 44}>
+              {t.roadmap.questions(counts.get(exam.id) ?? 0)}
+            </text>
+          </a>
+        );
+      })}
+    </svg>
+  </div>
+
+  <section class="list">
+    <h2 class="section-title">{t.roadmap.connections}</h2>
+    <ul>
+      {pathways.map((p) => (
+        <li>
+          <span class="pair">
+            <a href={routes.exam(p.from.id)}>{p.from.shortName}</a>
+            {p.kind === 'next' ? <ArrowRight size={14} aria-label="から" /> : <span aria-label="と">・</span>}
+            <a href={routes.exam(p.to.id)}>{p.to.shortName}</a>
+          </span>
+          <span class="kind">{p.kind === 'next' ? t.roadmap.legendNext : t.roadmap.legendRelated}</span>
+          <span class="note">{p.note}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+</PageLayout>
+
+<style>
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-2) var(--s-5);
+    font-size: var(--fs-sm);
+    color: var(--ink-2);
+    margin-bottom: var(--s-3);
+  }
+
+  .legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+  }
+
+  .scroll-hint {
+    color: var(--ink-3);
+    font-size: var(--fs-xs);
+  }
+
+  @media (min-width: 76rem) {
+    .scroll-hint {
+      display: none !important;
+    }
+  }
+
+  .map {
+    max-width: 100%;
+    overflow-x: auto;
+    background: var(--surface);
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--rule-strong);
+    padding: var(--s-3) 0;
+    margin-bottom: var(--s-7);
+  }
+
+  .map svg {
+    display: block;
+    margin: 0 auto;
+  }
+
+  .tier-rule {
+    stroke: var(--rule);
+    stroke-dasharray: 2 4;
+  }
+
+  .tier-label {
+    font-size: 12px;
+    font-weight: 700;
+    fill: var(--ink-3);
+  }
+
+  .group-label {
+    font-size: 12px;
+    font-weight: 700;
+    fill: var(--ink-2);
+    letter-spacing: 0.05em;
+  }
+
+  .edge-next {
+    fill: none;
+    stroke: var(--ai);
+    stroke-width: 1.8;
+  }
+
+  .edge-related {
+    fill: none;
+    stroke: var(--ink-3);
+    stroke-width: 1.3;
+    stroke-dasharray: 4 4;
+  }
+
+  .arrow-head {
+    fill: var(--ai);
+  }
+
+  .node rect {
+    fill: var(--paper);
+    stroke: var(--ink);
+    stroke-width: 1.2;
+  }
+
+  .node:hover rect,
+  .node:focus-visible rect {
+    fill: var(--ai-tint);
+    stroke: var(--ai);
+  }
+
+  .node-name {
+    font-family: var(--font-serif);
+    font-size: 15px;
+    font-weight: 700;
+    fill: var(--ink);
+  }
+
+  .node-meta {
+    font-size: 11px;
+    fill: var(--ink-3);
+  }
+
+  .list ul {
+    list-style: none;
+    padding: 0;
+    border-top: 1px solid var(--rule-strong);
+  }
+
+  .list li {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-1);
+    padding: var(--s-3) 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  @media (min-width: 48rem) {
+    .list li {
+      grid-template-columns: 16rem 9rem minmax(0, 1fr);
+      gap: var(--s-4);
+      align-items: baseline;
+    }
+  }
+
+  .pair {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    font-weight: 700;
+  }
+
+  .kind {
+    font-size: var(--fs-xs);
+    color: var(--ink-3);
+  }
+
+  .note {
+    font-size: var(--fs-sm);
+    color: var(--ink-2);
+  }
+</style>

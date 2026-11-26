@@ -1,0 +1,110 @@
+name: ITストラテジスト試験
+shortName: ITストラテジスト
+family: ipa
+category: it
+level: 高度試験（レベル4）
+order: 30
+status: published
+summary: 経営戦略に基づいて IT を活用した事業戦略・情報システム戦略・システム化計画を策定し、その実行を推進・評価する人材を認定する、情報処理技術者試験の高度試験。午後の論述（科目B-2）が最大の関門となる。
+organizer:
+  name: 独立行政法人 情報処理推進機構（IPA）
+  url: https://www.ipa.go.jp/shiken/index.html
+format:
+  short: CBT・4科目（A-1／A-2／B-1／B-2）
+  method: CBT（令和8年度から。令和7年度まではペーパー方式）
+  duration: 科目A-1 50分／科目A-2 40分／科目B-1 90分／科目B-2 120分
+  questions: 科目A-1 30問／科目A-2 25問／科目B-1 3問中2問選択／科目B-2 2問中1問選択
+  answerStyle: 科目A-1・A-2 は多肢選択式（四肢択一）、科目B-1 は記述式、科目B-2 は論述式
+  passing: 科目A-1・A-2・B-1 はそれぞれ100点満点中60点以上、科目B-2 は評価ランクA（4科目すべてで基準を満たすと合格）
+  schedule: 年1回（前期）。令和8年度は科目A群を2026年10月17日〜27日、科目B群を11月11日〜23日に実施
+  eligibility: 制限なし
+  notes:
+    - 令和8年度（2026年度）から CBT 方式に移行し、科目名が「午前I→科目A-1」「午前II→科目A-2」「午後I→科目B-1」「午後II→科目B-2」に変わった。出題範囲・出題形式・出題数・試験時間・配点・合格基準は変更されていない
+    - 多段階選抜方式。科目A-1・A-2 が基準点に達しないと科目B-1・B-2 は採点されず、科目B-1 が基準点に達しないと科目B-2 は採点されない
+    - 配点は科目A-1 が各3.4点（上限100点）、科目A-2 が各4点、科目B-1 が各50点。科目B-2 は評価ランク（A〜D）で判定する
+    - 科目A-1 は、応用情報技術者試験・高度試験・情報処理安全確保支援士試験に合格するか、高度試験・支援士試験の科目A-1（令和7年度までは午前I）で基準点以上を取ると、その後2年間免除される
+    - CBT 方式で実施した試験の問題は非公開。IPA が公開している ST の過去問題は令和7年度春期試験までである
+    - IPA は現行試験制度を2026年度の試験実施で終了し、2027年度から新試験制度に移行する予定と公表している。応用情報技術者試験と高度試験は「プロフェッショナルデジタルスキル試験（仮称）」のマネジメント／データ・AI／システムの3区分に再編される予定
+choiceStyle: katakana
+sections:
+  - id: am1
+    name: 科目A-1（旧 午前I）
+    description: 高度試験・支援士試験に共通の知識問題。四肢択一30問、50分。出題範囲はテクノロジ系・マネジメント系・ストラテジ系の全分野（技術レベル3）。
+  - id: am2
+    name: 科目A-2（旧 午前II）
+    description: ITストラテジストの専門知識。四肢択一25問、40分。システム戦略・システム企画・経営戦略・ビジネスインダストリ・企業活動・セキュリティが重点分野（技術レベル4）。
+  - id: pm1
+    name: 科目B-1（旧 午後I）
+    description: 事例を読んで設問に字数制限付きで答える記述式。3問中2問を選択、90分。
+  - id: pm2
+    name: 科目B-2（旧 午後II）
+    description: 自身の経験と考えに基づく論述式。2問中1問を選択、120分。設問アは800字以内（令和7年度は400字以上800字以内）、設問イは800〜1,600字、設問ウは600〜1,200字。
+topics:
+  - id: system-strategy
+    name: システム戦略（情報システム戦略・業務プロセス・IT 投資マネジメント）
+    group: 科目A-2（専門知識）
+  - id: system-planning
+    name: システム企画（システム化計画・要件定義・調達）
+    group: 科目A-2（専門知識）
+  - id: business-strategy
+    name: 経営戦略マネジメント（経営戦略手法・マーケティング・BSC・経営管理システム）
+    group: 科目A-2（専門知識）
+  - id: technology-strategy
+    name: 技術戦略マネジメント（技術開発戦略・MOT）
+    group: 科目A-2（専門知識）
+  - id: business-industry
+    name: ビジネスインダストリ（ビジネスシステム・e ビジネス・IoT）
+    group: 科目A-2（専門知識）
+  - id: corporate-activity
+    name: 企業活動（経営・組織論・業務分析とデータ利活用・会計と財務）
+    group: 科目A-2（専門知識）
+  - id: legal
+    name: 法務（知的財産権・取引関連法規・標準化）
+    group: 科目A-2（専門知識）
+  - id: security
+    name: セキュリティ
+    group: 科目A-2（専門知識）
+  - id: am1-technology
+    name: テクノロジ系（基礎理論・コンピュータシステム・技術要素・開発技術）
+    group: 科目A-1（共通知識）
+  - id: am1-management
+    name: マネジメント系（プロジェクトマネジメント・サービスマネジメント・システム監査）
+    group: 科目A-1（共通知識）
+  - id: it-business-strategy
+    name: 業種ごとの事業特性を反映した IT 活用による事業戦略の策定
+    group: 科目B（記述・論述）
+  - id: is-strategy
+    name: 情報システム戦略と全体システム化計画の策定
+    group: 科目B（記述・論述）
+  - id: individual-system-plan
+    name: 個別システム化構想・計画の策定
+    group: 科目B（記述・論述）
+  - id: strategy-execution
+    name: 情報システム戦略の実行管理と評価
+    group: 科目B（記述・論述）
+officialLinks:
+  - label: ITストラテジスト試験（IPA）
+    url: https://www.ipa.go.jp/shiken/kubun/st.html
+  - label: 令和8年度 応用情報技術者試験、高度試験及び情報処理安全確保支援士試験の申込受付期間及び試験実施期間について
+    url: https://www.ipa.go.jp/shiken/2026/ap_koudo_sc_kikan.html
+  - label: 応用情報技術者試験、高度試験及び情報処理安全確保支援士試験におけるCBT方式での実施について
+    url: https://www.ipa.go.jp/shiken/2026/ap_koudo_sc-cbt.html
+  - label: 試験要綱 Ver.5.6（採点方式・配点・合格基準、出題範囲）
+    url: https://www.ipa.go.jp/shiken/syllabus/rcu1hd00000141gq-att/youkou_ver5_6.pdf
+  - label: ITストラテジスト試験（レベル4）シラバス Ver.4.2
+    url: https://www.ipa.go.jp/shiken/syllabus/nq6ept00000014l7-att/syllabus_st_ver4_2.pdf
+  - label: 過去問題（問題冊子・解答例・採点講評）
+    url: https://www.ipa.go.jp/shiken/mondai-kaiotu/index.html
+  - label: 試験制度の見直しについて（2027年度からの新試験制度）
+    url: https://www.ipa.go.jp/shiken/minaoshi/index.html
+  - label: よくある質問（過去問題の使用方法）
+    url: https://www.ipa.go.jp/shiken/faq.html
+notice: |
+  IPA は現行の情報処理技術者試験を2026年度（令和8年度）の実施で終了し、2027年度から新しい試験制度に移行する予定です。ITストラテジスト試験は令和8年度が最後の実施となり、高度試験は「プロフェッショナルデジタルスキル試験（仮称）」に再編されます。
+  ここに収録した過去問題と解説は、経営戦略・IT 戦略の知識の確認や、後継試験の学習にも利用できます。最新の情報は IPA の公式サイトで確認してください。
+tier: 4
+pathways:
+  - to: shindanshi
+    kind: related
+    note: 経営戦略・マーケティング・情報システム・IT 投資評価の範囲が重なる。
+updatedAt: '2026-11-26'

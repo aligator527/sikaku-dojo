@@ -1,0 +1,83 @@
+---
+import {
+  ChiSquareTable,
+  FTable,
+  NormalTable,
+  TableNote,
+  TTable,
+  type TableId,
+} from '../../components/tools/Tables';
+import { F_ALPHAS } from '../../domain/tables';
+import { t } from '../../i18n';
+import PageLayout from '../../layouts/PageLayout.astro';
+import { routes } from '../../lib/paths';
+
+const sections: TableId[] = ['normal', 't', 'chi2', 'f'];
+---
+
+<PageLayout
+  title={t.tools.tables.title}
+  lead={t.tools.tables.lead}
+  parents={[{ label: t.tools.title, href: routes.tools() }]}
+>
+  <nav class="toc" aria-label="表の一覧">
+    {sections.map((id) => (
+      <a href={`#${id}`}>{t.tools.tables[id].title}</a>
+    ))}
+  </nav>
+
+  <section id="normal">
+    <h2>{t.tools.tables.normal.title}</h2>
+    <TableNote id="normal" />
+    <NormalTable />
+  </section>
+
+  <section id="t">
+    <h2>{t.tools.tables.t.title}</h2>
+    <TableNote id="t" />
+    <TTable />
+  </section>
+
+  <section id="chi2">
+    <h2>{t.tools.tables.chi2.title}</h2>
+    <TableNote id="chi2" />
+    <ChiSquareTable />
+  </section>
+
+  <section id="f">
+    <h2>{t.tools.tables.f.title}</h2>
+    <TableNote id="f" />
+    {F_ALPHAS.map((alpha) => (
+      <>
+        <h3 class="alpha">α = {alpha}</h3>
+        <FTable alpha={alpha} />
+      </>
+    ))}
+  </section>
+</PageLayout>
+
+<style>
+  .toc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2) var(--s-5);
+    margin-bottom: var(--s-6);
+    font-size: var(--fs-sm);
+  }
+
+  section {
+    scroll-margin-top: calc(var(--header-height) + var(--s-4));
+    margin-bottom: var(--s-7);
+  }
+
+  h2 {
+    font-size: var(--fs-xl);
+    margin-bottom: var(--s-3);
+  }
+
+  .alpha {
+    font-family: var(--font-sans);
+    font-size: var(--fs-md);
+    margin: var(--s-4) 0 var(--s-2);
+  }
+</style>

@@ -1,0 +1,11 @@
+exam: toukei-1
+title: 1級 論述演習セット（3問）
+description: 統計数理から 2 問、統計応用から 1 問を出題します。本試験は 90 分で 3 問を解く形式なので、1 問 30 分を目安に、途中の導出まで答案として書き切ってください。記述問題は模範解答と採点ポイントを見て自己採点します（合格ラインは目安です）。
+durationMin: 90
+passingRate: 0.6
+order: 10
+blueprint:
+  - topics: [probability, limit-theorems, estimation-theory, testing-theory, data-analysis]
+    count: 2
+  - topics: [design, regression-multivariate, stochastic-ts, humanities, social, science-engineering, medical]
+    count: 1

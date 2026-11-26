@@ -1,0 +1,9 @@
+exam: shindanshi
+title: 第1次試験 7科目横断ミニ模試（12問）
+description: 第1次試験の7科目（経済学・経済政策、財務・会計、企業経営理論、運営管理、経営法務、経営情報システム、中小企業経営・中小企業政策）のオリジナル問題から12問をランダムに出題します。合格基準に合わせて6割以上で合格とします。
+durationMin: 30
+passingRate: 0.6
+order: 10
+blueprint:
+  - topics: [econ-micro, econ-macro, accounting, corporate-finance, strategy, marketing, production, retail, business-law, information-systems, sme-policy]
+    count: 12

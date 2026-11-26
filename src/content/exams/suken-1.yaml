@@ -1,0 +1,95 @@
+name: 実用数学技能検定1級
+shortName: 数検1級
+family: suken
+category: math
+level: 1級
+order: 10
+status: published
+summary: 大学程度・一般の数学（解析・線形代数・確率統計・数値計算など）について、計算技能（1次）と数理技能（2次）を記述式で問う、実用数学技能検定の最上位級。
+organizer:
+  name: 公益財団法人 日本数学検定協会
+  url: https://www.su-gaku.net/suken/
+format:
+  short: 筆記・記述式・1次60分＋2次120分
+  method: 筆記（記述式）。1次：計算技能検定と2次：数理技能検定からなり、初めて受検するときは両方を受検する
+  duration: 1次 60分、2次 120分
+  questions: 1次 7問、2次 必須2題＋選択2題（5題から2題を選択）
+  answerStyle: 記述式（解答用紙に答えや解答の過程を書く）
+  passing: 1次は全問題の70%程度、2次は全問題の60%程度の正答で、それぞれ合格
+  schedule: 個人受検（2026年度は4月・7月・10月の年3回）。最新の検定日は公式の検定日一覧で確認する
+  eligibility: 原則として受検資格を問わない
+  notes:
+    - 目安となる程度は「大学程度・一般」。
+    - 1級は団体受検では実施されない（個人受検のみ）。
+    - 電卓は1次では使用できない。2次では一般的な電卓・関数電卓・グラフ電卓を使用できる（スマートフォン等の電卓機能や通信・印刷機能付きの電卓は不可）。
+    - 1次・2次のどちらか一方のみ合格した場合、次回以降はその段階の免除を申請して受検できる。
+    - 公式サイトで1級の過去問題（検定問題・解答用紙・模範解答）が公開されている。
+choiceStyle: number
+sections:
+  - id: ichiji
+    name: 1次（計算技能検定）
+    description: 7問・60分。微分積分・線形代数・確率などの計算を正確に速く処理する力を問う。電卓は使用不可。
+  - id: niji
+    name: 2次（数理技能検定）
+    description: 必須2題と選択2題・120分。証明や論証を含む記述で、数学的な推論と表現の力を問う。電卓の使用可。
+topics:
+  - id: calculus-limits
+    name: 極限・級数
+    group: 解析
+  - id: differential
+    name: 微分法・テイラー展開
+    group: 解析
+  - id: integral
+    name: 積分法（広義積分・特殊関数）
+    group: 解析
+  - id: multivariable
+    name: 多変数関数（偏微分・極値・重積分）
+    group: 解析
+  - id: ode
+    name: 微分方程式
+    group: 解析
+  - id: complex
+    name: 複素解析
+    group: 解析
+  - id: matrix
+    name: 行列・行列式
+    group: 線形代数
+  - id: eigen
+    name: 線形変換・固有値
+    group: 線形代数
+  - id: linear-programming
+    name: 線形計画法
+    group: 線形代数
+  - id: number-theory
+    name: 初等整数論
+    group: 線形代数
+  - id: probability
+    name: 確率・確率分布
+    group: 確率統計
+  - id: statistics
+    name: 回帰分析・相関係数
+    group: 確率統計
+  - id: numerical
+    name: 数値解析・アルゴリズムの基礎
+    group: コンピュータ
+  - id: applications
+    name: 自然科学への数学の応用
+    group: その他
+officialLinks:
+  - label: 数学検定1級 概要・検定の出題内容（日本数学検定協会）
+    url: https://www.su-gaku.net/suken/examination/summary/1q/
+  - label: 検定概要（合格基準・持ち物・1次2次の免除）
+    url: https://www.su-gaku.net/suken/examination/
+  - label: 検定日一覧
+    url: https://www.su-gaku.net/suken/schedule/
+  - label: 検定過去問題
+    url: https://www.su-gaku.net/suken/support/past_questions/
+tier: 3
+pathways:
+  - to: toukei-1
+    kind: related
+    note: 微積分・線形代数・確率の計算力が、統計数理の導出を支える。
+  - to: jdla-e
+    kind: related
+    note: 行列の固有値分解・多変数の微分・確率は、深層学習の理論問題と重なる。
+updatedAt: '2026-11-26'

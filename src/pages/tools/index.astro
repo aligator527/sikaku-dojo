@@ -1,0 +1,91 @@
+---
+import { ArrowRight, Calculator, ChartScatter, Table2 } from '@lucide/astro';
+
+import { t } from '../../i18n';
+import PageLayout from '../../layouts/PageLayout.astro';
+import { routes } from '../../lib/paths';
+
+const tools = [
+  { href: routes.tables(), icon: Table2, title: t.tools.tables.title, lead: t.tools.tables.lead },
+  {
+    href: routes.distributions(),
+    icon: Calculator,
+    title: t.tools.distributions.title,
+    lead: t.tools.distributions.lead,
+  },
+  {
+    href: routes.statistics(),
+    icon: ChartScatter,
+    title: t.tools.statistics.title,
+    lead: t.tools.statistics.lead,
+  },
+];
+---
+
+<PageLayout title={t.tools.title} lead={t.tools.lead}>
+  <ul class="tools">
+    {tools.map(({ href, icon: Icon, title, lead }) => (
+      <li>
+        <a href={href}>
+          <Icon size={22} aria-hidden="true" class="icon" />
+          <span class="name">{title}</span>
+          <span class="desc">{lead}</span>
+          <span class="go">
+            {t.tools.open} <ArrowRight size={14} aria-hidden="true" />
+          </span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</PageLayout>
+
+<style>
+  .tools {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+    gap: var(--s-4);
+    list-style: none;
+    padding: 0;
+  }
+
+  .tools a {
+    display: grid;
+    gap: var(--s-2);
+    height: 100%;
+    padding: var(--s-4) var(--s-4) var(--s-3);
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-top: 2px solid var(--ink);
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .tools a:hover {
+    border-color: var(--rule-strong);
+    border-top-color: var(--ai);
+  }
+
+  .icon {
+    color: var(--ai);
+  }
+
+  .name {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: var(--fs-lg);
+  }
+
+  .desc {
+    font-size: var(--fs-sm);
+    color: var(--ink-2);
+  }
+
+  .go {
+    display: flex;
+    align-items: center;
+    gap: var(--s-1);
+    font-size: var(--fs-sm);
+    color: var(--ai);
+    margin-top: var(--s-1);
+  }
+</style>

@@ -1,0 +1,51 @@
+---
+import { Route } from '@lucide/astro';
+
+import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
+import ExamCatalog from '../../components/exam/ExamCatalog.astro';
+import { t } from '../../i18n';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { routes } from '../../lib/paths';
+---
+
+<BaseLayout
+  title={t.nav.exams}
+  description="資格道場で学べる資格の一覧。試験形式・収録問題数・用語数を確認できます。"
+>
+  <div class="container page">
+    <Breadcrumbs items={[{ label: t.site.name, href: routes.home() }, { label: t.nav.exams }]} />
+    <h1 class="title">{t.nav.exams}</h1>
+    <p class="roadmap">
+      <Route size={16} aria-hidden="true" />
+      <a href={routes.roadmap()}>{t.roadmap.title}</a>
+      <span class="meta">{t.roadmap.lead}</span>
+    </p>
+    <ExamCatalog detailed />
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-top: var(--s-5);
+  }
+
+  .title {
+    font-size: var(--fs-3xl);
+    margin: var(--s-3) 0 var(--s-3);
+  }
+
+  .roadmap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-1) var(--s-2);
+    margin-bottom: var(--s-6);
+    font-weight: 700;
+  }
+
+  .roadmap .meta {
+    flex-basis: 100%;
+    font-weight: 400;
+    font-size: var(--fs-sm);
+  }
+</style>

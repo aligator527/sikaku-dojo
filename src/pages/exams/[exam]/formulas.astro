@@ -1,0 +1,185 @@
+---
+import { BookA, Dumbbell, Printer } from '@lucide/astro';
+
+import { t } from '../../../i18n';
+import ExamLayout from '../../../layouts/ExamLayout.astro';
+import { getExams, getFormulaExamIds, getFormulaSheet, topicName, type Exam } from '../../../lib/content';
+import { routes } from '../../../lib/paths';
+
+export async function getStaticPaths() {
+  const withSheet = await getFormulaExamIds();
+  return (await getExams())
+    .filter((exam) => withSheet.has(exam.id))
+    .map((exam) => ({ params: { exam: exam.id }, props: { exam } }));
+}
+
+interface Props {
+  exam: Exam;
+}
+
+const { exam } = Astro.props;
+const sheet = (await getFormulaSheet(exam.id))!;
+---
+
+<ExamLayout
+  exam={exam}
+  tab="formulas"
+  title={sheet.title}
+  description={`${exam.name}の公式集（${sheet.count}個）。${t.formulas.lead}`}
+  searchable
+  searchKind="公式集"
+>
+  <div class="head" data-pagefind-body>
+    <h1 class="section-title" data-pagefind-meta="title">
+      {sheet.title}
+    </h1>
+    {sheet.introHtml && <div class="intro prose" set:html={sheet.introHtml} />}
+    <p class="meta toolbar" data-print-hide>
+      <span>
+        {t.formulas.count(sheet.count)}・{t.formulas.updated} {sheet.updatedAt}
+      </span>
+      <button type="button" class="btn btn--ghost btn--sm" data-print>
+        <Printer size={15} aria-hidden="true" />
+        {t.formulas.print}
+      </button>
+    </p>
+
+    <div class="sheet">
+      {sheet.sections.map((section) => (
+        <section class="block">
+          <h2>{section.title}</h2>
+          <dl>
+            {section.items.map((item) => (
+              <div class="item">
+                <dt>{item.name}</dt>
+                <dd>
+                  <div class="tex" set:html={item.html} />
+                  {item.noteHtml && <p class="note" set:html={item.noteHtml} />}
+                  {item.term && (
+                    <a class="term" href={routes.term(item.term.slug)} data-print-hide>
+                      <BookA size={13} aria-hidden="true" />
+                      {t.formulas.term}：{item.term.label}
+                    </a>
+                  )}
+                </dd>
+              </div>
+            ))}
+          </dl>
+          {section.topics.length > 0 && (
+            <p class="drill" data-print-hide>
+              <Dumbbell size={14} aria-hidden="true" />
+              {section.topics.map((id) => (
+                <a href={`${routes.drill(exam.id)}?topic=${encodeURIComponent(id)}`}>
+                  {t.formulas.drill}：{topicName(exam, id)}
+                </a>
+              ))}
+            </p>
+          )}
+        </section>
+      ))}
+    </div>
+  </div>
+</ExamLayout>
+
+<script>
+  document.querySelectorAll('[data-print]').forEach((b) => b.addEventListener('click', () => window.print()));
+</script>
+
+<style>
+  .intro {
+    max-width: var(--prose-width);
+    margin-bottom: var(--s-3);
+  }
+
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-3);
+    margin-bottom: var(--s-5);
+  }
+
+  .sheet {
+    columns: 2 26rem;
+    column-gap: var(--s-6);
+  }
+
+  .block {
+    break-inside: avoid-column;
+    margin-bottom: var(--s-6);
+  }
+
+  .block h2 {
+    font-size: var(--fs-lg);
+    padding-bottom: var(--s-1);
+    border-bottom: 1px solid var(--ink);
+    margin-bottom: var(--s-2);
+    break-after: avoid;
+  }
+
+  .item {
+    break-inside: avoid;
+    padding: var(--s-2) 0 var(--s-3);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  dt {
+    font-weight: 700;
+    font-size: var(--fs-sm);
+  }
+
+  dd {
+    margin: 0;
+    min-width: 0;
+  }
+
+  .tex {
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .tex :global(.katex-display) {
+    margin: var(--s-2) 0;
+  }
+
+  .note {
+    font-size: var(--fs-sm);
+    color: var(--ink-2);
+  }
+
+  .term,
+  .drill {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-1);
+    font-size: var(--fs-xs);
+    margin-top: var(--s-1);
+  }
+
+  .drill {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-1) var(--s-3);
+    color: var(--ink-3);
+  }
+
+  @media print {
+    .sheet {
+      columns: 2;
+      column-gap: 1.2rem;
+      font-size: 9.5pt;
+    }
+
+    .block {
+      margin-bottom: 0.8rem;
+    }
+
+    .item {
+      padding: 0.15rem 0 0.3rem;
+    }
+
+    .tex :global(.katex-display) {
+      margin: 0.2rem 0;
+    }
+  }
+</style>

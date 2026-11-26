@@ -1,0 +1,10 @@
+exam: toukei-1
+title: 統計応用 論述演習（3題・90分）
+description: 本試験の「統計応用」と同じく、論述式の大問 3 題を 90 分で解きます。共通分野（データ解析・研究デザイン・多変量・時系列）と 4 分野（人文・社会・理工・医薬）から出題します。本番では申し込んだ 1 分野から出題されるので、分野を絞りたいときは分野別演習を使ってください。合格の目安は 60% です。
+durationMin: 90
+passingRate: 0.6
+order: 6
+blueprint:
+  - sections: [applied]
+    formats: [essay]
+    count: 3

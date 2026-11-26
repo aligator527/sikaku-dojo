@@ -1,0 +1,110 @@
+name: 日商簿記検定2級
+shortName: 簿記2級
+family: boki
+category: accounting
+level: 2級
+order: 51
+status: published
+summary: 高度な商業簿記と工業簿記（原価計算を含む）を修得し、財務諸表から経営内容を把握できるかを問う試験。経理・財務部門をはじめ、企業から最も求められる資格の一つとされる。
+organizer:
+  name: 日本商工会議所・各地商工会議所
+  url: https://www.kentei.ne.jp/bookkeeping
+format:
+  short: ペーパー／ネット試験・90分
+  method: 統一試験（ペーパー）・ネット試験（CBT）・団体試験
+  duration: 90分
+  questions: 5題以内（第1問〜第3問は商業簿記、第4問・第5問は工業簿記）
+  answerStyle: ネット試験は選択式＋入力式（仕訳は勘定科目をプルダウンで選択）、統一試験は答案用紙に記入
+  passing: 100点満点中70点以上
+  schedule: 統一試験は年3回（6月・11月・2月）。ネット試験は統一試験前後の施行休止期間を除き、各試験会場が設定する日に随時受験できる
+  notes:
+    - 配点の目安は第1問20点・第2問20点・第3問20点・第4問28点・第5問12点（大手予備校の公表値）。工業簿記の第4問・第5問だけで40点を占める
+    - 2026年度（2027年3月31日まで）は2022年度適用の出題区分表、2027年度からは新しい出題区分表で出題される。新区分表ではリースが企業会計基準第34号にもとづく処理（借手は使用権資産・リース負債で計上、短期・少額リースは賃貸借処理を容認）に改められ、手形関連の論点が削除される一方、売掛債権の譲渡（ファクタリング）が明記された
+    - 工業簿記・原価計算の出題区分は2027年度も変更されない
+    - 電卓は四則演算機能のみのものに限り持ち込める
+    - ネット試験は試験終了後に自動採点され、その場で合否が判明する。ネット試験の合格と統一試験の合格は同じ扱い
+choiceStyle: katakana
+sections:
+  - id: q1
+    name: 第1問
+    description: 商業簿記の仕訳5題。勘定科目は設問ごとに示された選択肢から選ぶ。
+  - id: q2
+    name: 第2問
+    description: 連結会計、有価証券、固定資産、株主資本等変動計算書など特定論点の総合問題（勘定記入・連結精算表を含む）。
+  - id: q3
+    name: 第3問
+    description: 決算整理を踏まえた損益計算書・貸借対照表の作成、本支店会計、製造業の決算などの総合問題。
+  - id: q4
+    name: 第4問
+    description: 工業簿記の仕訳と、個別・部門別・総合・標準原価計算などの勘定記入や製造原価報告書の作成。
+  - id: q5
+    name: 第5問
+    description: 標準原価計算の差異分析、直接原価計算、CVP分析などの計算問題。
+topics:
+  - id: merchandise-revenue
+    name: 商品売買と収益認識（契約資産・役務収益・ファクタリング。売上原価対立法は2027年度から3級）
+    group: 商業簿記
+  - id: receivables-fx
+    name: 債権債務・電子記録債権・外貨建取引
+    group: 商業簿記
+  - id: securities
+    name: 有価証券（売買目的・満期保有目的・子会社株式・その他有価証券）
+    group: 商業簿記
+  - id: fixed-assets
+    name: 有形・無形固定資産（割賦購入・圧縮記帳・建設仮勘定・ソフトウェア・のれん）
+    group: 商業簿記
+  - id: lease
+    name: リース（2027年度から使用権資産・リース負債、短期・少額リース）
+    group: 商業簿記
+  - id: provisions
+    name: 引当金（貸倒・退職給付・修繕・賞与・商品保証）
+    group: 商業簿記
+  - id: tax-effect
+    name: 税金と税効果会計
+    group: 商業簿記
+  - id: equity
+    name: 株式会社会計（純資産・剰余金の配当・株主資本等変動計算書・合併）
+    group: 商業簿記
+  - id: closing
+    name: 決算と財務諸表（本支店会計・製造業の決算を含む）
+    group: 商業簿記
+  - id: consolidation
+    name: 連結会計（資本連結・のれん・非支配株主持分・未実現利益）
+    group: 商業簿記
+  - id: cost-elements
+    name: 工業簿記の基礎と費目別計算（材料費・労務費・経費・製造間接費）
+    group: 工業簿記
+  - id: job-department
+    name: 個別原価計算・部門別原価計算
+    group: 工業簿記
+  - id: process-costing
+    name: 総合原価計算（単純・等級別・組別・工程別、仕損・減損）
+    group: 工業簿記
+  - id: standard-costing
+    name: 標準原価計算と差異分析
+    group: 工業簿記
+  - id: direct-costing-cvp
+    name: 直接原価計算とCVP分析
+    group: 工業簿記
+officialLinks:
+  - label: 日本商工会議所 簿記2級
+    url: https://www.kentei.ne.jp/bookkeeping/class2
+  - label: 簿記2級 試験科目・注意事項
+    url: https://www.kentei.ne.jp/bookkeeping/class2/exam
+  - label: 簿記検定試験 出題区分表
+    url: https://www.kentei.ne.jp/bookkeeping/exam-list
+  - label: 簿記2級 サンプル問題
+    url: https://www.kentei.ne.jp/bookkeeping/class-s/sample/sample-two
+  - label: 日商簿記検定試験（2級・3級・簿記初級・原価計算初級）ネット試験について
+    url: https://www.kentei.ne.jp/33013
+  - label: 出題区分表などの改定について（2027年度適用・改定項目等の説明書）
+    url: https://www.kentei.ne.jp/wp/wp-content/uploads/2014/10/2027_kaitei_shushi_fixed.pdf
+tier: 2
+pathways:
+  - to: boki-1
+    kind: next
+    note: 会計基準の理論と原価計算を深める。税理士・公認会計士試験の入口にもなるレベル。
+  - to: shindanshi
+    kind: related
+    note: 1次試験「財務・会計」の仕訳・財務諸表・原価計算・経営分析の土台になる。
+updatedAt: '2026-11-26'

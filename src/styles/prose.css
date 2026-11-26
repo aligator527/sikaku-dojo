@@ -1,0 +1,137 @@
+/* Long-form Markdown: explanations, guides, glossary entries. */
+.prose {
+  max-width: var(--prose-width);
+  color: var(--ink);
+}
+
+.prose > * + * {
+  margin-top: 1.1em;
+}
+
+.prose h2 {
+  font-size: var(--fs-xl);
+  margin-top: 2.4em;
+  padding-bottom: var(--s-2);
+  border-bottom: 1px solid var(--rule-strong);
+}
+
+.prose h3 {
+  font-size: var(--fs-lg);
+  margin-top: 2em;
+}
+
+.prose h3::before {
+  content: '';
+  display: inline-block;
+  width: 0.35em;
+  height: 0.9em;
+  margin-right: 0.5em;
+  background: var(--shu);
+  vertical-align: -0.05em;
+}
+
+.prose h4 {
+  font-size: var(--fs-md);
+  margin-top: 1.6em;
+}
+
+.prose h2 + *,
+.prose h3 + *,
+.prose h4 + * {
+  margin-top: 0.6em;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.5em;
+}
+
+.prose li + li {
+  margin-top: 0.3em;
+}
+
+.prose li::marker {
+  color: var(--ink-3);
+}
+
+.prose strong {
+  font-weight: 700;
+  background: linear-gradient(transparent 62%, var(--shu-tint) 62%);
+}
+
+.prose blockquote {
+  padding: var(--s-3) var(--s-4);
+  border-left: 3px solid var(--rule-strong);
+  background: var(--surface-sunken);
+  color: var(--ink-2);
+}
+
+.prose table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  font-size: var(--fs-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.prose th,
+.prose td {
+  padding: var(--s-2) var(--s-3);
+  border: 1px solid var(--rule-strong);
+  text-align: left;
+  vertical-align: top;
+}
+
+.prose th {
+  background: var(--surface-sunken);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.prose td[align='right'],
+.prose th[align='right'] {
+  text-align: right;
+}
+
+.prose td[align='center'],
+.prose th[align='center'] {
+  text-align: center;
+}
+
+.prose code:not(pre code) {
+  padding: 0.1em 0.35em;
+  border-radius: var(--radius);
+  background: var(--surface-sunken);
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+}
+
+.prose pre {
+  padding: var(--s-3) var(--s-4);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  overflow-x: auto;
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+}
+
+.prose pre code {
+  font-family: var(--font-mono);
+}
+
+.prose hr {
+  margin: 2em 0;
+}
+
+.prose a {
+  word-break: break-all;
+}
+
+/* Compact variant for question stems and choices. */
+.prose--tight > * + * {
+  margin-top: 0.75em;
+}
+
+.prose--tight h3::before {
+  display: none;
+}

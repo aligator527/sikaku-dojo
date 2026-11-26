@@ -1,0 +1,138 @@
+---
+import { formatBrief, getExamsByCategory, getQuestionCounts, getTerms } from '../../lib/content';
+import { routes } from '../../lib/paths';
+import { t } from '../../i18n';
+
+interface Props {
+  /** Show each exam's summary line. */
+  detailed?: boolean;
+}
+
+const { detailed = false } = Astro.props;
+const [categories, counts, terms] = await Promise.all([
+  getExamsByCategory(),
+  getQuestionCounts(),
+  getTerms(),
+]);
+const termCount = (examId: string) => terms.filter((x) => x.exams.includes(examId)).length;
+---
+
+<div class="catalog">
+  {categories.map((category) => (
+    <section class="category">
+      <h3 class="category-name">{category.name}</h3>
+      <ul>
+        {category.exams.map((exam) => (
+          <li class="row">
+            <div class="name">
+              <a href={routes.exam(exam.id)}>{exam.name}</a>
+              {exam.status === 'planned' && <span class="tag">{t.exam.planned}</span>}
+              {detailed && <p class="summary">{exam.summary}</p>}
+            </div>
+            <p class="format">{formatBrief(exam)}</p>
+            <p class="counts num">
+              <span>{t.exam.questionCount(counts.get(exam.id) ?? 0)}</span>
+              <span>{t.exam.termCount(termCount(exam.id))}</span>
+            </p>
+            <p class="quick">
+              <a href={routes.drill(exam.id)}>{t.examTabs.drill}</a>
+              <a href={routes.mocks(exam.id)}>{t.examTabs.mock}</a>
+            </p>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))}
+</div>
+
+<style>
+  .catalog {
+    display: grid;
+    gap: var(--s-6);
+  }
+
+  .category-name {
+    font-family: var(--font-sans);
+    font-size: var(--fs-sm);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--ink-2);
+    padding-bottom: var(--s-1);
+    border-bottom: 1px solid var(--rule-strong);
+  }
+
+  ul {
+    padding: 0;
+    list-style: none;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--s-1) var(--s-4);
+    align-items: baseline;
+    padding: var(--s-3) 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  @media (min-width: 52rem) {
+    .row {
+      grid-template-columns: minmax(0, 1fr) 13rem 8rem 7rem;
+    }
+  }
+
+  .name a {
+    font-family: var(--font-serif);
+    font-size: var(--fs-lg);
+    font-weight: 700;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .name a:hover {
+    color: var(--ai);
+    text-decoration: underline;
+  }
+
+  .name .tag {
+    margin-left: var(--s-2);
+  }
+
+  .summary {
+    margin-top: 2px;
+    font-size: var(--fs-sm);
+    color: var(--ink-2);
+  }
+
+  .format,
+  .counts {
+    display: flex;
+    gap: var(--s-2);
+    font-size: var(--fs-sm);
+    color: var(--ink-3);
+  }
+
+  .counts {
+    white-space: nowrap;
+  }
+
+  .counts span + span::before {
+    content: '・';
+    margin-right: var(--s-2);
+    color: var(--rule-strong);
+  }
+
+  .quick {
+    display: flex;
+    gap: var(--s-3);
+    font-size: var(--fs-sm);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 52rem) {
+    .format,
+    .quick {
+      display: none;
+    }
+  }
+</style>

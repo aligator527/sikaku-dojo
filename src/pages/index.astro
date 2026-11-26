@@ -1,0 +1,114 @@
+---
+import ExamCatalog from '../components/exam/ExamCatalog.astro';
+import ContinueLearning, { type ExamRef } from '../components/home/ContinueLearning';
+import DailyQuestion, { type DailyExam } from '../components/home/DailyQuestion';
+import { t } from '../i18n';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { examContext, getExams, getQuestionCounts, getTerms } from '../lib/content';
+import { routes } from '../lib/paths';
+
+const exams = await getExams();
+const counts = await getQuestionCounts();
+const terms = await getTerms();
+const questionTotal = [...counts.values()].reduce((n, c) => n + c, 0);
+
+const dailyExams: DailyExam[] = exams.map((exam) => ({
+  id: exam.id,
+  shortName: exam.shortName,
+  topics: examContext(exam).topics,
+}));
+
+const refs: ExamRef[] = exams.map((exam) => ({
+  id: exam.id,
+  name: exam.name,
+  href: routes.exam(exam.id),
+  drillHref: routes.drill(exam.id),
+}));
+---
+
+<BaseLayout>
+  <div class="container home">
+    <section class="masthead">
+      <div class="intro">
+        <h1>
+          <span class="seal" aria-hidden="true">
+            道
+          </span>
+          {t.site.name}
+        </h1>
+        <p class="tagline">{t.site.tagline}</p>
+        <p class="stats num">{t.home.stats(exams.length, questionTotal, terms.length)}</p>
+      </div>
+      <DailyQuestion client:load exams={dailyExams} />
+    </section>
+
+    <ContinueLearning client:load exams={refs} />
+
+    <section>
+      <h2 class="section-title">
+        {t.home.catalog}
+        <small>
+          <a href={routes.roadmap()}>{t.roadmap.title}</a>
+        </small>
+      </h2>
+      <ExamCatalog />
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .home {
+    display: grid;
+    gap: var(--s-7);
+    padding-top: var(--s-7);
+  }
+
+  .masthead {
+    display: grid;
+    gap: var(--s-6);
+    align-items: end;
+    padding-bottom: var(--s-6);
+    border-bottom: 1px solid var(--ink);
+  }
+
+  @media (min-width: 52rem) {
+    .masthead {
+      grid-template-columns: minmax(0, 1fr) 22rem;
+    }
+  }
+
+  h1 {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    font-size: clamp(2.25rem, 6vw, 3.5rem);
+    letter-spacing: 0.12em;
+    line-height: 1.2;
+  }
+
+  .seal {
+    display: grid;
+    place-items: center;
+    width: 0.95em;
+    height: 0.95em;
+    border: 0.07em solid var(--shu);
+    border-radius: 3px;
+    color: var(--shu);
+    font-size: 0.8em;
+    letter-spacing: 0;
+    transform: rotate(-5deg);
+  }
+
+  .tagline {
+    margin-top: var(--s-4);
+    font-size: var(--fs-lg);
+    color: var(--ink-2);
+    max-width: 34rem;
+  }
+
+  .stats {
+    margin-top: var(--s-2);
+    font-size: var(--fs-sm);
+    color: var(--ink-3);
+  }
+</style>

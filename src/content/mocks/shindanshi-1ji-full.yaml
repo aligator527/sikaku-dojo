@@ -1,0 +1,21 @@
+exam: shindanshi
+title: 第1次試験 7科目 横断模試（35問・70分）
+description: 第1次試験の 7 科目（経済学・経済政策、財務・会計、企業経営理論、運営管理、経営法務、経営情報システム、中小企業経営・政策）から 5問ずつ、マークシート形式の多肢選択問題を出題します。本試験は科目ごとに 60〜90分ですが、ここでは科目横断で弱点を見つけることを目的にしています。合格の目安は本試験と同じ 60% で、結果の分野別得点で 40% 未満の科目がないかも確認してください。
+durationMin: 70
+passingRate: 0.6
+order: 5
+blueprint:
+  - sections: [economics]
+    count: 5
+  - sections: [finance]
+    count: 5
+  - sections: [management]
+    count: 5
+  - sections: [operations]
+    count: 5
+  - sections: [law]
+    count: 5
+  - sections: [information]
+    count: 5
+  - sections: [sme]
+    count: 5

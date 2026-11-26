@@ -1,0 +1,13 @@
+exam: jdla-e
+title: E資格 実力診断（11問）
+description: 数学的基礎・機械学習、深層学習の基礎（順伝播・最適化・正則化・正規化）、CNN・RNN・Transformer の3つの分野からバランスよく出題します。本番は120分で100問程度なので、1問あたり1分強のペースを意識してください。合格基準は公表されていないため、合格ラインは目安です。
+durationMin: 15
+passingRate: 0.65
+order: 10
+blueprint:
+  - topics: [linear-algebra, probability-statistics, information-theory, ml-basics, ml-evaluation]
+    count: 3
+  - topics: [feedforward, optimization, regularization, generalization]
+    count: 5
+  - topics: [cnn, rnn, transformer]
+    count: 3

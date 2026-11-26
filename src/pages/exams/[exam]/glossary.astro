@@ -1,0 +1,46 @@
+---
+import { Layers } from '@lucide/astro';
+
+import GlossaryIndex from '../../../components/glossary/GlossaryIndex';
+import { t } from '../../../i18n';
+import ExamLayout from '../../../layouts/ExamLayout.astro';
+import { examPaths, getTermsForExam, toTermRow, type Exam } from '../../../lib/content';
+import { routes } from '../../../lib/paths';
+
+export const getStaticPaths = examPaths;
+
+interface Props {
+  exam: Exam;
+}
+
+const { exam } = Astro.props;
+const terms = await getTermsForExam(exam.id);
+---
+
+<ExamLayout exam={exam} tab="glossary" description={`${exam.name}に出る用語${terms.length}語の解説。`}>
+  <div class="head">
+    <h1 class="section-title">
+      {t.examTabs.glossary}
+      <small>{t.exam.termCount(terms.length)}</small>
+    </h1>
+    <a class="btn btn--ghost btn--sm" href={`${routes.flashcards()}?exam=${exam.id}`}>
+      <Layers size={15} aria-hidden="true" />
+      {t.glossary.cards}
+    </a>
+  </div>
+  <GlossaryIndex client:load terms={terms.map(toTermRow)} />
+</ExamLayout>
+
+<style>
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--s-3);
+  }
+
+  .head h1 {
+    flex: 1;
+  }
+</style>

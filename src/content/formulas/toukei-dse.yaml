@@ -1,0 +1,205 @@
+exam: toukei-dse
+title: 統計検定 データサイエンスエキスパート 公式集
+intro: 'データサイエンスエキスパートで使う推測統計・数学・機械学習の公式を、学習する順にまとめました。2級の範囲（基本的な推定・検定）も出題されるので、2級の公式集とあわせて確認してください。ベクトルは太字、$X^{\top}$ は転置、$\|\cdot\|$ はユークリッドノルム、$z_{\alpha}$ などは上側 $100\alpha\%$ 点を表します。'
+updatedAt: '2026-11-26'
+sections:
+  - title: 推測統計
+    topics: [prob-inference]
+    items:
+      - name: 母平均の信頼区間
+        tex: '\bar{x} - t_{\alpha/2}(n-1)\frac{s}{\sqrt{n}} \leq \mu \leq \bar{x} + t_{\alpha/2}(n-1)\frac{s}{\sqrt{n}}'
+        note: '$s$ は不偏分散（$n-1$ で割る）の平方根です。$n$ が大きければ $t_{\alpha/2}(n-1) \approx z_{\alpha/2}$（95% で 1.96）。標本サイズを 4 倍にすると区間の幅が半分になります。'
+        term: confidence-interval
+      - name: 2群の比率の差の検定（A/B テスト）
+        tex: 'Z = \frac{\hat{p}_1-\hat{p}_2}{\sqrt{\hat{p}(1-\hat{p})\left(\frac{1}{n_1}+\frac{1}{n_2}\right)}},\qquad \hat{p} = \frac{x_1+x_2}{n_1+n_2}'
+        note: '帰無仮説 $p_1 = p_2$ のもとで、2 群を合わせた比率 $\hat{p}$ を分母に使います。途中で何度も結果を見て有意になった時点で止める（のぞき見）と、第1種の過誤の確率が名目の $\alpha$ より大きくなります。'
+      - name: 最尤推定量とその漸近分布
+        tex: '\hat{\theta} = \arg\max_{\theta}\sum_{i=1}^{n}\log f(x_i;\theta),\qquad \sqrt{n}(\hat{\theta}-\theta) \xrightarrow{d} N\left(0,\ I(\theta)^{-1}\right)'
+        note: '$I(\theta) = -\mathrm{E}[\partial^2\log f(X;\theta)/\partial\theta^2]$ は1観測あたりのフィッシャー情報量です。正規分布の分散の最尤推定量は $n$ で割るので不偏ではありません。負の対数尤度を損失として最小化するのと同じで、ロジスティック回帰の交差エントロピー損失はその例です。'
+        term: maximum-likelihood-estimation
+      - name: 多重検定の補正
+        tex: '\text{ボンフェローニ法}:\ p_i \leq \frac{\alpha}{m},\qquad \text{BH 法}:\ p_{(k)} \leq \frac{k}{m}\alpha\ \text{を満たす最大の}\ k\ \text{まで棄却}'
+        note: 'ボンフェローニ法はファミリーワイズ誤り率（1つでも誤って棄却する確率）を、ベンジャミニ・ホッホベルク法は偽発見率（FDR）を $\alpha$ 以下に抑えます。BH 法では $m$ 個の p 値を小さい順に並べた $p_{(1)} \leq \cdots \leq p_{(m)}$ を使います。'
+
+  - title: ベイズ推論と計算統計
+    topics: [bayes-computation]
+    items:
+      - name: 事後分布
+        tex: '\pi(\theta \mid \boldsymbol{x}) = \frac{f(\boldsymbol{x} \mid \theta)\,\pi(\theta)}{\int f(\boldsymbol{x} \mid \theta)\,\pi(\theta)\,d\theta} \propto f(\boldsymbol{x} \mid \theta)\,\pi(\theta)'
+        note: '事後分布は「尤度 × 事前分布」に比例します。分母（周辺尤度）は $\theta$ によらない定数で、高次元では計算が難しいため MCMC などで近似します。'
+        term: bayes-theorem
+      - name: ベータ・二項モデル
+        tex: '\theta \sim \mathrm{Beta}(a,\ b),\ \ X \mid \theta \sim \mathrm{Bin}(n,\ \theta) \;\Rightarrow\; \theta \mid X=x \sim \mathrm{Beta}(a+x,\ b+n-x)'
+        note: '事後平均 $\frac{a+x}{a+b+n}$ は、事前平均 $\frac{a}{a+b}$ と標本比率 $\frac{x}{n}$ の加重平均です。$b$ に加えるのは失敗の数 $n - x$ です。'
+      - name: MAP 推定と正則化
+        tex: '\hat{\boldsymbol{\theta}}_{\mathrm{MAP}} = \arg\max_{\boldsymbol{\theta}}\left\{\log f(\boldsymbol{x} \mid \boldsymbol{\theta}) + \log\pi(\boldsymbol{\theta})\right\}'
+        note: '事後分布の最頻値で、事前分布の対数が罰則項に対応します。正規事前分布 $N(\boldsymbol{0}, \tau^2 I)$ はリッジ（L2）回帰、ラプラス事前分布はラッソ（L1）回帰に相当します。事後平均とは一般に異なります。'
+      - name: メトロポリス・ヘイスティングス法
+        tex: '\alpha(\theta, \theta^{*}) = \min\left\{1,\ \frac{\pi(\theta^{*})\,q(\theta \mid \theta^{*})}{\pi(\theta)\,q(\theta^{*} \mid \theta)}\right\}'
+        note: '現在値 $\theta$ から提案分布 $q(\cdot \mid \theta)$ で候補 $\theta^{*}$ を出し、確率 $\alpha$ で採択します（棄却したら現在値をもう一度記録）。目標分布は比だけで使うので、正規化定数が分からなくてもかまいません。提案分布が対称なら $q$ は約分されます。'
+      - name: ブートストラップ標準誤差
+        tex: '\widehat{\mathrm{SE}}_{\mathrm{boot}} = \sqrt{\frac{1}{B-1}\sum_{b=1}^{B}\left(\hat{\theta}^{*}_{b} - \bar{\theta}^{*}\right)^2}'
+        note: '元の標本から同じ大きさ $n$ の標本を**復元**抽出して $\hat{\theta}^{*}_b$ を $B$ 回計算し、そのばらつきで標準誤差を推定します。非復元抽出では元の標本と同じになってしまいます。'
+        term: bootstrap
+
+  - title: 線形代数
+    topics: [linear-algebra]
+    items:
+      - name: 射影行列
+        tex: 'P = X(X^{\top}X)^{-1}X^{\top},\qquad P^2 = P,\quad P^{\top} = P,\quad \operatorname{tr}P = \operatorname{rank}X'
+        note: '$X$ の列空間への直交射影で、最小二乗法の予測値は $\hat{\boldsymbol{y}} = P\boldsymbol{y}$、残差は $(I-P)\boldsymbol{y}$ です。1本のベクトル $\boldsymbol{u}$ への射影は $\frac{\boldsymbol{u}^{\top}\boldsymbol{y}}{\boldsymbol{u}^{\top}\boldsymbol{u}}\boldsymbol{u}$。'
+      - name: 対称行列の固有値分解
+        tex: 'A = Q\Lambda Q^{\top} = \sum_{j=1}^{n}\lambda_j\boldsymbol{q}_j\boldsymbol{q}_j^{\top},\qquad Q^{\top}Q = I'
+        note: '実対称行列は直交行列 $Q$ で対角化でき、固有値はすべて実数です。$\operatorname{tr}A = \sum_j\lambda_j$、$\det A = \prod_j\lambda_j$。固有値がすべて正なら正定値行列です。'
+        term: eigenvalue
+      - name: 特異値分解
+        tex: 'A = U\Sigma V^{\top} = \sum_{j=1}^{r}\sigma_j\boldsymbol{u}_j\boldsymbol{v}_j^{\top}'
+        note: '任意の行列で存在し、$r$ は階数です。特異値 $\sigma_j$ は $A^{\top}A$ の固有値の平方根で、$V$ の列は $A^{\top}A$ の、$U$ の列は $AA^{\top}$ の固有ベクトルです。中心化したデータ行列の SVD から主成分が得られます。'
+        term: singular-value-decomposition
+      - name: 低ランク近似（エッカート・ヤングの定理）
+        tex: 'A_k = \sum_{j=1}^{k}\sigma_j\boldsymbol{u}_j\boldsymbol{v}_j^{\top},\qquad \|A - A_k\|_F^2 = \sum_{j>k}\sigma_j^2'
+        note: '上位 $k$ 個の特異値だけを残した $A_k$ が、階数 $k$ 以下の行列の中でフロベニウスノルムの意味で最良の近似です（2 ノルムでも最良で、誤差は $\sigma_{k+1}$）。誤差は残りの特異値の **2乗** の和です。推薦システムの行列分解や画像圧縮に使います。'
+      - name: ムーア・ペンローズの擬似逆行列
+        tex: 'A^{+} = V\Sigma^{+}U^{\top},\qquad \hat{\boldsymbol{x}} = A^{+}\boldsymbol{b}'
+        note: '$\Sigma^{+}$ は 0 でない特異値を逆数にして転置した行列です。$\hat{\boldsymbol{x}}$ は $\|A\boldsymbol{x} - \boldsymbol{b}\|$ を最小にする解のうちノルムが最小のもので、$A$ が列フルランクなら $(A^{\top}A)^{-1}A^{\top}\boldsymbol{b}$ に一致します。'
+
+  - title: 微積分と最適化
+    topics: [calculus-optimization]
+    items:
+      - name: ベクトルによる微分
+        tex: '\frac{\partial}{\partial\boldsymbol{x}}\left(\boldsymbol{a}^{\top}\boldsymbol{x}\right) = \boldsymbol{a},\qquad \frac{\partial}{\partial\boldsymbol{x}}\left(\boldsymbol{x}^{\top}A\boldsymbol{x}\right) = (A + A^{\top})\boldsymbol{x}'
+        note: '$A$ が対称なら $2A\boldsymbol{x}$ です。$\|\boldsymbol{y} - X\boldsymbol{\beta}\|^2$ を $\boldsymbol{\beta}$ で微分して 0 とおくと、正規方程式 $X^{\top}X\boldsymbol{\beta} = X^{\top}\boldsymbol{y}$ が得られます。'
+      - name: 2次のテイラー近似
+        tex: 'f(\boldsymbol{x} + \boldsymbol{h}) \approx f(\boldsymbol{x}) + \nabla f(\boldsymbol{x})^{\top}\boldsymbol{h} + \frac{1}{2}\boldsymbol{h}^{\top}H(\boldsymbol{x})\boldsymbol{h}'
+        note: '$H$ はヘッセ行列です。停留点（$\nabla f = \boldsymbol{0}$）で $H$ が正定値なら極小、負定値なら極大、正と負の固有値が混じれば鞍点です。'
+        term: taylor-expansion
+      - name: 勾配降下法
+        tex: '\boldsymbol{\theta}_{t+1} = \boldsymbol{\theta}_t - \eta\,\nabla L(\boldsymbol{\theta}_t)'
+        note: '勾配の**逆**方向に進みます。学習率 $\eta$ が大きすぎると発散し、小さすぎると収束が遅くなります。確率的勾配降下法（SGD）では、ミニバッチで計算した勾配で更新します。'
+        term: gradient-descent
+      - name: ニュートン法
+        tex: '\boldsymbol{\theta}_{t+1} = \boldsymbol{\theta}_t - H(\boldsymbol{\theta}_t)^{-1}\nabla L(\boldsymbol{\theta}_t)'
+        note: '2次近似の最小点へ移動する方法で、解の近くでは2次収束します。1変数なら $\theta_{t+1} = \theta_t - L^{\prime}(\theta_t)/L^{\prime\prime}(\theta_t)$。ヘッセ行列の計算と逆行列は高コストで、正定値でないと降下方向になりません。'
+        term: hessian-matrix
+      - name: ラグランジュの未定乗数法
+        tex: '\mathcal{L}(\boldsymbol{x}, \lambda) = f(\boldsymbol{x}) - \lambda g(\boldsymbol{x}),\qquad \nabla f(\boldsymbol{x}) = \lambda\nabla g(\boldsymbol{x}),\quad g(\boldsymbol{x}) = 0'
+        note: '等式制約 $g(\boldsymbol{x}) = 0$ のもとでの極値の必要条件です。$\|\boldsymbol{u}\| = 1$ のもとで分散 $\boldsymbol{u}^{\top}\Sigma\boldsymbol{u}$ を最大化すると、固有値問題 $\Sigma\boldsymbol{u} = \lambda\boldsymbol{u}$（主成分分析）になります。不等式制約では、相補性条件 $\lambda g(\boldsymbol{x}) = 0$ と乗数の符号条件を加えた KKT 条件を使います。'
+        term: lagrange-multiplier
+
+  - title: 教師あり学習と正則化
+    topics: [supervised]
+    items:
+      - name: リッジ回帰
+        tex: '\hat{\boldsymbol{\beta}}_{\mathrm{ridge}} = \arg\min_{\boldsymbol{\beta}}\left\{\|\boldsymbol{y}-X\boldsymbol{\beta}\|^2 + \lambda\|\boldsymbol{\beta}\|^2\right\} = (X^{\top}X + \lambda I)^{-1}X^{\top}\boldsymbol{y}'
+        note: '説明変数を標準化し、切片には罰則をかけないのが普通です。$\lambda > 0$ なら多重共線性があっても逆行列が存在します。係数は 0 に向かって縮小されますが、ちょうど 0 にはなりません。'
+        term: weight-decay
+      - name: ラッソ
+        tex: '\hat{\boldsymbol{\beta}}_{\mathrm{lasso}} = \arg\min_{\boldsymbol{\beta}}\left\{\|\boldsymbol{y}-X\boldsymbol{\beta}\|^2 + \lambda\sum_{j=1}^{p}|\beta_j|\right\}'
+        note: 'L1 罰則により一部の係数がちょうど 0 になり、変数選択を兼ねます。一般に閉じた形の解はありません。$\lambda$ が大きいほど 0 になる係数が増えます。誤差項を $\frac{1}{2n}$ 倍する流儀もあります。'
+      - name: ロジスティック回帰の損失と勾配
+        tex: 'L(\boldsymbol{\beta}) = -\sum_{i=1}^{n}\left\{y_i\log p_i + (1-y_i)\log(1-p_i)\right\},\qquad \nabla L = X^{\top}(\boldsymbol{p} - \boldsymbol{y})'
+        note: '$p_i = 1/(1 + e^{-\boldsymbol{x}_i^{\top}\boldsymbol{\beta}})$ です。損失は負の対数尤度（交差エントロピー）で、勾配は「予測確率 − 正解」に特徴量を掛けた形になります。$e^{\beta_j}$ はオッズ比です。'
+        term: logistic-regression
+      - name: ソフトマックス関数
+        tex: '\mathrm{softmax}(\boldsymbol{z})_k = \frac{\exp(z_k)}{\sum_{j=1}^{K}\exp(z_j)},\qquad \frac{\partial L}{\partial z_k} = \hat{y}_k - y_k'
+        note: '右は交差エントロピー損失 $L = -\sum_k y_k\log\hat{y}_k$（$\boldsymbol{y}$ は one-hot）と組み合わせたときの勾配です。すべての $z_k$ に同じ定数を足しても出力は変わらないので、計算では最大値を引いてオーバーフローを防ぎます。'
+        term: softmax-function
+      - name: 決定木の不純度
+        tex: '\text{ジニ不純度} = 1 - \sum_{k}p_k^2,\qquad \text{エントロピー} = -\sum_{k}p_k\log_2 p_k'
+        note: '$p_k$ はノード内のクラス $k$ の割合です。分割の良さは「親の不純度 − 子の不純度の加重平均」（情報利得）で測り、重みは各子ノードのサンプル数の割合です。単純平均にしないよう注意します。'
+      - name: バイアス・バリアンス分解
+        tex: '\mathrm{E}\left[(y - \hat{f}(x))^2\right] = \left(\mathrm{E}[\hat{f}(x)] - f(x)\right)^2 + \mathrm{V}[\hat{f}(x)] + \sigma^2'
+        note: '$y = f(x) + \varepsilon$、$\mathrm{V}[\varepsilon] = \sigma^2$ のときの予測誤差の分解で、期待値は訓練データと新しい $y$ の両方についてとります。モデルを複雑にするとバイアスは減り分散は増えます。$\sigma^2$ はどのモデルでも減らせない誤差です。'
+        term: overfitting
+
+  - title: モデルの評価指標
+    topics: [model-evaluation]
+    items:
+      - name: 適合率と再現率
+        tex: '\text{適合率} = \frac{\mathrm{TP}}{\mathrm{TP}+\mathrm{FP}},\qquad \text{再現率} = \frac{\mathrm{TP}}{\mathrm{TP}+\mathrm{FN}}'
+        note: '適合率は「陽性と予測したうち本当に陽性」、再現率（感度・真陽性率）は「本当の陽性のうち陽性と予測できた」割合です。分母の FP と FN を取り違えやすいので、混同行列で確認します。しきい値を上げると一般に適合率は上がり、再現率は下がります。'
+      - name: F 値
+        tex: 'F_1 = \frac{2\cdot\text{適合率}\cdot\text{再現率}}{\text{適合率} + \text{再現率}} = \frac{2\,\mathrm{TP}}{2\,\mathrm{TP} + \mathrm{FP} + \mathrm{FN}}'
+        note: '適合率と再現率の調和平均で、算術平均ではありません。TN を使わないので、陰性が大多数のデータでも陽性の検出性能を評価できます。'
+      - name: 正解率・特異度・偽陽性率
+        tex: '\text{正解率} = \frac{\mathrm{TP}+\mathrm{TN}}{\mathrm{TP}+\mathrm{FP}+\mathrm{FN}+\mathrm{TN}},\qquad \text{特異度} = \frac{\mathrm{TN}}{\mathrm{TN}+\mathrm{FP}},\qquad \mathrm{FPR} = 1 - \text{特異度}'
+        note: 'クラスが不均衡だと、すべて多数派と予測するだけで正解率が高くなります。ROC 曲線は横軸に偽陽性率 FPR、縦軸に再現率（真陽性率）をとります。'
+      - name: AUC
+        tex: '\mathrm{AUC} = P\left(s(X^{+}) > s(X^{-})\right) + \frac{1}{2}P\left(s(X^{+}) = s(X^{-})\right)'
+        note: '無作為に選んだ陽性例のスコア $s(X^{+})$ が陰性例のスコア $s(X^{-})$ より大きい確率で、ROC 曲線の下の面積に等しくなります。0.5 がランダム、1 が完全な分類です。しきい値によらずスコアの順位だけで決まり、マン・ホイットニーの $U$ を $n_{+}n_{-}$ で割った値に一致します。'
+      - name: RMSE と MAE
+        tex: '\mathrm{RMSE} = \sqrt{\frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2},\qquad \mathrm{MAE} = \frac{1}{n}\sum_{i=1}^{n}|y_i - \hat{y}_i|'
+        note: 'どちらも目的変数と同じ単位で、常に $\mathrm{MAE} \leq \mathrm{RMSE}$ です。RMSE は大きな誤差を強く罰するので、外れ値の影響を受けやすくなります。'
+      - name: K 分割交差検証
+        tex: '\mathrm{CV}_{(K)} = \frac{1}{K}\sum_{k=1}^{K}\mathrm{Err}_k'
+        note: 'データを $K$ 個に分け、各分割をテスト、残りを訓練に使ったときの誤差 $\mathrm{Err}_k$ の平均です。標準化や特徴量選択などの前処理も訓練側だけで行わないと、情報が漏れて（リーケージ）評価が甘くなります。時系列データでは、未来のデータで訓練しない分割を使います。'
+        term: cross-validation
+
+  - title: 教師なし学習
+    topics: [unsupervised]
+    items:
+      - name: k-means 法の目的関数
+        tex: 'J = \sum_{k=1}^{K}\sum_{i \in C_k}\|\boldsymbol{x}_i - \boldsymbol{\mu}_k\|^2,\qquad \boldsymbol{\mu}_k = \frac{1}{|C_k|}\sum_{i \in C_k}\boldsymbol{x}_i'
+        note: '各点を最も近い重心に割り当てる操作と重心の更新を交互に繰り返すと $J$ は単調に減りますが、局所解に収束するので初期値を変えて何度か実行します。クラスター数 $K$ は事前に決める必要があります（エルボー法・シルエット係数など）。'
+      - name: 主成分分析
+        tex: '\Sigma\boldsymbol{u}_j = \lambda_j\boldsymbol{u}_j,\qquad \text{寄与率}_j = \frac{\lambda_j}{\sum_{k=1}^{p}\lambda_k}'
+        note: '$\Sigma$ は分散共分散行列（または相関行列）、$\lambda_j$ は第 $j$ 主成分の分散です。単位の異なる変数では相関行列（標準化したデータ）を使い、そのとき固有値の和は変数の数 $p$ になります。'
+        term: principal-component-analysis
+      - name: 混合正規分布の負担率（EM アルゴリズム）
+        tex: '\gamma_{ik} = \frac{\pi_k\,N(\boldsymbol{x}_i \mid \boldsymbol{\mu}_k, \Sigma_k)}{\sum_{j=1}^{K}\pi_j\,N(\boldsymbol{x}_i \mid \boldsymbol{\mu}_j, \Sigma_j)}'
+        note: 'E ステップで計算する、点 $i$ がクラスター $k$ に属する事後確率です。M ステップでは $\gamma_{ik}$ を重みとして $\pi_k$、$\boldsymbol{\mu}_k$、$\Sigma_k$ を更新します。各点を1つのクラスターに確定的に割り当てるのが k-means 法です。'
+
+  - title: 情報量とテキスト解析
+    topics: [text-analysis, deep-learning]
+    items:
+      - name: エントロピー
+        tex: 'H(X) = -\sum_{x}p(x)\log p(x)'
+        note: '$K$ 値の分布では一様分布のとき最大値 $\log K$ をとり、確定的なら 0 です。対数の底が 2 ならビット、$e$ ならナットです。'
+      - name: KL ダイバージェンス
+        tex: 'D_{\mathrm{KL}}(p \parallel q) = \sum_{x}p(x)\log\frac{p(x)}{q(x)} \geq 0'
+        note: '等号は $p = q$ のときだけ成り立ちます。$D_{\mathrm{KL}}(p \parallel q) \neq D_{\mathrm{KL}}(q \parallel p)$ で、対称性がないため距離ではありません。'
+      - name: 交差エントロピー
+        tex: 'H(p, q) = -\sum_{x}p(x)\log q(x) = H(p) + D_{\mathrm{KL}}(p \parallel q)'
+        note: '$p$ を正解の分布とすると $H(p)$ は定数なので、交差エントロピーの最小化は KL ダイバージェンスの最小化、つまり最尤推定と同じです。'
+        term: cross-entropy
+      - name: 相互情報量
+        tex: 'I(X;Y) = \sum_{x,y}p(x,y)\log\frac{p(x,y)}{p(x)\,p(y)} = H(X) - H(X \mid Y)'
+        note: '$X$ と $Y$ が独立なときだけ 0 になり、相関係数と違って非線形な依存関係もとらえます。特徴量選択や決定木の情報利得に使われます。'
+      - name: TF-IDF
+        tex: '\mathrm{tfidf}(t, d) = \mathrm{tf}(t, d) \times \log\frac{N}{\mathrm{df}(t)}'
+        note: '$\mathrm{tf}(t, d)$ は文書 $d$ 内の単語 $t$ の出現頻度、$N$ は文書数、$\mathrm{df}(t)$ は $t$ を含む文書数です。多くの文書に出る語ほど重みが小さくなります。分母に 1 を足す・正規化するなど変種が多いので、問題の定義に従います。'
+      - name: コサイン類似度
+        tex: '\cos(\boldsymbol{a}, \boldsymbol{b}) = \frac{\boldsymbol{a}^{\top}\boldsymbol{b}}{\|\boldsymbol{a}\|\,\|\boldsymbol{b}\|}'
+        note: 'ベクトルの向きだけを比べ、長さ（文書の長さ）の影響を受けません。各ベクトルを平均で中心化してから計算すると、相関係数に一致します。'
+
+  - title: 時系列解析と生存時間解析
+    topics: [time-series-survival]
+    items:
+      - name: AR(1) モデル
+        tex: 'X_t = \phi X_{t-1} + \varepsilon_t,\qquad \mathrm{V}[X_t] = \frac{\sigma^2}{1-\phi^2},\qquad \rho(k) = \phi^{k}'
+        note: '$\varepsilon_t$ は分散 $\sigma^2$ のホワイトノイズで、$|\phi| < 1$ のとき定常です。自己相関は指数的に減衰し、偏自己相関はラグ 2 以降 0 になります。$\phi = 1$ はランダムウォークで非定常です。'
+      - name: ハザード関数と生存関数
+        tex: 'h(t) = \frac{f(t)}{S(t)},\qquad S(t) = \exp\left(-\int_0^t h(u)\,du\right)'
+        note: '$S(t) = P(T > t)$ です。ハザードが一定値 $\lambda$ なら指数分布で、$S(t) = e^{-\lambda t}$ になります。'
+      - name: カプラン・マイヤー推定量
+        tex: '\hat{S}(t) = \prod_{t_j \leq t}\left(1-\frac{d_j}{n_j}\right)'
+        note: '$d_j$ は時刻 $t_j$ のイベント数、$n_j$ はその直前のリスク集合の大きさ（まだ観察中の人数）です。打ち切りの時刻では $\hat{S}$ は下がりませんが、以降の $n_j$ が減ります。打ち切り例を除いて割合を計算するのは誤りです。'
+        term: kaplan-meier-estimator
+
+  - title: 因果推論
+    topics: [causal-inference]
+    items:
+      - name: 平均処置効果
+        tex: '\mathrm{ATE} = \mathrm{E}\left[Y(1) - Y(0)\right]'
+        note: '$Y(1), Y(0)$ は処置を受けた場合・受けなかった場合の潜在結果で、同じ個体で両方を観測することはできません。無作為化されていれば $\mathrm{E}[Y \mid T=1] - \mathrm{E}[Y \mid T=0]$ で推定できますが、観察データでは交絡のため一般に一致しません。'
+      - name: バックドア調整公式
+        tex: 'P\left(Y=y \mid \mathrm{do}(X=x)\right) = \sum_{z} P(Y=y \mid X=x,\ Z=z)\,P(Z=z)'
+        note: '$Z$ がバックドア基準を満たすときに成り立ちます。重みは $P(Z=z)$ で、$P(Z=z \mid X=x)$ ではありません。中間変数や合流点（collider）で調整すると、かえって偏りが生じます。'
+        term: confounding
+      - name: 傾向スコアと IPW 推定量
+        tex: 'e(\boldsymbol{x}) = P(T=1 \mid \boldsymbol{x}),\qquad \widehat{\mathrm{ATE}} = \frac{1}{n}\sum_{i=1}^{n}\left\{\frac{T_iY_i}{e(\boldsymbol{x}_i)} - \frac{(1-T_i)Y_i}{1-e(\boldsymbol{x}_i)}\right\}'
+        note: '処置群は $1/e$、対照群は $1/(1-e)$ で重み付けます。測定された共変量で交絡が説明できることが前提で、未測定の交絡は補正できません。$e$ が 0 や 1 に近い個体があると重みが極端になり、推定が不安定になります。'
+        term: propensity-score
+      - name: 差の差（DID）推定量
+        tex: '\hat{\tau}_{\mathrm{DID}} = \left(\bar{y}_{1,\mathrm{post}} - \bar{y}_{1,\mathrm{pre}}\right) - \left(\bar{y}_{0,\mathrm{post}} - \bar{y}_{0,\mathrm{pre}}\right)'
+        note: '添字 1 は処置群、0 は対照群、pre / post は介入前後です。処置がなければ両群の変化が等しかったという平行トレンド仮定のもとで、処置群への効果を推定します。処置群の前後差だけでは、時間による変化と効果を区別できません。'

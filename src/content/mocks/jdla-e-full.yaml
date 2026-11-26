@@ -1,0 +1,35 @@
+exam: jdla-e
+title: 本番形式模試（100問・120分）
+description: 本試験（CBT・120分・100問程度）と同じ分量で、シラバス2026の比重に合わせて全分野から出題します。シラバスで前提知識（試験対象外）とされている線形代数は含めていません。合格基準は公表されていないため、合格ラインは目安として 65% にしています。
+durationMin: 120
+passingRate: 0.65
+order: 5
+blueprint:
+  - topics: [probability-statistics]
+    count: 4
+  - topics: [information-theory]
+    count: 5
+  - topics: [ml-basics]
+    count: 4
+  - topics: [ml-evaluation]
+    count: 6
+  - topics: [feedforward]
+    count: 8
+  - topics: [optimization]
+    count: 8
+  - topics: [regularization]
+    count: 7
+  - topics: [cnn]
+    count: 8
+  - topics: [rnn]
+    count: 7
+  - topics: [transformer]
+    count: 8
+  - topics: [generalization]
+    count: 6
+  - topics: [vision]
+    count: 9
+  - topics: [applications]
+    count: 12
+  - topics: [dev-env]
+    count: 8

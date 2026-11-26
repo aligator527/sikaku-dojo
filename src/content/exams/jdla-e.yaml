@@ -1,0 +1,90 @@
+name: JDLA Deep Learning for ENGINEER（E資格）
+shortName: E資格
+family: jdla
+category: ai
+level: エンジニア資格
+order: 10
+status: published
+summary: ディープラーニングの理論を理解し、適切な手法を選択して実装する能力を認定する、日本ディープラーニング協会（JDLA）のエンジニア向け資格試験。受験にはJDLA認定プログラムの修了が必要。
+organizer:
+  name: 一般社団法人 日本ディープラーニング協会（JDLA）
+  url: https://www.jdla.org/certificate/engineer/
+format:
+  short: CBT・120分・100問程度
+  method: 会場試験（ピアソンVUEのテストセンターでコンピュータ上で解答）
+  duration: 120分（別途、機密保持契約とアンケートの時間あり）
+  questions: 100問程度（2026年第2回は105問）
+  answerStyle: 多肢選択式の知識問題。ソースコードを含む問題は Python で記述され、PyTorch または TensorFlow を利用した出題もある
+  passing: 合格基準点は公式サイトに明示されていない（結果は後日JDLAから通知）
+  schedule: 年2回（2月・8月ごろ）。2027年は第1回が2月19日〜21日、第2回が8月27日〜29日
+  eligibility: JDLA認定プログラムを試験日の過去2年以内に修了していること
+  notes:
+    - 出題範囲は「E資格の試験出題範囲（シラバス）」に従う。2026年8月試験（E2026#2）から新シラバスが適用されている。
+    - 試験開始時に PyTorch か TensorFlow のどちらかを選び、選択後は変更できない。
+    - 試験中は画面上の一般電卓（関数電卓ではない）を利用できる。個人の電卓・メモ用紙は持ち込めず、ホワイトノートとペンが貸与される。
+    - 予約時に認定プログラムの「修了者ナンバー」と「修了日」の入力が必要。
+    - 結果発表では応用数学・機械学習・深層学習・開発環境の分野別の平均得点率が公表されている。
+choiceStyle: alpha
+sections:
+  - id: main
+    name: 本試験
+    description: 120分・多肢選択式。数学的基礎から開発・運用環境までシラバス全域から出題される。シラバスで灰色の項目（線形代数・確率分布・古典的な機械学習手法・音声処理など）は前提知識で、直接は出題されない。
+topics:
+  - id: linear-algebra
+    name: 線形代数（行列演算・固有値分解・特異値分解。現行シラバスでは前提知識）
+    group: 数学的基礎
+  - id: probability-statistics
+    name: 確率・統計（パラメータ推定が試験範囲。確率分布は前提知識）
+    group: 数学的基礎
+  - id: information-theory
+    name: 情報理論
+    group: 数学的基礎
+  - id: ml-basics
+    name: 機械学習の基礎（パターン認識・k 近傍法と距離・機械学習の分類と課題。回帰・SVM・決定木などは前提知識）
+    group: 機械学習
+  - id: ml-evaluation
+    name: 検証集合と性能指標
+    group: 機械学習
+  - id: feedforward
+    name: 順伝播型ネットワーク（出力層・損失関数・活性化関数）
+    group: 深層学習の基礎
+  - id: optimization
+    name: 深層モデルのための最適化
+    group: 深層学習の基礎
+  - id: regularization
+    name: 深層モデルのための正則化
+    group: 深層学習の基礎
+  - id: cnn
+    name: 畳み込みニューラルネットワーク
+    group: 深層学習の基礎
+  - id: rnn
+    name: リカレントニューラルネットワーク
+    group: 深層学習の基礎
+  - id: transformer
+    name: Transformer
+    group: 深層学習の基礎
+  - id: generalization
+    name: 汎化性能向上のためのテクニック（データ拡張・正規化・アンサンブル・ハイパーパラメータ）
+    group: 深層学習の基礎
+  - id: vision
+    name: 画像認識・物体検出・セグメンテーション
+    group: 深層学習の応用
+  - id: applications
+    name: 自然言語処理・生成モデル・深層強化学習・様々な学習方法・説明性（音声処理・能動学習・メタ学習は前提知識）
+    group: 深層学習の応用
+  - id: dev-env
+    name: 開発・運用環境（軽量化・分散処理・アクセラレータ・環境構築）
+    group: 開発・運用環境
+officialLinks:
+  - label: E資格（エンジニア資格）JDLA公式
+    url: https://www.jdla.org/certificate/engineer/
+  - label: E資格の試験出題範囲（シラバス）E2026#2〜
+    url: https://www.jdla.org/download/e%e8%b3%87%e6%a0%bc%e3%81%ae%e8%a9%a6%e9%a8%93%e5%87%ba%e9%a1%8c%e7%af%84%e5%9b%b2%ef%bc%88%e3%82%b7%e3%83%a9%e3%83%90%e3%82%b9%ef%bc%89e20262%ef%bd%9e/
+  - label: JDLA認定プログラム一覧
+    url: https://www.jdla.org/certificate/engineer/programs/bizlist/
+  - label: 2026年第2回E資格 結果発表・2027年開催スケジュール
+    url: https://www.jdla.org/news/20260918001/
+  - label: E資格 受験案内（ピアソンVUE）
+    url: https://www.pearsonvue.com/jp/ja/jdla.html
+tier: 3
+updatedAt: '2026-11-26'

@@ -1,0 +1,162 @@
+title: ディープラーニング
+items:
+  - title: E資格（エンジニア資格）
+    url: https://www.jdla.org/certificate/engineer/
+    publisher: 一般社団法人 日本ディープラーニング協会
+    lang: ja
+    kind: official
+    cost: free
+    exams: [jdla-e]
+    description: 試験概要、受験資格、日程、受験料、出題範囲の大項目・中項目、シラバスのダウンロード。
+  - title: E資格の試験出題範囲（シラバス）E2026#2〜
+    url: https://www.jdla.org/download/e%e8%b3%87%e6%a0%bc%e3%81%ae%e8%a9%a6%e9%a8%93%e5%87%ba%e9%a1%8c%e7%af%84%e5%9b%b2%ef%bc%88%e3%82%b7%e3%83%a9%e3%83%90%e3%82%b9%ef%bc%89e20262%ef%bd%9e/
+    publisher: 一般社団法人 日本ディープラーニング協会
+    lang: ja
+    kind: official
+    cost: free
+    exams: [jdla-e]
+    description: 2026年8月試験（E2026#2）から適用されているシラバス。小項目・細項目・キーワードと、シラバス2024からの変更点が載っている。
+  - title: JDLA認定プログラム一覧
+    url: https://www.jdla.org/certificate/engineer/programs/bizlist/
+    publisher: 一般社団法人 日本ディープラーニング協会
+    lang: ja
+    kind: official
+    cost: free
+    exams: [jdla-e]
+    description: 受験資格となる認定プログラムの事業者一覧。受講形式や費用は事業者ごとに異なる。
+  - title: E資格 新着情報（結果発表・日程）
+    url: https://www.jdla.org/news/engineer/
+    publisher: 一般社団法人 日本ディープラーニング協会
+    lang: ja
+    kind: official
+    cost: free
+    exams: [jdla-e]
+    description: 各回の受験申込開始、結果発表（受験者数・合格者数・分野別平均得点率）、シラバス改定のお知らせ。
+  - title: E資格 受験案内（ピアソンVUE）
+    url: https://www.pearsonvue.com/jp/ja/jdla.html
+    publisher: ピアソンVUE
+    lang: ja
+    kind: official
+    cost: free
+    exams: [jdla-e]
+    description: 申込・予約の手順、当日の持ち物、本人確認書類、フレームワークの選択、画面上の電卓とホワイトノートの扱い。
+  - title: ピアソンVUE CBT サンプル試験
+    url: https://wsr.pearsonvue.com/demo-jp/
+    publisher: ピアソンVUE
+    lang: ja
+    kind: tool
+    cost: free
+    exams: [jdla-e]
+    description: コンピュータ試験の画面表示、解答方法、見直し方法を事前に操作して確かめられるデモ。
+  - title: ゼロから作るDeep Learning
+    url: https://www.oreilly.co.jp/books/9784873117584/
+    publisher: オライリー・ジャパン
+    lang: ja
+    kind: textbook
+    cost: paid
+    exams: [jdla-e]
+    description: Python と NumPy だけでニューラルネットワーク、誤差逆伝播法、最適化手法、CNN を実装しながら学ぶ定番の入門書。
+  - title: ゼロから作るDeep Learning ❷ 自然言語処理編
+    url: https://www.oreilly.co.jp/books/9784873118369/
+    publisher: オライリー・ジャパン
+    lang: ja
+    kind: textbook
+    cost: paid
+    exams: [jdla-e]
+    description: word2vec、RNN、LSTM、seq2seq、Attention をゼロから実装する続編。
+  - title: deep-learning-from-scratch（サンプルコード）
+    url: https://github.com/oreilly-japan/deep-learning-from-scratch
+    publisher: オライリー・ジャパン
+    lang: ja
+    kind: tool
+    cost: free
+    exams: [jdla-e]
+    description: 『ゼロから作るDeep Learning』のサンプルコードのリポジトリ。逆伝播の実装を動かして確かめられる。
+  - title: 深層学習 改訂第2版（機械学習プロフェッショナルシリーズ）
+    url: https://www.kspub.co.jp/book/detail/5133323.html
+    publisher: 講談社サイエンティフィク
+    lang: ja
+    kind: textbook
+    cost: paid
+    exams: [jdla-e]
+    description: 岡谷貴之 著。順伝播型ネットワーク、最適化、正則化、CNN、RNN、Transformer、生成モデルまでを理論的に整理した教科書。
+  - title: ディープラーニング入門：Chainer チュートリアル
+    url: https://tutorials.chainer.org/ja/
+    publisher: Preferred Networks
+    lang: ja
+    kind: course
+    cost: free
+    exams: [jdla-e]
+    description: 微分・線形代数・確率統計の基礎から機械学習・ディープラーニングまでを日本語で解説する無料教材。Chainer はメンテナンスモードだが、数学と理論の解説は今も有用。
+  - title: TensorFlow チュートリアル
+    url: https://www.tensorflow.org/tutorials?hl=ja
+    publisher: Google
+    lang: ja
+    kind: course
+    cost: free
+    exams: [jdla-e]
+    description: TensorFlow / Keras の公式チュートリアル。試験で TensorFlow を選ぶ人向け。
+  - title: PyTorch Tutorials
+    url: https://docs.pytorch.org/tutorials/
+    publisher: PyTorch Foundation
+    lang: en
+    kind: course
+    cost: free
+    exams: [jdla-e]
+    description: PyTorch の公式チュートリアル。テンソル操作、自動微分、モデルの定義と学習ループの書き方を確認できる。
+  - title: PyTorch documentation
+    url: https://docs.pytorch.org/docs/stable/
+    publisher: PyTorch Foundation
+    lang: en
+    kind: tool
+    cost: free
+    exams: [jdla-e]
+    description: nn.Conv2d、nn.LSTM、nn.BatchNorm2d、nn.Dropout などの引数・形状・挙動を確認する公式リファレンス。
+  - title: Dive into Deep Learning
+    url: https://d2l.ai/
+    publisher: d2l.ai
+    lang: en
+    kind: textbook
+    cost: free
+    exams: [jdla-e]
+    description: 数式と実行可能なコードが対応した無料の教科書。最適化手法、CNN、RNN、Attention と Transformer まで網羅している。
+  - title: Deep Learning（Goodfellow, Bengio, Courville）
+    url: https://www.deeplearningbook.org/
+    publisher: MIT Press
+    lang: en
+    kind: textbook
+    cost: free
+    exams: [jdla-e]
+    description: 深層学習の理論的な教科書。Web 版を無料で読める。数学的基礎、正則化、最適化の章が試験範囲と重なる。
+  - title: CS231n Deep Learning for Computer Vision
+    url: https://cs231n.github.io/
+    publisher: Stanford University
+    lang: en
+    kind: course
+    cost: free
+    exams: [jdla-e]
+    description: 画像認識のための深層学習の講義ノート。逆伝播、CNN の構成、学習のテクニックの解説が詳しい。
+  - title: The Annotated Transformer
+    url: https://nlp.seas.harvard.edu/annotated-transformer/
+    publisher: Harvard NLP
+    lang: en
+    kind: article
+    cost: free
+    exams: [jdla-e]
+    description: Transformer の原論文を、PyTorch のコードと対応づけながら1行ずつ解説した記事。マスクや Multi-Head Attention の実装の理解に。
+  - title: Attention Is All You Need
+    url: https://arxiv.org/abs/1706.03762
+    publisher: arXiv
+    lang: en
+    kind: article
+    cost: free
+    exams: [jdla-e]
+    description: Transformer を提案した原論文（Vaswani ら, 2017）。Scaled Dot-Product Attention と Positional Encoding の定義を確認できる。
+  - title: 'Adam: A Method for Stochastic Optimization'
+    url: https://arxiv.org/abs/1412.6980
+    publisher: arXiv
+    lang: en
+    kind: article
+    cost: free
+    exams: [jdla-e]
+    description: Adam の原論文（Kingma, Ba）。更新式、バイアス補正、推奨ハイパーパラメータが記載されている。

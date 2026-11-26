@@ -1,0 +1,17 @@
+exam: boki-2
+title: 2級 ネット試験形式模試（90分）
+description: ネット試験と同じ 90分で、第1問の仕訳 5題（各4点）、第2問・第3問の商業簿記の総合問題、第4問・第5問の工業簿記から出題します。2027年度からの出題区分表（リースは使用権資産・リース負債、手形の論点は削除）に合わせた問題です。合格ラインは本試験と同じ 70% です。
+durationMin: 90
+passingRate: 0.7
+order: 5
+blueprint:
+  - sections: [q1]
+    count: 5
+  - sections: [q2]
+    count: 6
+  - sections: [q3]
+    count: 6
+  - sections: [q4]
+    count: 6
+  - sections: [q5]
+    count: 5

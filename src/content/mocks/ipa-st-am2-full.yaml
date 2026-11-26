@@ -1,0 +1,31 @@
+exam: ipa-st
+title: 科目A-2（午前II）本番形式（25問・40分）
+description: 過去問題から、本試験の科目A-2 と同じ 25問・40分・四肢択一で出題します。分野の比重は過去の出題に合わせ、受験のたびに問題が入れ替わります。基準点は本試験と同じ 60%（25問中15問）です。
+durationMin: 40
+passingRate: 0.6
+order: 5
+blueprint:
+  - topics: [business-strategy]
+    sections: [am2]
+    count: 6
+  - topics: [system-strategy]
+    sections: [am2]
+    count: 4
+  - topics: [corporate-activity]
+    sections: [am2]
+    count: 4
+  - topics: [business-industry]
+    sections: [am2]
+    count: 3
+  - topics: [system-planning]
+    sections: [am2]
+    count: 2
+  - topics: [technology-strategy]
+    sections: [am2]
+    count: 2
+  - topics: [legal]
+    sections: [am2]
+    count: 2
+  - topics: [security]
+    sections: [am2]
+    count: 2

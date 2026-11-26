@@ -1,0 +1,240 @@
+exam: jdla-e
+title: E資格 公式集
+intro: 'E資格の理論問題で使う式を、シラバスの順にまとめました。$\eta$ は学習率、$g = \nabla_{\theta} L$ はミニバッチで求めた損失の勾配、$\odot$ は要素ごとの積、$\sigma$ はシグモイド関数、$\log$ は自然対数を表します。前提知識の扱いになっている確率分布・線形代数・古典的な機械学習手法の式は省いています。教材やフレームワークによって記号や係数の流儀が違う式は、各公式の注記に違いを書きました。'
+updatedAt: '2026-11-26'
+sections:
+  - title: 情報理論と最尤推定
+    topics: [information-theory, probability-statistics]
+    items:
+      - name: 自己情報量とエントロピー
+        tex: 'I(x) = -\log p(x),\qquad H(X) = -\sum_{x} p(x)\log p(x)'
+        note: '対数の底が 2 ならビット、自然対数ならナットが単位です。$K$ 個の値をとる離散分布では $0 \leq H(X) \leq \log K$ で、最大になるのは一様分布のときです。$p(x) = 0$ の項は $0 \log 0 = 0$ とみなします。先頭のマイナスを落とすと負の値になってしまいます。'
+      - name: 交差エントロピー
+        tex: 'H(p, q) = -\sum_{x} p(x)\log q(x) = H(p) + D_{\mathrm{KL}}(p \parallel q)'
+        note: '$p$ が正解（データ）の分布、$q$ がモデルの予測分布です。$p$ を固定して $q$ を学習するとき、交差エントロピーの最小化は KL ダイバージェンスの最小化と同じです。$\log$ の中に入るのは予測側の $q$ で、$p$ と $q$ を入れ替えると値が変わります。'
+        term: cross-entropy
+      - name: KL ダイバージェンス
+        tex: 'D_{\mathrm{KL}}(p \parallel q) = \sum_{x} p(x)\log\frac{p(x)}{q(x)} = \mathrm{E}_{p}\bigl[\log p(x) - \log q(x)\bigr] \geq 0'
+        note: '等号は $p = q$ のときだけ成り立ちます。対称ではなく（$D_{\mathrm{KL}}(p \parallel q) \neq D_{\mathrm{KL}}(q \parallel p)$）、三角不等式も満たさないので距離ではありません。対称にしたものが JS ダイバージェンス $\frac{1}{2}D_{\mathrm{KL}}(p \parallel m) + \frac{1}{2}D_{\mathrm{KL}}(q \parallel m)$（$m = \frac{p+q}{2}$）です。相互情報量は $I(X;Y) = D_{\mathrm{KL}}\bigl(p(x,y) \parallel p(x)p(y)\bigr) = H(X) - H(X \mid Y)$ と書けます。'
+      - name: 最尤推定と負の対数尤度
+        tex: '\hat{\theta} = \operatorname*{arg\,max}_{\theta}\sum_{i=1}^{n}\log p(x_i \mid \theta) = \operatorname*{arg\,min}_{\theta}\left\{-\sum_{i=1}^{n}\log p(x_i \mid \theta)\right\}'
+        note: '尤度の積ではなく対数尤度の和で扱うと、微分しやすくアンダーフローも防げます。誤差が正規分布に従うと仮定した回帰の最尤推定は二乗誤差の最小化に、ベルヌーイ分布を仮定した2値分類は二値交差エントロピーの最小化に一致します。正規分布の最尤推定量は $\hat{\mu} = \bar{x}$、$\hat{\sigma}^2 = \frac{1}{n}\sum_{i}(x_i - \bar{x})^2$ で、分散は $n$ で割る（不偏推定量ではない）点に注意します。'
+        term: maximum-likelihood-estimation
+      - name: MAP 推定と正則化
+        tex: '\hat{\theta}_{\mathrm{MAP}} = \operatorname*{arg\,max}_{\theta}\left\{\sum_{i=1}^{n}\log p(x_i \mid \theta) + \log p(\theta)\right\}'
+        note: '事前分布 $p(\theta)$ を掛けた事後確率を最大化します。ベイズの定理の分母 $p(x)$ は $\theta$ によらないので無視できます。事前分布を平均 0 の正規分布にすると L2 正則化、ラプラス分布にすると L1 正則化に対応します。事前分布が一様なら最尤推定と一致します。'
+
+  - title: 評価指標
+    topics: [ml-evaluation]
+    items:
+      - name: 正解率・適合率・再現率
+        tex: '\text{正解率} = \frac{TP+TN}{TP+FP+FN+TN},\qquad \text{適合率} = \frac{TP}{TP+FP},\qquad \text{再現率} = \frac{TP}{TP+FN}'
+        note: '適合率（precision）は「陽性と予測したもののうち本当に陽性だった割合」、再現率（recall、感度、真陽性率）は「本当の陽性のうち陽性と予測できた割合」で、分母が違います。クラスが不均衡なデータでは、すべて多数派と予測するだけで正解率が高くなるので、正解率だけで評価しません。'
+      - name: F 値
+        tex: 'F_1 = \frac{2 \cdot \text{適合率} \cdot \text{再現率}}{\text{適合率} + \text{再現率}} = \frac{2\,TP}{2\,TP + FP + FN}'
+        note: '適合率と再現率の調和平均で、算術平均ではありません。一方が 0 なら $F_1 = 0$ です。再現率を重視する $F_{\beta} = \frac{(1+\beta^2)PR}{\beta^2 P + R}$（$P$ は適合率、$R$ は再現率）もあります。多クラスでは、クラスごとの F 値を平均するマクロ平均と、全クラスの $TP$・$FP$・$FN$ を合計してから計算するマイクロ平均を区別します。'
+      - name: ROC 曲線と AUC
+        tex: '\mathrm{TPR} = \frac{TP}{TP+FN},\qquad \mathrm{FPR} = \frac{FP}{FP+TN},\qquad \mathrm{AUC} = P\bigl(s(x^{+}) > s(x^{-})\bigr)'
+        note: 'ROC 曲線は、しきい値を動かしたときの点 $(\mathrm{FPR}, \mathrm{TPR})$ を結んだ曲線で、AUC はその下の面積です。ランダムな予測で 0.5、完全な分類で 1 になります。AUC は、陽性の例 $x^{+}$ のスコアが陰性の例 $x^{-}$ のスコアを上回る確率に等しく、しきい値の選び方によりません。FPR は 1 − 特異度で、適合率とは関係ありません。陽性がまれなデータでは PR 曲線（適合率と再現率）の方が差が見えやすくなります。'
+
+  - title: 活性化関数とその微分
+    topics: [feedforward]
+    items:
+      - name: シグモイド関数
+        tex: '\sigma(x) = \frac{1}{1+e^{-x}},\qquad \sigma^{\prime}(x) = \sigma(x)\bigl(1-\sigma(x)\bigr)'
+        note: '出力は $(0, 1)$ です。導関数の最大値は $x = 0$ での $0.25$ なので、層を重ねるたびに勾配が小さくなり、勾配消失の原因になります。$1 - \sigma(x) = \sigma(-x)$ も覚えておくと計算が速くなります。'
+        term: activation-function
+      - name: tanh
+        tex: '\tanh x = \frac{e^{x}-e^{-x}}{e^{x}+e^{-x}} = 2\sigma(2x)-1,\qquad \frac{d}{dx}\tanh x = 1-\tanh^2 x'
+        note: '出力は $(-1, 1)$ で原点対称です。導関数の最大値は $x = 0$ での 1 で、シグモイドの 0.25 より大きいものの、$|x|$ が大きいと 0 に近づくので勾配消失は避けられません。導関数をシグモイドと同じ形 $\tanh x\,(1-\tanh x)$ と書く誤りに注意します。'
+      - name: ReLU とその仲間
+        tex: '\mathrm{ReLU}(x) = \max(0, x),\qquad \mathrm{ReLU}^{\prime}(x) = \begin{cases} 1 & (x > 0) \\ 0 & (x < 0) \end{cases},\qquad \mathrm{LeakyReLU}(x) = \max(\alpha x, x)'
+        note: '正の領域で勾配が 1 なので勾配消失が起きにくい一方、入力が常に負になったユニットは勾配が 0 のまま学習しなくなります（dying ReLU）。Leaky ReLU（$0 < \alpha < 1$、例えば 0.01）は負の領域にも傾き $\alpha$ を残します。$x = 0$ では微分できず、実装では 0 とすることが多いです。Transformer では $\mathrm{GELU}(x) = x\,\Phi(x)$（$\Phi$ は標準正規分布の分布関数）がよく使われます。'
+      - name: ソフトマックス関数とその微分
+        tex: 'y_k = \frac{\exp(z_k)}{\sum_{j=1}^{K}\exp(z_j)},\qquad \frac{\partial y_k}{\partial z_j} = y_k(\delta_{kj} - y_j)'
+        note: '$\delta_{kj}$ はクロネッカーのデルタで、出力は和が 1 の確率ベクトルです。すべての $z_j$ に同じ定数を足しても出力は変わらないので、実装では $\max_j z_j$ を引いてから指数をとってオーバーフローを防ぎます。$K = 2$ のソフトマックスは、差 $z_1 - z_2$ のシグモイドと同じです。'
+        term: softmax-function
+
+  - title: 損失関数と誤差逆伝播
+    topics: [feedforward]
+    items:
+      - name: 二乗誤差
+        tex: 'L = \frac{1}{2}\sum_{k}(y_k - t_k)^2,\qquad \frac{\partial L}{\partial y_k} = y_k - t_k'
+        note: '回帰で、恒等関数の出力層と組み合わせます。係数 $\frac{1}{2}$ は微分をきれいにするためのものです。平均二乗誤差（MSE）は $\frac{1}{N}\sum (y_k - t_k)^2$ と $\frac{1}{2}$ なしで定義されることが多いので、問題文の定義で係数を確認します。外れ値に敏感なので、頑健にしたいときは平均絶対誤差や Huber 損失を使います。'
+      - name: 交差エントロピー誤差（ソフトマックス出力）
+        tex: 'L = -\sum_{k=1}^{K} t_k\log y_k,\qquad \frac{\partial L}{\partial z_k} = y_k - t_k\quad \bigl(y = \mathrm{softmax}(z)\bigr)'
+        note: '多クラス分類の損失で、$t$ は one-hot の正解ラベルです。ソフトマックスと組み合わせると、出力層の入力 $z$ についての勾配が「予測 − 正解」という簡単な形になります（$\sum_k t_k = 1$ のとき）。$t$ が one-hot なら $L = -\log y_c$（$c$ は正解クラス）です。実装では $\log 0$ を避けるため $\log(y_k + \epsilon)$ とするか、ロジットから直接計算します。ミニバッチではバッチサイズ $N$ で割った平均を使います。'
+        term: cross-entropy
+      - name: 二値交差エントロピー（シグモイド出力）
+        tex: 'L = -\bigl\{t\log y + (1-t)\log(1-y)\bigr\},\qquad \frac{\partial L}{\partial z} = y - t\quad \bigl(y = \sigma(z)\bigr)'
+        note: '2値分類（$t \in \{0, 1\}$）や、複数のラベルが同時に立つマルチラベル分類で出力ごとに使います。ベルヌーイ分布の負の対数尤度に一致します。$(1-t)\log(1-y)$ の項を落とすと、負例が学習に効かなくなります。'
+        term: logistic-regression
+      - name: 全結合層（Affine）の逆伝播
+        tex: 'Y = XW + b \;\Rightarrow\; \frac{\partial L}{\partial X} = \frac{\partial L}{\partial Y}W^{\top},\quad \frac{\partial L}{\partial W} = X^{\top}\frac{\partial L}{\partial Y},\quad \frac{\partial L}{\partial b_m} = \sum_{n=1}^{N}\frac{\partial L}{\partial Y_{nm}}'
+        note: '連鎖律を層ごとに適用した形で、$X$ は $N \times D$（バッチ × 入力次元）、$W$ は $D \times M$ です。勾配は元の変数と同じ形になるので、行列の形を合わせると転置の位置を確認できます。バイアスの勾配はバッチ方向の和です（平均は損失の側でとる）。PyTorch の `nn.Linear` は $Y = XW^{\top} + b$（$W$ は $M \times D$）なので、転置の位置が入れ替わります。'
+        term: backpropagation
+
+  - title: 最適化
+    topics: [optimization]
+    items:
+      - name: 確率的勾配降下法（SGD）
+        tex: '\theta \leftarrow \theta - \eta\,g,\qquad g = \nabla_{\theta}L(\theta)'
+        note: 'ミニバッチで推定した勾配で更新します。勾配の符号はマイナス（損失を下げる向き）です。学習率 $\eta$ が大きすぎると発散・振動し、小さすぎると収束が遅く局所解や鞍点の近くで停滞しやすくなります。'
+        term: gradient-descent
+      - name: Momentum
+        tex: 'v \leftarrow \alpha v - \eta\,g,\qquad \theta \leftarrow \theta + v'
+        note: '$\alpha$（0.9 程度）は過去の更新をどれだけ残すかの係数です。同じ向きの勾配が続くと加速し、振動する方向は打ち消し合います。$v \leftarrow \alpha v + \eta g$、$\theta \leftarrow \theta - v$ と符号を逆にした書き方もあり、内容は同じです。Nesterov の加速勾配法は、勾配を先読みした位置 $\theta + \alpha v$ で計算します。'
+        term: momentum
+      - name: AdaGrad と RMSProp
+        tex: 'h \leftarrow h + g \odot g\ \ (\text{AdaGrad}),\qquad h \leftarrow \rho\,h + (1-\rho)\,g \odot g\ \ (\text{RMSProp}),\qquad \theta \leftarrow \theta - \frac{\eta}{\sqrt{h} + \epsilon} \odot g'
+        note: 'どちらもパラメータごとに、過去の勾配の 2 乗の大きさで学習率を割ります。AdaGrad は $h$ が単調に増えるので、学習が進むと更新がほぼ止まります。RMSProp は指数移動平均（$\rho$ は 0.9〜0.99 程度）で古い勾配を忘れるので、これを防げます。$\epsilon$ は 0 除算を防ぐ小さな値で、$\sqrt{h + \epsilon}$ と根号の中に入れる流儀もあります。'
+      - name: Adam
+        tex: '\begin{aligned} m &\leftarrow \beta_1 m + (1-\beta_1)\,g, & v &\leftarrow \beta_2 v + (1-\beta_2)\,g \odot g, \\ \hat{m} &= \frac{m}{1-\beta_1^{\,t}}, & \hat{v} &= \frac{v}{1-\beta_2^{\,t}}, \qquad \theta \leftarrow \theta - \eta\,\frac{\hat{m}}{\sqrt{\hat{v}} + \epsilon} \end{aligned}'
+        note: '$m$ は勾配の 1 次モーメント（Momentum に相当）、$v$ は 2 次モーメント（RMSProp に相当）の指数移動平均です。$m, v$ は 0 で初期化するので学習の初期は 0 側に偏り、それを補正するのが $\hat{m}, \hat{v}$ です（$t$ は 1 から数える更新回数）。既定値は $\beta_1 = 0.9$、$\beta_2 = 0.999$、$\epsilon = 10^{-8}$ で、$\beta_1$ と $\beta_2$ の役割を取り違えないようにします。'
+        term: adam
+      - name: 重みの初期化
+        tex: '\text{Xavier（Glorot）}:\ \mathrm{Var}[W] = \frac{2}{n_{\mathrm{in}} + n_{\mathrm{out}}},\qquad \text{He}:\ \mathrm{Var}[W] = \frac{2}{n_{\mathrm{in}}}'
+        note: '$n_{\mathrm{in}}$、$n_{\mathrm{out}}$ は層の入力・出力のユニット数（畳み込みでは $n_{\mathrm{in}} = C_{\mathrm{in}} K_h K_w$）です。Xavier はシグモイドや tanh、He は ReLU に向きます（ReLU は負の側を 0 にして分散が半分になるので 2 倍する）。Xavier を簡略化して $\mathrm{Var}[W] = 1/n_{\mathrm{in}}$（標準偏差 $1/\sqrt{n_{\mathrm{in}}}$）とする書き方もあり、分散と標準偏差を取り違えやすい点に注意します。すべて 0 など同じ値で初期化すると、同じ層のユニットが同じように更新され、学習が進みません。'
+
+  - title: 正則化と正規化
+    topics: [regularization, generalization]
+    items:
+      - name: L2 正則化（荷重減衰）
+        tex: '\tilde{L}(w) = L(w) + \frac{\lambda}{2}\|w\|_2^2,\qquad w \leftarrow (1-\eta\lambda)\,w - \eta\,\nabla L(w)'
+        note: '重みを毎回 $(1-\eta\lambda)$ 倍に縮める効果があり、荷重減衰（weight decay）と呼ばれます。係数 $\frac{1}{2}$ がない定義では、正則化項の勾配が $2\lambda w$ になります。バイアスには通常かけません。SGD では L2 正則化と荷重減衰は同じですが、Adam では一致しないので、勾配とは別に $\eta\lambda w$ を引く AdamW が使われます。'
+        term: weight-decay
+      - name: L1 正則化
+        tex: '\tilde{L}(w) = L(w) + \lambda\sum_{i}|w_i|,\qquad \frac{\partial \tilde{L}}{\partial w_i} = \frac{\partial L}{\partial w_i} + \lambda\,\mathrm{sign}(w_i)'
+        note: '重みの大きさによらず一定の力 $\lambda$ で 0 に引き寄せるので、多くの重みがちょうど 0 になる（スパースになる）性質があります。L2 は重みを小さくするものの 0 にはしにくい、という対比で問われます。$w_i = 0$ では微分できず、劣勾配を使います。'
+      - name: ドロップアウト
+        tex: 'h_{\mathrm{train}} = \frac{m \odot h}{1-p},\quad m_i \sim \mathrm{Bernoulli}(1-p),\qquad h_{\mathrm{test}} = h'
+        note: '$p$ はユニットを落とす確率です。この式は学習時にスケールする inverted dropout（PyTorch などの実装）です。元の論文の方式では学習時にスケールせず、推論時に出力へ $1-p$ を掛けます。どちらも出力の期待値を学習時と推論時でそろえるためです。$p$ を「残す確率」と定義する教材もあるので、問題文の定義を確認します。'
+        term: dropout
+      - name: ラベル平滑化
+        tex: 't_k^{\mathrm{LS}} = (1-\varepsilon)\,t_k + \frac{\varepsilon}{K}'
+        note: '$K$ はクラス数、$t$ は one-hot ラベルです。正解クラスは $1-\varepsilon+\varepsilon/K$、それ以外は $\varepsilon/K$ になり、モデルが極端に自信過剰な出力をするのを抑えます。「正解クラスが $1-\varepsilon$ になる」と覚えると $\varepsilon/K$ の分を落とします。正解以外のクラスに $\varepsilon/(K-1)$ ずつ配る定義もあります。'
+      - name: バッチ正規化
+        tex: '\mu_B = \frac{1}{m}\sum_{i=1}^{m}x_i,\quad \sigma_B^2 = \frac{1}{m}\sum_{i=1}^{m}(x_i-\mu_B)^2,\quad \hat{x}_i = \frac{x_i-\mu_B}{\sqrt{\sigma_B^2+\epsilon}},\quad y_i = \gamma\hat{x}_i + \beta'
+        note: '特徴（チャネル）ごとに、ミニバッチ内の $m$ 個で平均・分散をとります。CNN ではバッチと空間方向 $(N, H, W)$ をまとめてチャネルごとに正規化します。$\gamma, \beta$ は学習するパラメータです。推論時はミニバッチの統計ではなく、学習中に求めた移動平均を使います。バッチサイズが小さいと統計が不安定になります。'
+        term: batch-normalization
+      - name: レイヤー正規化と正規化の軸
+        tex: '\mu = \frac{1}{H}\sum_{i=1}^{H}x_i,\quad \sigma^2 = \frac{1}{H}\sum_{i=1}^{H}(x_i-\mu)^2,\quad y_i = \gamma_i\,\frac{x_i-\mu}{\sqrt{\sigma^2+\epsilon}} + \beta_i'
+        note: '1 つのサンプルの中の $H$ 個の特徴で平均・分散をとります。バッチの他のサンプルによらないので、バッチサイズ 1 でも使え、学習時と推論時で計算が同じです。系列長が変わる RNN や Transformer で使われます。画像 $(N, C, H, W)$ で統計をとる軸は、BN が $(N, H, W)$、LN が $(C, H, W)$、インスタンス正規化が $(H, W)$、グループ正規化がチャネルのグループ内の $(C/G, H, W)$ です。'
+
+  - title: 畳み込みニューラルネットワーク
+    topics: [cnn]
+    items:
+      - name: 出力サイズ
+        tex: 'O = \left\lfloor\frac{I + 2P - K}{S}\right\rfloor + 1'
+        note: '$I$ は入力の高さ（幅）、$K$ はカーネルサイズ、$P$ はパディング、$S$ はストライドです。パディングは両側に入るので $2P$ で、割り切れないときは切り捨てます。プーリングも同じ式です。ダイレーション $D$ があるときは $K$ を実効サイズ $D(K-1)+1$ に置き換えます。転置畳み込みの出力は $O = (I-1)S - 2P + K$ です。'
+        term: convolution
+      - name: パラメータ数と計算量
+        tex: '\text{パラメータ数} = (K_h K_w C_{\mathrm{in}} + 1)\,C_{\mathrm{out}},\qquad \text{乗算回数} = K_h K_w C_{\mathrm{in}}\,C_{\mathrm{out}}\,H_{\mathrm{out}} W_{\mathrm{out}}'
+        note: '$+1$ はフィルタごとのバイアスです。パラメータ数は入力の縦横のサイズによらない点が、全結合層との大きな違いです。深さ方向分離可能畳み込み（MobileNet）は、深さ方向 $K_h K_w C_{\mathrm{in}}$ と点方向 $C_{\mathrm{in}} C_{\mathrm{out}}$ に分けるので、パラメータ数・計算量は通常の畳み込みの $\frac{1}{C_{\mathrm{out}}} + \frac{1}{K_h K_w}$ 倍になります。'
+      - name: 受容野
+        tex: 'r_l = r_{l-1} + (K_l - 1)\prod_{i=1}^{l-1} S_i,\qquad r_0 = 1'
+        note: '$l$ 層目の 1 つの出力が見ている入力の範囲（一辺の長さ）です。掛けるのはその層より前の層のストライドの積で、その層自身のストライドは含めません。ストライド 1 の $3 \times 3$ 畳み込みを $n$ 層重ねると受容野は $2n+1$ で、$3 \times 3$ を 2 層重ねると $5 \times 5$ 1 層と同じ受容野を少ないパラメータ（$18C^2$ 対 $25C^2$）で得られます（VGG の考え方）。'
+
+  - title: リカレントニューラルネットワーク
+    topics: [rnn]
+    items:
+      - name: RNN の順伝播と BPTT
+        tex: 'h_t = \tanh(W_x x_t + W_h h_{t-1} + b),\qquad \frac{\partial h_t}{\partial h_k} = \prod_{j=k+1}^{t}\frac{\partial h_j}{\partial h_{j-1}} = \prod_{j=k+1}^{t}\mathrm{diag}\bigl(1-h_j^{2}\bigr)\,W_h'
+        note: '$h_j^2$ は要素ごとの 2 乗で、積は $j$ の大きい順に左から掛けます。同じ $W_h$ を時刻の数だけ掛けるので、$W_h$ の最大特異値が 1 より小さいと勾配は指数的に小さくなり（勾配消失）、1 より大きいと爆発することがあります。全時刻で重みを共有しているので、$W_h$ の勾配は各時刻の勾配の和です。系列を一定の長さで区切って逆伝播する方法を truncated BPTT といいます。'
+        term: vanishing-gradient
+      - name: LSTM
+        tex: '\begin{aligned} f_t &= \sigma(W_f[h_{t-1}, x_t] + b_f), & i_t &= \sigma(W_i[h_{t-1}, x_t] + b_i), \\ o_t &= \sigma(W_o[h_{t-1}, x_t] + b_o), & \tilde{c}_t &= \tanh(W_c[h_{t-1}, x_t] + b_c), \\ c_t &= f_t \odot c_{t-1} + i_t \odot \tilde{c}_t, & h_t &= o_t \odot \tanh(c_t) \end{aligned}'
+        note: '$f_t$ は忘却ゲート、$i_t$ は入力ゲート、$o_t$ は出力ゲートで、ゲートはシグモイド（0〜1）、候補 $\tilde{c}_t$ は tanh です。セル $c_t$ は行列の掛け算ではなく足し算で更新されるので、$f_t \approx 1$ なら勾配がほぼそのまま過去へ伝わり、長期の依存を学習できます。パラメータ数は $4\{h(d+h) + h\}$（$d$ は入力、$h$ は隠れ状態の次元）で、バイアスを 2 組もつ PyTorch では $4h(d+h+2)$ です。'
+        term: lstm
+      - name: GRU
+        tex: '\begin{aligned} z_t &= \sigma(W_z[h_{t-1}, x_t] + b_z), & r_t &= \sigma(W_r[h_{t-1}, x_t] + b_r), \\ \tilde{h}_t &= \tanh(W_h[r_t \odot h_{t-1}, x_t] + b_h), & h_t &= (1-z_t) \odot h_{t-1} + z_t \odot \tilde{h}_t \end{aligned}'
+        note: '$z_t$ は更新ゲート、$r_t$ はリセットゲートです。セルをもたずゲートが 2 つなので、LSTM（重み行列 4 組）より少ない 3 組で済みます。リセットゲートは候補 $\tilde{h}_t$ を作るときの $h_{t-1}$ にかかります。$h_t = z_t \odot h_{t-1} + (1-z_t) \odot \tilde{h}_t$ と $z_t$ の役割を逆に書く流儀（PyTorch など）もあるので、式の形で確認します。'
+      - name: 勾配クリッピング
+        tex: '\|g\| > c \;\Rightarrow\; g \leftarrow \frac{c}{\|g\|}\,g'
+        note: '勾配のノルムがしきい値 $c$ を超えたら、向きを保ったまま長さを $c$ に縮めます。勾配爆発への対策で、勾配消失は解決しません（そちらは LSTM・GRU や残差接続で対処します）。要素ごとに値を切る方法（value clipping）は向きが変わる別の手法です。全パラメータの勾配をまとめた 1 つのノルムで判定するのが一般的です。'
+
+  - title: Attention と Transformer
+    topics: [transformer]
+    items:
+      - name: Scaled Dot-Product Attention
+        tex: '\mathrm{Attention}(Q, K, V) = \mathrm{softmax}\left(\frac{QK^{\top}}{\sqrt{d_k}}\right)V'
+        note: '$Q$ は $n \times d_k$、$K$ は $m \times d_k$、$V$ は $m \times d_v$ で、出力は $n \times d_v$ です。ソフトマックスは行ごと（キーの方向）にとります。$\sqrt{d_k}$ で割るのは、次元が大きいと内積の分散が $d_k$ に比例して大きくなり、ソフトマックスが飽和して勾配が小さくなるのを防ぐためで、$d_k$ で割るのではありません。デコーダの自己注意では、未来の位置のスコアに $-\infty$ を足すマスクで重みを 0 にします。計算量は系列長の 2 乗に比例します（$O(n^2 d)$）。'
+        term: attention-mechanism
+      - name: Multi-Head Attention
+        tex: '\mathrm{MultiHead}(Q, K, V) = \mathrm{Concat}(\mathrm{head}_1, \ldots, \mathrm{head}_h)\,W^{O},\qquad \mathrm{head}_i = \mathrm{Attention}(QW_i^{Q}, KW_i^{K}, VW_i^{V})'
+        note: '通常 $d_k = d_v = d_{\mathrm{model}}/h$ とするので、ヘッド数 $h$ を増やしても全体のパラメータ数・計算量はほぼ変わりません。パラメータ数は $W^Q, W^K, W^V, W^O$ の $4d_{\mathrm{model}}^2$（バイアスを除く）で、$h$ によりません。ヘッドごとに異なる部分空間で関係を捉えられるのが利点です。'
+        term: transformer
+      - name: 位置エンコーディング
+        tex: 'PE_{(pos,\,2i)} = \sin\left(\frac{pos}{10000^{2i/d_{\mathrm{model}}}}\right),\qquad PE_{(pos,\,2i+1)} = \cos\left(\frac{pos}{10000^{2i/d_{\mathrm{model}}}}\right)'
+        note: 'Attention 自体は語順を区別しないので、位置の情報を単語の埋め込みに**足し**ます（連結ではありません）。偶数次元に sin、奇数次元に cos を使い、次元が上がるほど波長が長くなります（$2\pi$ から $10000 \cdot 2\pi$ まで）。$PE_{pos+k}$ が $PE_{pos}$ の線形変換で表せるので、相対位置を捉えやすい性質があります。BERT などは位置埋め込みを学習します。'
+      - name: Transformer ブロック
+        tex: '\begin{aligned} x &\leftarrow \mathrm{LayerNorm}\bigl(x + \mathrm{MHA}(x)\bigr), \qquad x \leftarrow \mathrm{LayerNorm}\bigl(x + \mathrm{FFN}(x)\bigr), \\ \mathrm{FFN}(x) &= \max(0,\ xW_1 + b_1)\,W_2 + b_2 \end{aligned}'
+        note: '元論文の Post-LN の形で、各サブ層に残差接続と層正規化が付きます。FFN は位置ごとに同じ重みを使う 2 層の全結合層で、中間次元は $d_{\mathrm{ff}} = 4d_{\mathrm{model}}$（元論文では 2048 と 512）が典型です。最近のモデルの多くは $x + \mathrm{Sublayer}(\mathrm{LayerNorm}(x))$ とする Pre-LN で、層を深くしても学習が安定します。正規化は BN ではなく LN です。'
+        term: residual-connection
+
+  - title: 生成モデル
+    topics: [applications]
+    items:
+      - name: VAE の ELBO
+        tex: '\log p_{\theta}(x) \geq \mathrm{E}_{q_{\phi}(z \mid x)}\bigl[\log p_{\theta}(x \mid z)\bigr] - D_{\mathrm{KL}}\bigl(q_{\phi}(z \mid x) \parallel p(z)\bigr)'
+        note: '右辺が証拠下界（ELBO）で、これを最大化します（損失はその符号を反転したもの）。第1項は再構成の対数尤度、第2項はエンコーダの出力分布を事前分布 $p(z) = N(0, I)$ に近づける正則化項です。$\log p_{\theta}(x)$ と ELBO の差は $D_{\mathrm{KL}}\bigl(q_{\phi}(z \mid x) \parallel p_{\theta}(z \mid x)\bigr) \geq 0$ です。KL 項の符号をプラスにする誤りに注意します。'
+      - name: 再パラメータ化トリック
+        tex: 'z = \mu_{\phi}(x) + \sigma_{\phi}(x) \odot \varepsilon,\qquad \varepsilon \sim N(0, I)'
+        note: '$z \sim N(\mu, \sigma^2)$ を直接サンプリングすると $\mu, \sigma$ に勾配を流せないので、乱数 $\varepsilon$ を外に出して、$z$ を $\mu, \sigma$ の微分可能な関数にします。実装ではエンコーダに $\log\sigma^2$ を出力させ、$\sigma = \exp\bigl(\frac{1}{2}\log\sigma^2\bigr)$ とします。$\varepsilon$ に掛けるのは標準偏差で、分散 $\sigma^2$ を掛けるのは誤りです。'
+      - name: 正規分布の KL ダイバージェンス
+        tex: 'D_{\mathrm{KL}}\bigl(N(\mu, \mathrm{diag}(\sigma^2)) \parallel N(0, I)\bigr) = -\frac{1}{2}\sum_{j=1}^{J}\left(1 + \log\sigma_j^2 - \mu_j^2 - \sigma_j^2\right)'
+        note: 'VAE の正則化項を解析的に計算する式で、$J$ は潜在変数の次元です。1 次元の一般形は $D_{\mathrm{KL}}\bigl(N(\mu_1, \sigma_1^2) \parallel N(\mu_2, \sigma_2^2)\bigr) = \log\frac{\sigma_2}{\sigma_1} + \frac{\sigma_1^2 + (\mu_1-\mu_2)^2}{2\sigma_2^2} - \frac{1}{2}$ です。$\mu = 0$、$\sigma = 1$ で 0 になることで検算できます。'
+      - name: GAN の目的関数
+        tex: '\min_{G}\max_{D}\ V(D, G) = \mathrm{E}_{x \sim p_{\mathrm{data}}}\bigl[\log D(x)\bigr] + \mathrm{E}_{z \sim p_z}\bigl[\log\bigl(1 - D(G(z))\bigr)\bigr]'
+        note: '識別器 $D$ は最大化、生成器 $G$ は最小化します。$G$ を固定したときの最適な識別器は $D^{*}(x) = \frac{p_{\mathrm{data}}(x)}{p_{\mathrm{data}}(x) + p_g(x)}$ で、このとき $V = -\log 4 + 2\,\mathrm{JS}(p_{\mathrm{data}} \parallel p_g)$ となり、$p_g = p_{\mathrm{data}}$（$D^{*} = \frac{1}{2}$）で最小です。学習初期は $\log(1 - D(G(z)))$ の勾配が小さいので、実際には $G$ で $\log D(G(z))$ を最大化する非飽和型の損失を使います。'
+      - name: 拡散モデルの拡散過程
+        tex: 'q(x_t \mid x_{t-1}) = N\bigl(x_t;\ \sqrt{1-\beta_t}\,x_{t-1},\ \beta_t I\bigr),\qquad x_t = \sqrt{\bar{\alpha}_t}\,x_0 + \sqrt{1-\bar{\alpha}_t}\,\varepsilon,\quad \bar{\alpha}_t = \prod_{s=1}^{t}(1-\beta_s)'
+        note: 'DDPM の前向き過程で、$\beta_t$ は各ステップで加えるノイズの分散、$\varepsilon \sim N(0, I)$ です。正規分布の再生性により、途中の時刻を経ずに $x_0$ から任意の $x_t$ を一度にサンプリングできます。平均の係数は $1-\beta_t$ ではなく $\sqrt{1-\beta_t}$ で、これにより分散が 1 に保たれます。$t$ が大きいと $\bar{\alpha}_t \to 0$ となり、$x_t$ はほぼ標準正規分布になります。'
+      - name: 拡散モデルの学習損失
+        tex: 'L_{\mathrm{simple}} = \mathrm{E}_{t,\,x_0,\,\varepsilon}\Bigl[\bigl\|\varepsilon - \varepsilon_{\theta}\bigl(\sqrt{\bar{\alpha}_t}\,x_0 + \sqrt{1-\bar{\alpha}_t}\,\varepsilon,\ t\bigr)\bigr\|^2\Bigr]'
+        note: 'ネットワーク $\varepsilon_{\theta}$ は、ノイズを加えた $x_t$ と時刻 $t$ から、加えたノイズ $\varepsilon$ を予測します（$x_0$ を直接予測するのではありません）。ELBO を変形して重みを省いた簡略形です。生成は $x_T \sim N(0, I)$ から始め、学習した逆過程で 1 ステップずつノイズを取り除きます。'
+
+  - title: 深層強化学習
+    topics: [applications]
+    items:
+      - name: ベルマン方程式
+        tex: 'V^{\pi}(s) = \sum_{a}\pi(a \mid s)\sum_{s^{\prime}}P(s^{\prime} \mid s, a)\bigl\{r(s, a, s^{\prime}) + \gamma V^{\pi}(s^{\prime})\bigr\}'
+        note: '状態価値 $V^{\pi}(s)$ は割引収益 $G_t = \sum_{k=0}^{\infty}\gamma^{k}r_{t+k+1}$ の期待値 $\mathrm{E}_{\pi}[G_t \mid S_t = s]$ で、それを 1 ステップ先の価値で再帰的に表した式です。終わりのない課題では割引率を $0 \leq \gamma < 1$ にします。行動価値とは $V^{\pi}(s) = \sum_{a}\pi(a \mid s)\,Q^{\pi}(s, a)$ の関係があります。$\gamma$ がかかるのは即時報酬ではなく次の状態の価値です。'
+      - name: ベルマン最適方程式
+        tex: 'Q^{*}(s, a) = \sum_{s^{\prime}}P(s^{\prime} \mid s, a)\Bigl\{r(s, a, s^{\prime}) + \gamma\max_{a^{\prime}}Q^{*}(s^{\prime}, a^{\prime})\Bigr\},\qquad V^{*}(s) = \max_{a}Q^{*}(s, a)'
+        note: '方策についての平均の代わりに $\max$ が入ります。最適な方策は $\pi^{*}(s) = \operatorname*{arg\,max}_a Q^{*}(s, a)$ です。環境のモデル $P$ が分かっていれば、この式を繰り返し適用する価値反復法で解けます。'
+      - name: Q 学習と DQN
+        tex: '\begin{aligned} &Q(s, a) \leftarrow Q(s, a) + \alpha\Bigl\{r + \gamma\max_{a^{\prime}}Q(s^{\prime}, a^{\prime}) - Q(s, a)\Bigr\}, \\ &L(\theta) = \Bigl\{r + \gamma\max_{a^{\prime}}Q_{\theta^{-}}(s^{\prime}, a^{\prime}) - Q_{\theta}(s, a)\Bigr\}^2 \end{aligned}'
+        note: '中かっこの中が TD 誤差です。Q 学習は次の行動を $\max$ でとる方策オフ型で、実際に選んだ次の行動 $a^{\prime}$ の $Q(s^{\prime}, a^{\prime})$ を使うのが方策オン型の SARSA です。DQN は Q 関数をニューラルネットで近似し、目標値の計算に一定間隔でだけ更新するターゲットネットワーク $\theta^{-}$ を使い、経験再生でデータの相関を減らします。終端状態では目標値を $r$ だけにします。'
+      - name: 方策勾配定理
+        tex: '\nabla_{\theta}J(\theta) = \mathrm{E}_{\pi_{\theta}}\bigl[\nabla_{\theta}\log\pi_{\theta}(a \mid s)\,Q^{\pi_{\theta}}(s, a)\bigr]'
+        note: '方策を直接パラメータ化し、期待収益 $J(\theta)$ を勾配上昇で**最大化**します。勾配をとるのは $\pi$ ではなく $\log\pi$ です。REINFORCE は $Q^{\pi}$ を実際の収益 $G_t$ で置き換えます。分散を下げるため $Q$ からベースライン $b(s)$（通常は $V(s)$）を引いてよく、$A(s, a) = Q(s, a) - V(s)$ をアドバンテージと呼びます。Actor-Critic では TD 誤差 $r + \gamma V(s^{\prime}) - V(s)$ をアドバンテージの推定に使います。'
+
+  - title: 物体検出・セグメンテーション
+    topics: [vision]
+    items:
+      - name: IoU
+        tex: '\mathrm{IoU}(A, B) = \frac{|A \cap B|}{|A \cup B|} = \frac{|A \cap B|}{|A| + |B| - |A \cap B|}'
+        note: '2 つの領域（予測と正解のボックスなど）の重なりの割合で、0〜1 の値をとります。分母の和集合は、面積の和から共通部分を**引いた**ものです。PASCAL VOC の評価では $\mathrm{IoU} \geq 0.5$ の予測を正しい検出とみなします。セグメンテーションでは、クラスごとの IoU の平均 mIoU や、Dice 係数 $\frac{2|A \cap B|}{|A| + |B|} = \frac{2\,\mathrm{IoU}}{1 + \mathrm{IoU}}$ も使います。'
+      - name: NMS（非最大値抑制）
+        tex: '\mathcal{D} \leftarrow \mathcal{D} \cup \{b_{\max}\},\qquad \mathcal{B} \leftarrow \bigl\{\, b \in \mathcal{B} \mid \mathrm{IoU}(b_{\max}, b) \leq \theta \,\bigr\}'
+        note: '同じ物体への重複した検出をまとめる後処理です。候補 $\mathcal{B}$ のうちスコアが最大のボックス $b_{\max}$ を出力 $\mathcal{D}$ に加え、それとの IoU がしきい値 $\theta$ を超えるボックス（$b_{\max}$ 自身を含む）を候補から除く、を候補がなくなるまで繰り返します。通常はクラスごとに行います。$\theta$ を大きくすると残るボックスが増え、小さくすると重なり合った別の物体まで消えやすくなります。'
+      - name: AP と mAP
+        tex: '\mathrm{AP} = \int_{0}^{1}p_{\mathrm{interp}}(r)\,dr,\quad p_{\mathrm{interp}}(r) = \max_{\tilde{r} \geq r}p(\tilde{r}),\qquad \mathrm{mAP} = \frac{1}{C}\sum_{c=1}^{C}\mathrm{AP}_c'
+        note: '検出をスコア順に並べ、上位から順に適合率 $p$ と再現率 $r$ を計算して PR 曲線を描き、その下の面積をとります。補間では、その再現率**以上**での適合率の最大値を使います（PR 曲線を右下がりの階段状にならす）。mAP は $C$ 個のクラスの AP の平均です。COCO の mAP は IoU のしきい値を 0.50 から 0.95 まで 0.05 刻みで変えた平均（AP@[.5:.95]）で、しきい値 0.5 だけの AP50 とは値が違います。'
+      - name: バウンディングボックス回帰
+        tex: 't_x = \frac{x - x_a}{w_a},\quad t_y = \frac{y - y_a}{h_a},\quad t_w = \log\frac{w}{w_a},\quad t_h = \log\frac{h}{h_a}'
+        note: 'Faster R-CNN などで、アンカー（中心 $(x_a, y_a)$、幅 $w_a$、高さ $h_a$）からのずれとして回帰する量です。中心のずれはアンカーの幅・高さで割って正規化し、幅・高さは比の対数にします。推論時は逆に $x = x_a + w_a t_x$、$w = w_a e^{t_w}$ で復元します。損失には外れ値に強い smooth L1 損失がよく使われます。'
+
+  - title: 軽量化
+    topics: [dev-env]
+    items:
+      - name: 量子化
+        tex: 'q = \mathrm{clip}\left(\mathrm{round}\left(\frac{x}{s}\right) + z,\ q_{\min},\ q_{\max}\right),\qquad \hat{x} = s\,(q - z)'
+        note: '$s$ はスケール、$z$ はゼロ点です。範囲 $[x_{\min}, x_{\max}]$ を $b$ ビット整数に割り当てるときは $s = \frac{x_{\max} - x_{\min}}{2^{b} - 1}$、$z = q_{\min} - \mathrm{round}(x_{\min}/s)$ とします。0 を中心に対称に割り当てる対称量子化では $z = 0$、$s = \frac{\max|x|}{2^{b-1} - 1}$ です。FP32 から INT8 にするとメモリは 1/4 になります。$\hat{x}$ は元の $x$ に戻らず、最大 $s/2$ の丸め誤差が残ります。学習後に変換する PTQ と、学習中に量子化を模擬する QAT があります。'
+      - name: 温度付きソフトマックス
+        tex: 'p_i^{(T)} = \frac{\exp(z_i/T)}{\sum_{j}\exp(z_j/T)}'
+        note: '温度 $T > 1$ で分布がなめらかになり、正解以外のクラスへの確率（クラス間の似かたの情報）が見えやすくなります。$T = 1$ で通常のソフトマックス、$T \to \infty$ で一様分布、$T \to 0$ で最大のクラスだけが 1 の one-hot に近づきます。確率の大小の順位は $T$ によって変わりません。'
+      - name: 知識蒸留の損失
+        tex: 'L = (1-\alpha)\,H\bigl(y,\ q^{(1)}\bigr) + \alpha\,T^{2}\,D_{\mathrm{KL}}\bigl(p^{(T)} \parallel q^{(T)}\bigr)'
+        note: '$p$ は教師モデル、$q$ は生徒モデルの温度付きソフトマックス出力、$y$ は正解ラベルです。第2項（ソフトターゲット）は教師の出力に生徒を近づけます。温度で割るとソフトターゲットによる勾配がおよそ $1/T^2$ 倍に小さくなるので、$T^2$ を掛けて正解ラベルの項と大きさをそろえます。KL の代わりに教師の出力との交差エントロピーを使っても、教師側のエントロピーは定数なので勾配は同じです。'

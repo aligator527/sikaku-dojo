@@ -1,0 +1,80 @@
+name: 統計検定2級
+shortName: 統計2級
+family: toukei
+category: statistics
+level: 2級
+order: 20
+status: published
+summary: 大学基礎課程（1・2年次）で学ぶ統計学の知識と、その活用力を問う CBT 試験。記述統計から確率分布、推定・検定、回帰分析・分散分析までを幅広く扱う。
+organizer:
+  name: 一般財団法人 統計質保証推進協会（認定：一般社団法人 日本統計学会）
+  url: https://www.toukei-kentei.jp/
+format:
+  short: CBT・90分・35問程度
+  method: CBT（コンピュータ上で解答。全国のテストセンターで受験）
+  duration: 90分
+  questions: 35問程度
+  answerStyle: 4〜5肢選択（ラジオボタンで選ぶ形式と、正解番号を入力する形式がある）
+  passing: 100点満点中60点以上
+  schedule: 通年（CBT 方式。テストセンターの空き日程から選んで申し込む）
+  eligibility: 受験資格の制限なし
+  notes:
+    - 持ち込める電卓は四則演算・百分率・平方根が計算できる普通電卓（一般電卓）または事務用電卓 1 台のみ。関数電卓・金融電卓・プログラム電卓は不可。
+    - 統計数値表（正規分布・t 分布・カイ二乗分布・F 分布など）と計算用紙は会場で配布され、終了後に回収される。
+    - 試験終了直後に試験結果レポートが表示される。
+    - 同じ種別を再受験するには、前回の受験から 7 日（168 時間）以上空ける必要がある。
+    - 出題範囲は 3 級・4 級の内容を含む。現行の出題範囲表は 2018 年 12 月 14 日版、試験のバージョンは 202409 版。
+choiceStyle: circled
+topics:
+  - id: descriptive
+    name: 1変数データの記述（代表値・散らばり・標準化・歪度と尖度・ローレンツ曲線）
+    group: データの分析
+  - id: bivariate
+    name: 2変数データ（散布図・相関・相関行列と偏相関・クロス集計）
+    group: データの分析
+  - id: simple-regression
+    name: 単回帰と予測
+    group: データの分析
+  - id: time-series
+    name: 時系列データの処理（成長率・指数・移動平均・季節変動・自己相関・寄与度）
+    group: データの分析
+  - id: data-collection
+    name: 観察研究・実験と標本調査
+    group: データの収集
+  - id: probability
+    name: 確率とベイズの定理
+    group: 確率モデル
+  - id: random-variables
+    name: 確率変数と確率分布
+    group: 確率モデル
+  - id: sampling-distribution
+    name: 標本分布（中心極限定理・t 分布・カイ二乗分布・F 分布）
+    group: 確率モデル
+  - id: estimation
+    name: 点推定と区間推定
+    group: 推測
+  - id: testing
+    name: 仮説検定（平均・比率・分散）
+    group: 推測
+  - id: chi-square
+    name: 適合度検定と独立性の検定
+    group: 推測
+  - id: linear-model
+    name: 回帰分析（単回帰の推測・重回帰）と分散分析
+    group: 線形モデル
+officialLinks:
+  - label: 統計検定2級 試験内容（公式）
+    url: https://www.toukei-kentei.jp/grade/grade2/
+  - label: 統計検定2級 出題範囲表（PDF）
+    url: https://www.toukei-kentei.jp/hubfs/files/grade_range/grade2_hani_20181214.pdf
+  - label: CBT 方式試験の試験要項（電卓・数値表・再受験ルール）
+    url: https://www.toukei-kentei.jp/info/other_grades_apply/
+  - label: 過去問題について（公式）
+    url: https://www.toukei-kentei.jp/preparation/kakomon/
+tier: 2
+pathways:
+  - to: toukei-jun1
+    kind: next
+    note: 推定・検定を数理的に深め、一般化線形モデル・多変量解析・時系列へ広げる。
+tools: [tables]
+updatedAt: '2026-11-26'

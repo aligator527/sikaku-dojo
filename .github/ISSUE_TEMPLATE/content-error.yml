@@ -1,0 +1,22 @@
+name: 問題・解説の誤り
+description: 問題文・選択肢・正解・解説・用語の誤りを報告する
+labels: [content]
+body:
+  - type: input
+    id: page
+    attributes:
+      label: ページの URL
+      placeholder: https://.../exams/toukei-2/questions/o-001/
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: 誤りの内容
+    validations:
+      required: true
+  - type: textarea
+    id: fix
+    attributes:
+      label: 正しいと思われる内容・根拠
+      description: 教科書・公式資料などの出典があれば記載してください。
