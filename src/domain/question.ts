@@ -88,6 +88,15 @@ export const toMeta = (q: Question): QuestionMeta => ({
   source: q.source.year ? { kind: q.source.kind, year: q.source.year } : { kind: q.source.kind },
 });
 
+/**
+ * The question minus the HTML that a static page already shows (passage, stem, explanation,
+ * model answer). The page's island needs only what it takes to answer and grade.
+ */
+export function answerOnly(q: Question): Question {
+  const slim = { ...q, stemHtml: '', passageHtml: undefined, explanationHtml: '' };
+  return slim.format === 'essay' ? { ...slim, modelAnswerHtml: '', rubric: [] } : slim;
+}
+
 /** What the learner submitted. Mirrors Question['format']. */
 export type Response =
   | { format: 'single'; choice: number }

@@ -36,6 +36,11 @@ jobs:
           SITE_URL: ${{ steps.pages.outputs.origin }}
           BASE_PATH: ${{ steps.pages.outputs.base_path }}
           PUBLIC_REPO_URL: ${{ github.server_url }}/${{ github.repository }}
+          # Optional repository variables (Settings → Secrets and variables → Actions → Variables):
+          # ownership tags for Google Search Console and Bing Webmaster Tools, and an IndexNow key.
+          PUBLIC_GOOGLE_SITE_VERIFICATION: ${{ vars.GOOGLE_SITE_VERIFICATION }}
+          PUBLIC_BING_SITE_VERIFICATION: ${{ vars.BING_SITE_VERIFICATION }}
+          INDEXNOW_KEY: ${{ vars.INDEXNOW_KEY }}
       - uses: actions/upload-pages-artifact@v5
         with:
           path: dist
@@ -46,6 +51,30 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
         uses: actions/deploy-pages@v5
+
+  # Tells IndexNow engines (Bing, Yandex, Naver …) which URLs exist. Runs only when the
+  # INDEXNOW_KEY variable is set; Google does not use IndexNow (submit the sitemap instead).
+  indexnow:
+    needs: deploy
+    if: ${{ vars.INDEXNOW_KEY != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Submit sitemap URLs
+        env:
+          PAGE_URL: ${{ needs.deploy.outputs.page_url }}
+          KEY: ${{ vars.INDEXNOW_KEY }}
+        run: |
+          site="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+          base="${PAGE_URL:-$site}"
+          urls=$(curl -fsSL "${base}sitemap-0.xml" | grep -o '<loc>[^<]*</loc>' | sed 's/<[^>]*>//g' | head -n 10000)
+          host=$(printf '%s' "$base" | sed -E 's#https?://([^/]+)/.*#\1#')
+          jq -n --arg host "$host" --arg key "$KEY" --arg loc "${base}${KEY}.txt" --arg urls "$urls" \
+            '{host: $host, key: $key, keyLocation: $loc, urlList: ($urls | split("\n") | map(select(length > 0)))}' \
+            > payload.json
+          curl -fsS -X POST https://api.indexnow.org/indexnow \
+            -H 'Content-Type: application/json; charset=utf-8' --data @payload.json -o /dev/null -w '%{http_code}\n'

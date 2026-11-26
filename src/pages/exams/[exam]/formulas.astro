@@ -28,6 +28,7 @@ const sheet = (await getFormulaSheet(exam.id))!;
   description={`${exam.name}の公式集（${sheet.count}個）。${t.formulas.lead}`}
   searchable
   searchKind="公式集"
+  ogType="article"
 >
   <div class="head" data-pagefind-body>
     <h1 class="section-title" data-pagefind-meta="title">

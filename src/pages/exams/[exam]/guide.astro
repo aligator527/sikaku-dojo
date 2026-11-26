@@ -5,6 +5,8 @@ import { t } from '../../../i18n';
 import ExamLayout from '../../../layouts/ExamLayout.astro';
 import { getExams, getGuide, type Exam } from '../../../lib/content';
 import type { GuideEntry } from '../../../lib/content';
+import { routes } from '../../../lib/paths';
+import { absolute, articleLd } from '../../../lib/seo/structured-data';
 
 export async function getStaticPaths() {
   const paths = [];
@@ -32,6 +34,15 @@ const toc = headings.filter((h) => h.depth === 2);
   description={guide.data.summary}
   searchable
   searchKind="対策"
+  ogType="article"
+  jsonLd={[
+    articleLd({
+      headline: guide.data.title,
+      description: guide.data.summary,
+      url: absolute(routes.guide(exam.id), Astro.site),
+      dateModified: guide.data.updatedAt,
+    }),
+  ]}
 >
   <div class="guide">
     <article>

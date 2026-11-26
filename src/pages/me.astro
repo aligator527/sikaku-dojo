@@ -16,7 +16,7 @@ const exams: MeExam[] = (await getExams()).map((exam) => ({
 }));
 ---
 
-<BaseLayout title={t.me.title} description="解答履歴・弱点分野・模擬試験の成績・ブックマーク。">
+<BaseLayout title={t.me.title} description="解答履歴・弱点分野・模擬試験の成績・ブックマーク。" noindex>
   <div class="container page">
     <Breadcrumbs items={[{ label: t.site.name, href: routes.home() }, { label: t.me.title }]} />
     <h1 class="title">{t.me.title}</h1>

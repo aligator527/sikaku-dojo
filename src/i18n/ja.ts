@@ -384,6 +384,10 @@ export const ja = {
     scroll: '図は横にスクロールできます。',
     questions: (n: number) => `${n}問`,
   },
+  topics: {
+    drill: 'この分野を演習する',
+    hint: '分野名からその分野の問題一覧へ',
+  },
   formulas: {
     lead: '試験で使う公式を分野別にまとめました。印刷すると A4 の一覧表になります。',
     print: '印刷する',

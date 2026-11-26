@@ -1,0 +1,158 @@
+---
+/**
+ * One topic of one exam: every question as a plain, crawlable list. These are the pages a
+ * search for "統計検定2級 仮説検定 問題" should land on; drills and mocks link here too.
+ */
+import { BookOpen, Dumbbell, Sigma } from '@lucide/astro';
+import { getCollection } from 'astro:content';
+
+import { DIFFICULTY_LABEL, FORMAT_LABEL, SOURCE_KIND_LABEL } from '../../../../domain/labels';
+import { t } from '../../../../i18n';
+import ExamLayout from '../../../../layouts/ExamLayout.astro';
+import { getExams, getFormulaSheet, getQuestions, type Exam } from '../../../../lib/content';
+import { excerpt } from '../../../../lib/markdown/excerpt';
+import { routes } from '../../../../lib/paths';
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const exam of await getExams()) {
+    const questions = await getQuestions(exam.id);
+    for (const topic of exam.topics) {
+      if (questions.some((q) => q.topics.includes(topic.id)))
+        paths.push({ params: { exam: exam.id, topic: topic.id }, props: { exam, topicId: topic.id } });
+    }
+  }
+  return paths;
+}
+
+interface Props {
+  exam: Exam;
+  topicId: string;
+}
+
+const { exam, topicId } = Astro.props;
+const topic = exam.topics.find((x) => x.id === topicId)!;
+const shortName = topic.name.split(/[（(]/)[0]!;
+const questions = (await getQuestions(exam.id)).filter((q) => q.topics.includes(topicId));
+const stems = new Map(
+  (await getCollection('questions', (e) => e.data.exam.id === exam.id)).map((e) => [e.id, e.data.stem]),
+);
+const sheet = await getFormulaSheet(exam.id);
+const hasFormulas = sheet?.sections.some((s) => s.topics.includes(topicId)) ?? false;
+const pastCount = questions.filter((q) => q.source.kind === 'past').length;
+const description =
+  `${exam.name}の「${shortName}」の問題 ${questions.length}問` +
+  (pastCount ? `（うち過去問題 ${pastCount}問）` : '') +
+  `。すべて解答と解説つきで、分野別演習や模擬試験にも使えます。`;
+---
+
+<ExamLayout
+  exam={exam}
+  tab="questions"
+  title={`${exam.name}「${shortName}」の問題一覧`}
+  description={description}
+  crumb={shortName}
+>
+  <header class="head">
+    {topic.group && <p class="eyebrow">{topic.group}</p>}
+    <h1>{topic.name}</h1>
+    <p class="meta">{description}</p>
+    <p class="actions">
+      <a class="btn" href={`${routes.drill(exam.id)}?topic=${encodeURIComponent(topicId)}`}>
+        <Dumbbell size={16} aria-hidden="true" />
+        {t.topics.drill}
+      </a>
+      {hasFormulas && (
+        <a class="btn btn--ghost" href={routes.formulas(exam.id)}>
+          <Sigma size={16} aria-hidden="true" />
+          {t.examTabs.formulas}
+        </a>
+      )}
+      <a class="btn btn--ghost" href={routes.examGlossary(exam.id)}>
+        <BookOpen size={16} aria-hidden="true" />
+        {t.examTabs.glossary}
+      </a>
+    </p>
+  </header>
+
+  <ol class="list">
+    {questions.map((q) => (
+      <li>
+        <a href={routes.question(exam.id, q.slug)} class="item">
+          <span class="no">{t.question.number(q.order)}</span>
+          <span class="body">
+            <span class="stem">{excerpt(stems.get(q.id) ?? '', 90)}</span>
+            <span class="tags">
+              <span>{q.source.label ?? SOURCE_KIND_LABEL[q.source.kind]}</span>
+              <span>{DIFFICULTY_LABEL[q.difficulty]}</span>
+              {q.format !== 'single' && <span>{FORMAT_LABEL[q.format]}</span>}
+            </span>
+          </span>
+        </a>
+      </li>
+    ))}
+  </ol>
+</ExamLayout>
+
+<style>
+  .head {
+    display: grid;
+    gap: var(--s-2);
+    max-width: 48rem;
+    margin-bottom: var(--s-6);
+  }
+
+  h1 {
+    font-size: var(--fs-2xl);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2);
+    margin-top: var(--s-2);
+  }
+
+  .list {
+    list-style: none;
+    padding: 0;
+    max-width: 52rem;
+    border-top: 1px solid var(--ink);
+  }
+
+  .list li {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .item {
+    display: grid;
+    grid-template-columns: 4rem minmax(0, 1fr);
+    gap: var(--s-3);
+    padding: var(--s-3) 0;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .item:hover .stem {
+    color: var(--ai);
+  }
+
+  .no {
+    font-family: var(--font-serif);
+    font-weight: 700;
+  }
+
+  .body {
+    display: grid;
+    gap: var(--s-1);
+    min-width: 0;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-1) var(--s-3);
+    font-size: var(--fs-xs);
+    color: var(--ink-3);
+  }
+</style>

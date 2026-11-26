@@ -36,7 +36,7 @@ const { exam, mock } = Astro.props;
 const title = mock?.title ?? t.mock.customTitle;
 ---
 
-<ExamLayout exam={exam} tab="mock" title={`${exam.shortName} ${title}`} crumb={title} compact>
+<ExamLayout exam={exam} tab="mock" title={`${exam.shortName} ${title}`} crumb={title} compact noindex>
   <MockRunner client:only="react" exam={examContext(exam)} mock={mock} listHref={routes.mocks(exam.id)}>
     <p slot="fallback" class="meta">
       {t.common.loading}

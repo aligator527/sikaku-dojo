@@ -9,15 +9,30 @@ import { t } from '../../i18n';
 import { JournalTable } from './inputs';
 import s from './Question.module.css';
 
-export function QuestionMeta({ question, exam }: { question: Question; exam: ExamContext }) {
+export function QuestionMeta({
+  question,
+  exam,
+  topicHref,
+}: {
+  question: Question;
+  exam: ExamContext;
+  /** Link each topic tag (the static question page links to the topic's question list). */
+  topicHref?: (topicId: string) => string;
+}) {
   const { source } = question;
   return (
     <div className={s.meta}>
-      {question.topics.map((id) => (
-        <span className="tag" key={id}>
-          {exam.topics[id] ?? id}
-        </span>
-      ))}
+      {question.topics.map((id) =>
+        topicHref ? (
+          <a className="tag tag--link" key={id} href={topicHref(id)}>
+            {exam.topics[id] ?? id}
+          </a>
+        ) : (
+          <span className="tag" key={id}>
+            {exam.topics[id] ?? id}
+          </span>
+        ),
+      )}
       <span className={source.kind === 'past' ? 'tag tag--past' : 'tag'} title={source.note}>
         {source.label ?? SOURCE_KIND_LABEL[source.kind]}
         {source.kind === 'adapted' && `（${SOURCE_KIND_LABEL.adapted}）`}
@@ -108,8 +123,11 @@ export function Verdict({
 interface ExplanationProps {
   question: Question;
   choiceStyle: ChoiceStyle;
-  open: boolean;
-  onToggle: (open: boolean) => void;
+  /** Controlled mode (drills, mocks). Leave both out to render a plain, JavaScript-free <details>. */
+  open?: boolean;
+  onToggle?: (open: boolean) => void;
+  /** Lets an island elsewhere on the page open this block (see PracticeQuestion's explanationId). */
+  id?: string;
   /** Essay only: called with the learner's self-assessment. */
   onSelfGrade?: (grade: SelfGrade) => void;
   selfGrade?: SelfGrade;
@@ -117,24 +135,59 @@ interface ExplanationProps {
   hideAnswerKey?: boolean;
 }
 
+export function SelfGradeButtons({
+  onSelfGrade,
+  selfGrade,
+}: {
+  onSelfGrade: (grade: SelfGrade) => void;
+  selfGrade?: SelfGrade;
+}) {
+  return (
+    <div className={s.selfGrade}>
+      <p className="meta">{t.question.selfGradePrompt}</p>
+      <div className={s.selfGradeButtons}>
+        {(['good', 'partial', 'poor'] as const).map((g) => (
+          <button
+            key={g}
+            type="button"
+            className={selfGrade === g ? 'btn btn--sm' : 'btn btn--ghost btn--sm'}
+            aria-pressed={selfGrade === g}
+            onClick={() => onSelfGrade(g)}
+          >
+            {t.question.selfGrade[g]}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /**
  * Answer + explanation inside a native <details>: readable without JavaScript and
- * present in the static HTML (so it is indexed by site search).
+ * present in the static HTML (so it is indexed by site search and search engines).
+ * The summary label follows the open state through CSS, so it also works unhydrated.
  */
 export function Explanation({
   question,
   choiceStyle,
   open,
   onToggle,
+  id,
   onSelfGrade,
   selfGrade,
   hideAnswerKey = false,
 }: ExplanationProps) {
+  const controlled = onToggle !== undefined;
   return (
-    <details className={s.explain} open={open} onToggle={(e) => onToggle(e.currentTarget.open)}>
+    <details
+      id={id}
+      className={s.explain}
+      {...(controlled ? { open, onToggle: (e) => onToggle(e.currentTarget.open) } : {})}
+    >
       <summary>
         <ChevronRight size={16} aria-hidden />
-        {open ? t.question.hideAnswer : t.question.showAnswer}
+        <span className={s.whenClosed}>{t.question.showAnswer}</span>
+        <span className={s.whenOpen}>{t.question.hideAnswer}</span>
       </summary>
       <div className={s.explainBody}>
         {question.format === 'essay' ? (
@@ -156,24 +209,7 @@ export function Explanation({
                 </ul>
               </section>
             )}
-            {onSelfGrade && (
-              <div className={s.selfGrade}>
-                <p className="meta">{t.question.selfGradePrompt}</p>
-                <div className={s.selfGradeButtons}>
-                  {(['good', 'partial', 'poor'] as const).map((g) => (
-                    <button
-                      key={g}
-                      type="button"
-                      className={selfGrade === g ? 'btn btn--sm' : 'btn btn--ghost btn--sm'}
-                      aria-pressed={selfGrade === g}
-                      onClick={() => onSelfGrade(g)}
-                    >
-                      {t.question.selfGrade[g]}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
+            {onSelfGrade && <SelfGradeButtons onSelfGrade={onSelfGrade} selfGrade={selfGrade} />}
           </>
         ) : (
           !hideAnswerKey && <AnswerKey question={question} choiceStyle={choiceStyle} />

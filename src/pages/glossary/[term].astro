@@ -7,6 +7,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getExams, getQuestions, getTerms, type Term, type TermEntry } from '../../lib/content';
 import { excerpt } from '../../lib/markdown/excerpt';
 import { routes } from '../../lib/paths';
+import { absolute, definedTermLd } from '../../lib/seo/structured-data';
 
 export async function getStaticPaths() {
   const terms = await getTerms();
@@ -52,6 +53,10 @@ const stemById = new Map(stems.map((s) => [s.id, s.data.stem]));
   description={`${term.term}${term.en ? `（${term.en}）` : ''}：${term.summary}`}
   searchable
   searchFilters={{ 種類: '用語' }}
+  ogType="article"
+  jsonLd={[
+    definedTermLd(term, absolute(routes.term(term.id), Astro.site), absolute(routes.glossary(), Astro.site)),
+  ]}
 >
   <div class="container page">
     <Breadcrumbs

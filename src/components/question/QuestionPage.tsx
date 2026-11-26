@@ -1,23 +1,29 @@
 import { Bookmark, BookmarkCheck, MessageSquareWarning } from 'lucide-react';
 
+import { reportIssueUrl } from '../../config/site';
 import type { ExamContext, Question } from '../../domain/question';
 import { t } from '../../i18n';
-import { reportIssueUrl } from '../../config/site';
 import { progress } from '../../stores/progress';
 import { useProgress } from '../hooks/useProgress';
-import { QuestionMeta } from './feedback';
 import { TablesButton } from '../tools/Tables';
 import { PracticeQuestion } from './PracticeQuestion';
 import s from './Question.module.css';
 
 interface Props {
+  /** Already stripped with answerOnly(): the page renders stem and explanation statically. */
   question: Question;
   exam: ExamContext;
   pageUrl: string;
+  /** id of the page's static <details> explanation. */
+  explanationId: string;
 }
 
-/** Island for the static page of a single question (/exams/<exam>/questions/<slug>/). */
-export default function QuestionPage({ question, exam, pageUrl }: Props) {
+/**
+ * Island for the static page of a single question (/exams/<exam>/questions/<slug>/):
+ * the answer area, grading, bookmark and report link. Everything readable is plain HTML
+ * rendered by the page, so it is not repeated in this island's props.
+ */
+export default function QuestionPage({ question, exam, pageUrl, explanationId }: Props) {
   const { progress: state, ready } = useProgress();
   const record = state.attempts[question.id];
   const bookmarked = Boolean(state.bookmarks[question.id]);
@@ -26,22 +32,11 @@ export default function QuestionPage({ question, exam, pageUrl }: Props) {
     `ページ: ${pageUrl}\n\n## 誤りの内容\n\n## 正しいと思われる内容・根拠\n`,
   );
 
-  const header = (
-    <header style={{ display: 'grid', gap: 'var(--s-3)' }}>
-      <h1
-        style={{ display: 'flex', alignItems: 'baseline', flexWrap: 'wrap', gap: 'var(--s-3)' }}
-        data-pagefind-meta={`title:${exam.shortName} ${t.question.number(question.order)}`}
-      >
-        <span className={s.number}>{t.question.number(question.order)}</span>
-        <span className="visually-hidden">{exam.shortName}</span>
-      </h1>
-      <QuestionMeta question={question} exam={exam} />
-      {ready && record && <p className={s.history}>{t.question.history(record.attempts, record.correct)}</p>}
-    </header>
-  );
-
   const actions = (
     <>
+      {ready && record && (
+        <span className={s.history}>{t.question.history(record.attempts, record.correct)}</span>
+      )}
       <button
         type="button"
         className="btn btn--quiet btn--sm"
@@ -61,5 +56,14 @@ export default function QuestionPage({ question, exam, pageUrl }: Props) {
     </>
   );
 
-  return <PracticeQuestion question={question} exam={exam} header={header} actions={actions} keyboard />;
+  return (
+    <PracticeQuestion
+      question={question}
+      exam={exam}
+      actions={actions}
+      keyboard
+      bodyless
+      explanationId={explanationId}
+    />
+  );
 }

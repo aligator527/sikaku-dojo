@@ -6,7 +6,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { routes } from '../lib/paths';
 ---
 
-<BaseLayout title={t.search.title} description={t.search.placeholder}>
+<BaseLayout title={t.search.title} description={t.search.placeholder} noindex>
   <div class="container page">
     <Breadcrumbs items={[{ label: t.site.name, href: routes.home() }, { label: t.search.title }]} />
     <h1 class="title">{t.search.title}</h1>

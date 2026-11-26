@@ -17,7 +17,13 @@ const groups = groupedTopics(exam).map((g) => ({
 }));
 ---
 
-<ExamLayout exam={exam} tab="drill" title={`${exam.shortName} ${t.drill.title}`} description={t.drill.lead}>
+<ExamLayout
+  exam={exam}
+  tab="drill"
+  title={`${exam.shortName} ${t.drill.title}`}
+  description={t.drill.lead}
+  noindex
+>
   <h1 class="section-title">{t.drill.title}</h1>
   <p class="lead meta">{t.drill.lead}</p>
   <DrillApp client:only="react" exam={examContext(exam)} groups={groups}>

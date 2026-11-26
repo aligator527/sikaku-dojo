@@ -59,6 +59,24 @@ nanostores、KaTeX、Pagefind、Lucide アイコン。詳しくは [docs/ARCHITE
 3. `main` への push ごとに `.github/workflows/deploy.yml` がビルドと公開を行う。
    サイトの URL とベースパス（`/<リポジトリ名>/`）は自動で設定される。
 
+### 検索エンジンへの登録（任意）
+
+各ページには canonical・OGP・構造化データ（JSON-LD）が入り、`sitemap-index.xml` が生成されます。
+GitHub Pages のプロジェクトサイト（`https://<user>.github.io/<repo>/`）ではドメイン直下の
+`robots.txt` を置けないため、サイトマップは検索エンジンの管理ツールから登録します。
+
+1. [Google Search Console](https://search.google.com/search-console) で **URL プレフィックス** プロパティ
+   （`https://<user>.github.io/<repo>/`）を追加し、確認方法に「HTML タグ」を選ぶ。
+2. タグの `content` の値を、リポジトリの **Settings → Secrets and variables → Actions → Variables** に
+   `GOOGLE_SITE_VERIFICATION` として登録し、再デプロイしてから確認する。
+3. 確認後、「サイトマップ」に `sitemap-index.xml` を送信する。
+4. Bing Webmaster Tools も同様に `BING_SITE_VERIFICATION`（`msvalidate.01` の値）を登録する。
+5. Bing・Yandex などに更新を通知したい場合は、英数字 32 文字程度の任意の文字列を `INDEXNOW_KEY` に登録する。
+   デプロイのたびにサイトマップの URL が IndexNow に送信される（変数がなければ何も送信しない）。
+
+共有用画像（`public/og/*.png`）は `pnpm og` で生成します。資格を追加・改名したら実行してコミットしてください
+（Noto CJK フォントが必要）。
+
 そのほかのワークフロー:
 
 - `ci.yml` — プルリクエストで教材検査・テスト・型チェック・ビルドを実行。

@@ -6,6 +6,10 @@
   gap: var(--s-5);
 }
 
+.contents {
+  display: contents;
+}
+
 .meta {
   display: flex;
   flex-wrap: wrap;
@@ -400,6 +404,20 @@
 
 .explain[open] > summary svg {
   transform: rotate(90deg);
+}
+
+.whenOpen,
+.explain[open] .whenClosed {
+  display: none;
+}
+
+.explain[open] .whenOpen {
+  display: inline;
+}
+
+/* The verdict above already shows the answer (set by the page's island). */
+.explain[data-hide-key] .answerKey {
+  display: none;
 }
 
 .explainBody {

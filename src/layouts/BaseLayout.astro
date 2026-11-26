@@ -15,11 +15,33 @@ interface Props {
   searchable?: boolean;
   /** Pagefind filters, e.g. { 資格: '統計検定2級', 種類: '問題' }. */
   searchFilters?: Record<string, string>;
+  /** Keep the page out of search engines (personal, interactive-only or utility pages). */
+  noindex?: boolean;
+  ogType?: 'website' | 'article';
+  /** Share image under public/, e.g. "og/toukei-2.png". */
+  image?: string;
+  /** schema.org objects, emitted as <script type="application/ld+json">. */
+  jsonLd?: Record<string, unknown>[];
 }
 
-const { title, description = t.site.description, searchable = false, searchFilters = {} } = Astro.props;
+const {
+  title,
+  description = t.site.description,
+  searchable = false,
+  searchFilters = {},
+  noindex = false,
+  ogType = 'website',
+  image = 'og/default.png',
+  jsonLd = [],
+} = Astro.props;
 const fullTitle = title ? `${title}｜${t.site.name}` : `${t.site.name}｜資格試験の問題演習と用語集`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const imageUrl = new URL(href(image), Astro.site);
+// Search Console / Bing Webmaster Tools ownership tags, set as repository variables (see README).
+const googleVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
+const bingVerification = import.meta.env.PUBLIC_BING_SITE_VERIFICATION;
+// "<" is escaped so content can never close the script element.
+const ld = (data: Record<string, unknown>) => JSON.stringify(data).replace(/</g, '\\u003c');
 ---
 
 <!doctype html>
@@ -30,11 +52,22 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:locale" content="ja_JP" />
     <meta property="og:site_name" content={t.site.name} />
+    <meta name="twitter:card" content="summary_large_image" />
+    {googleVerification && <meta name="google-site-verification" content={googleVerification} />}
+    {bingVerification && <meta name="msvalidate.01" content={bingVerification} />}
+    {jsonLd.map((data) => (
+      <script type="application/ld+json" set:html={ld(data)} />
+    ))}
     <meta name="theme-color" content="#f6f4ee" />
     <link rel="icon" type="image/svg+xml" href={href('favicon.svg')} />
     <link rel="apple-touch-icon" href={href('apple-touch-icon.png')} />

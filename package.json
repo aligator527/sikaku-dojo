@@ -12,6 +12,7 @@
     "check": "astro check",
     "sync": "astro sync",
     "validate": "node scripts/validate-content.mjs",
+    "og": "node scripts/og-images.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "format": "prettier --write .",
@@ -46,6 +47,7 @@
     "pagefind": "^1.6.0",
     "prettier": "^3.10.1",
     "prettier-plugin-astro": "^1.1.2",
+    "sharp": "0.35.5",
     "typescript": "^6.0.3",
     "vitest": "^5.1.2"
   },

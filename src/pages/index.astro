@@ -6,6 +6,7 @@ import { t } from '../i18n';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { examContext, getExams, getQuestionCounts, getTerms } from '../lib/content';
 import { routes } from '../lib/paths';
+import { websiteLd } from '../lib/seo/structured-data';
 
 const exams = await getExams();
 const counts = await getQuestionCounts();
@@ -26,7 +27,7 @@ const refs: ExamRef[] = exams.map((exam) => ({
 }));
 ---
 
-<BaseLayout>
+<BaseLayout jsonLd={[websiteLd(new URL(routes.home(), Astro.site).toString())]}>
   <div class="container home">
     <section class="masthead">
       <div class="intro">

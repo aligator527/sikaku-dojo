@@ -6,11 +6,12 @@ interface Props {
   groups: { group?: string; topics: { id: string; name: string }[] }[];
   /** question id → topic ids */
   questions: { id: string; topics: string[] }[];
-  drillHref: string;
+  /** topic id → its question-list page */
+  topicHrefs: Record<string, string>;
 }
 
 /** 出題範囲 with the number of questions per topic and the learner's accuracy. */
-export default function TopicTable({ groups, questions, drillHref }: Props) {
+export default function TopicTable({ groups, questions, topicHrefs }: Props) {
   const { progress, ready } = useProgress();
   const byTopic = summarizeByTopic(progress, questions);
 
@@ -27,8 +28,8 @@ export default function TopicTable({ groups, questions, drillHref }: Props) {
                 ready && sum?.accuracy !== null && sum?.accuracy !== undefined ? sum.accuracy : null;
               return (
                 <li className={s.topicRow} key={topic.id}>
-                  {count > 0 ? (
-                    <a href={`${drillHref}?topic=${encodeURIComponent(topic.id)}`}>{topic.name}</a>
+                  {count > 0 && topicHrefs[topic.id] ? (
+                    <a href={topicHrefs[topic.id]}>{topic.name}</a>
                   ) : (
                     <span>{topic.name}</span>
                   )}

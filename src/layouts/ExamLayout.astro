@@ -30,9 +30,25 @@ interface Props {
   searchKind?: string;
   /** Hide the big exam heading (used by focused pages like the mock runner). */
   compact?: boolean;
+  /** Keep out of search engines (interactive-only pages such as the drill and mock runner). */
+  noindex?: boolean;
+  ogType?: 'website' | 'article';
+  jsonLd?: Record<string, unknown>[];
 }
 
-const { exam, tab, title, description, crumb, searchable = false, searchKind, compact = false } = Astro.props;
+const {
+  exam,
+  tab,
+  title,
+  description,
+  crumb,
+  searchable = false,
+  searchKind,
+  compact = false,
+  noindex = false,
+  ogType,
+  jsonLd,
+} = Astro.props;
 
 const [questions, terms, mocks, guide, resources, formulas] = await Promise.all([
   getQuestions(exam.id),
@@ -73,6 +89,10 @@ if (searchKind) filters['種類'] = searchKind;
   description={description ?? exam.summary}
   searchable={searchable}
   searchFilters={filters}
+  noindex={noindex}
+  ogType={ogType}
+  image={`og/${exam.id}.png`}
+  jsonLd={jsonLd}
 >
   <div class:list={['exam-head', { compact }]} data-pagefind-ignore>
     <div class="container">

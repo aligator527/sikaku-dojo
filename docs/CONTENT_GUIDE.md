@@ -42,7 +42,8 @@ IPA の過去問を `past` として掲載する場合、`label` は
 
 ## exams/<exam-id>.yaml
 
-ファイル名が資格 ID になる（例: `toukei-2.yaml` → `toukei-2`）。
+ファイル名が資格 ID になる（例: `toukei-2.yaml` → `toukei-2`）。資格を追加・改名したら `pnpm og` で
+共有用画像（`public/og/<資格ID>.png`）を作り直す。
 
 ```yaml
 name: 統計検定2級

@@ -237,6 +237,16 @@ textarea:focus {
   background: var(--surface);
 }
 
+.tag--link {
+  color: var(--ink-2);
+  text-decoration: none;
+}
+
+.tag--link:hover {
+  border-color: var(--ai);
+  color: var(--ai);
+}
+
 .tag--past {
   border-color: var(--ai);
   color: var(--ai);

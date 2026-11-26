@@ -20,11 +20,26 @@ const base = process.env.BASE_PATH || '/';
  */
 const watchIgnored = process.env.CONTENT_WATCH === 'off' ? ['**/src/content/questions/**'] : [];
 
+/** Pages marked noindex (personal, interactive-only or utility) stay out of the sitemap too. */
+const NOT_IN_SITEMAP = [
+  /\/search\/$/,
+  /\/me\/$/,
+  /\/offline\/$/,
+  /\/404\/?$/,
+  /\/drill\/$/,
+  /\/glossary\/cards\/$/,
+  /\/mock\/[^/]+\/$/,
+];
+
 export default defineConfig({
   site,
   base,
   trailingSlash: 'always',
-  integrations: [react(), sitemap({ filter: (page) => !page.includes('/offline/') }), serviceWorker()],
+  integrations: [
+    react(),
+    sitemap({ filter: (page) => !NOT_IN_SITEMAP.some((re) => re.test(new URL(page).pathname)) }),
+    serviceWorker(),
+  ],
   markdown: {
     syntaxHighlight: 'shiki',
     shikiConfig,

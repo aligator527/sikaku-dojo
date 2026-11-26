@@ -1,5 +1,5 @@
 import { RotateCcw } from 'lucide-react';
-import { useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useState, type ReactNode } from 'react';
 
 import { grade as gradeResponse, isAnswered, type Grade } from '../../domain/grading';
 import type { Outcome } from '../../domain/progress';
@@ -7,7 +7,7 @@ import type { ExamContext, Question, Response, SelfGrade } from '../../domain/qu
 import { t } from '../../i18n';
 import { progress } from '../../stores/progress';
 import { digitKeys, useShortcuts } from '../hooks/useShortcuts';
-import { Explanation, QuestionBody, Verdict } from './feedback';
+import { Explanation, QuestionBody, SelfGradeButtons, Verdict } from './feedback';
 import { AnswerInput, emptyResponse, pressChoice } from './inputs';
 import { KeyHints } from './KeyHints';
 import s from './Question.module.css';
@@ -32,6 +32,40 @@ interface Props {
   keyboard?: boolean;
   /** Called by Enter / → once the question is graded (the drill's "next"). */
   onNext?: () => void;
+  /**
+   * The static question page renders the stem and the explanation as plain HTML around this island
+   * (so the content is not shipped twice). Then the island renders only the answer area, and drives
+   * the page's <details id={explanationId}> instead of its own.
+   */
+  bodyless?: boolean;
+  explanationId?: string;
+}
+
+/** Open state of either our own explanation or a <details> elsewhere on the page. */
+function useExplanationOpen(
+  elementId: string | undefined,
+): [boolean, (open: boolean | ((v: boolean) => boolean)) => void] {
+  const [open, setOpenState] = useState(false);
+
+  useEffect(() => {
+    if (!elementId) return;
+    const el = document.getElementById(elementId) as HTMLDetailsElement | null;
+    if (!el) return;
+    const sync = () => setOpenState(el.open);
+    sync();
+    el.addEventListener('toggle', sync);
+    return () => el.removeEventListener('toggle', sync);
+  }, [elementId]);
+
+  const setOpen = useCallback(
+    (next: boolean | ((v: boolean) => boolean)) => {
+      const el = elementId ? (document.getElementById(elementId) as HTMLDetailsElement | null) : null;
+      if (el) el.open = typeof next === 'function' ? next(el.open) : next;
+      else setOpenState(next);
+    },
+    [elementId],
+  );
+  return [open, setOpen];
 }
 
 /**
@@ -47,10 +81,21 @@ export function PracticeQuestion({
   onGraded,
   keyboard = false,
   onNext,
+  bodyless = false,
+  explanationId,
 }: Props) {
   const [response, setResponse] = useState<Response>(() => emptyResponse(question));
   const [result, setResult] = useState<Grade | null>(null);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useExplanationOpen(explanationId);
+  const hideAnswerKey = result !== null && result.correct === false;
+
+  // The page's static explanation hides its "正解は …" line while the verdict shows it.
+  useEffect(() => {
+    const el = explanationId ? document.getElementById(explanationId) : null;
+    if (!el) return;
+    if (hideAnswerKey) el.dataset.hideKey = '';
+    else delete el.dataset.hideKey;
+  }, [explanationId, hideAnswerKey]);
 
   const finish = (r: Response) => {
     const g = gradeResponse(question, r);
@@ -105,10 +150,12 @@ export function PracticeQuestion({
     keyboard,
   );
 
+  // Bodyless: the page's <article> is the grid; this island's children join it.
+  const Wrapper = bodyless ? 'div' : 'article';
   return (
-    <article className={s.question}>
-      {header}
-      <QuestionBody question={question} />
+    <Wrapper className={bodyless ? s.contents : s.question}>
+      {!bodyless && header}
+      {!bodyless && <QuestionBody question={question} />}
       <AnswerInput
         question={question}
         response={response}
@@ -138,15 +185,25 @@ export function PracticeQuestion({
       </div>
       {keyboard && <KeyHints choices={choiceCount} next={Boolean(onNext)} />}
       {result && <Verdict question={question} grade={result} choiceStyle={exam.choiceStyle} />}
-      <Explanation
-        question={question}
-        choiceStyle={exam.choiceStyle}
-        open={open}
-        onToggle={setOpen}
-        onSelfGrade={question.format === 'essay' ? onSelfGrade : undefined}
-        selfGrade={response.format === 'essay' ? response.selfGrade : undefined}
-        hideAnswerKey={result !== null && result.correct === false}
-      />
-    </article>
+      {explanationId ? (
+        question.format === 'essay' &&
+        open && (
+          <SelfGradeButtons
+            onSelfGrade={onSelfGrade}
+            selfGrade={response.format === 'essay' ? response.selfGrade : undefined}
+          />
+        )
+      ) : (
+        <Explanation
+          question={question}
+          choiceStyle={exam.choiceStyle}
+          open={open}
+          onToggle={setOpen}
+          onSelfGrade={question.format === 'essay' ? onSelfGrade : undefined}
+          selfGrade={response.format === 'essay' ? response.selfGrade : undefined}
+          hideAnswerKey={hideAnswerKey}
+        />
+      )}
+    </Wrapper>
   );
 }

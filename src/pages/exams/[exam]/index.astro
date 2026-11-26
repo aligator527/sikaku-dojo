@@ -19,6 +19,7 @@ import {
   type Exam,
 } from '../../../lib/content';
 import { routes } from '../../../lib/paths';
+import { absolute, credentialLd } from '../../../lib/seo/structured-data';
 
 export const getStaticPaths = examPaths;
 
@@ -117,7 +118,13 @@ const menu = [
 ];
 ---
 
-<ExamLayout exam={exam} tab="overview" searchable searchKind="資格">
+<ExamLayout
+  exam={exam}
+  tab="overview"
+  searchable
+  searchKind="資格"
+  jsonLd={[credentialLd(exam, absolute(routes.exam(exam.id), Astro.site))]}
+>
   <div class="layout">
     <div class="main">
       <h1 class="visually-hidden">{exam.name}</h1>
@@ -148,13 +155,13 @@ const menu = [
       <section>
         <h2 class="section-title">
           {t.exam.scope}
-          <small>分野名から分野別演習へ</small>
+          <small>{t.topics.hint}</small>
         </h2>
         <TopicTable
           client:load
           groups={groupedTopics(exam)}
           questions={questions.map((q) => ({ id: q.id, topics: q.topics }))}
-          drillHref={routes.drill(exam.id)}
+          topicHrefs={Object.fromEntries(exam.topics.map((x) => [x.id, routes.topic(exam.id, x.id)]))}
         />
       </section>
     </div>

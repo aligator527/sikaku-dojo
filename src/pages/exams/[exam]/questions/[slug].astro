@@ -2,13 +2,16 @@
 import { ArrowLeft, ArrowRight, List } from '@lucide/astro';
 import { getCollection } from 'astro:content';
 
+import { Explanation, QuestionBody, QuestionMeta } from '../../../../components/question/feedback';
 import QuestionPage from '../../../../components/question/QuestionPage';
+import q from '../../../../components/question/Question.module.css';
 import { t } from '../../../../i18n';
 import ExamLayout from '../../../../layouts/ExamLayout.astro';
 import { examContext, getExams, getQuestions, topicName, type Exam } from '../../../../lib/content';
-import type { Question } from '../../../../domain/question';
+import { answerOnly, type Question } from '../../../../domain/question';
 import { excerpt } from '../../../../lib/markdown/excerpt';
 import { routes } from '../../../../lib/paths';
+import { questionLd } from '../../../../lib/seo/structured-data';
 
 export async function getStaticPaths() {
   const paths = [];
@@ -45,19 +48,48 @@ const { exam, question, prev, next, summary } = Astro.props;
 const label = t.question.number(question.order);
 const mainTopic = topicName(exam, question.topics[0]!).split(/[（(]/)[0];
 const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
+const ctx = examContext(exam);
+// The island needs no topic or section names: those are rendered here.
+const islandExam = { ...ctx, topics: {}, sections: {} };
+const explanationId = `explanation-${question.slug}`;
+// Past papers are searched by their official name (令和6年度 春期 … 午前II 問5).
+const pageTitle =
+  question.source.kind === 'past' && question.source.label
+    ? question.source.label
+    : `${exam.name} ${label}（${mainTopic}）`;
+const kind = question.source.kind === 'past' ? '過去問題' : '練習問題';
 ---
 
 <ExamLayout
   exam={exam}
   tab="questions"
-  title={`${exam.shortName} ${label}（${mainTopic}）`}
-  description={`${exam.name} ${label}：${summary}`}
+  title={pageTitle}
+  description={`${exam.name}の${kind}（${mainTopic}）。${summary}（解答と解説つき）`}
   crumb={label}
   searchable
   searchKind="問題"
+  ogType="article"
+  jsonLd={[questionLd(question, exam, pageUrl, mainTopic ?? '')]}
 >
   <div class="question-page">
-    <QuestionPage client:load question={question} exam={examContext(exam)} pageUrl={pageUrl} />
+    <article class={q.question}>
+      <header class="head">
+        <h1 data-pagefind-meta={`title:${exam.shortName} ${label}`}>
+          <span class={q.number}>{label}</span>
+          <span class="visually-hidden">{exam.name}</span>
+        </h1>
+        <QuestionMeta question={question} exam={ctx} topicHref={(id) => routes.topic(exam.id, id)} />
+      </header>
+      <QuestionBody question={question} />
+      <QuestionPage
+        client:load
+        question={answerOnly(question)}
+        exam={islandExam}
+        pageUrl={pageUrl}
+        explanationId={explanationId}
+      />
+      <Explanation question={question} choiceStyle={exam.choiceStyle} id={explanationId} />
+    </article>
     {question.source.kind === 'past' && (
       <p class="meta notice">
         {t.question.pastNotice}
@@ -105,6 +137,18 @@ const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
 <style>
   .question-page {
     max-width: 50rem;
+  }
+
+  .head {
+    display: grid;
+    gap: var(--s-3);
+  }
+
+  .head h1 {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: var(--s-3);
   }
 
   .notice {

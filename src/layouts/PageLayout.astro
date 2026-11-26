@@ -15,9 +15,11 @@ interface Props {
   parents?: { label: string; href: string }[];
   searchable?: boolean;
   searchFilters?: Record<string, string>;
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown>[];
 }
 
-const { title, lead, description, parents = [], searchable, searchFilters } = Astro.props;
+const { title, lead, description, parents = [], searchable, searchFilters, noindex, jsonLd } = Astro.props;
 ---
 
 <BaseLayout
@@ -25,6 +27,8 @@ const { title, lead, description, parents = [], searchable, searchFilters } = As
   description={description ?? lead}
   searchable={searchable}
   searchFilters={searchFilters}
+  noindex={noindex}
+  jsonLd={jsonLd}
 >
   <div class="container page">
     <Breadcrumbs items={[{ label: t.site.name, href: routes.home() }, ...parents, { label: title }]} />

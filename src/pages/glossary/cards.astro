@@ -9,7 +9,7 @@ import { routes } from '../../lib/paths';
 const exams = await getExams();
 ---
 
-<BaseLayout title={t.glossary.cards} description={t.glossary.cardsLead}>
+<BaseLayout title={t.glossary.cards} description={t.glossary.cardsLead} noindex>
   <div class="container page">
     <Breadcrumbs
       items={[

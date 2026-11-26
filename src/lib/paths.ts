@@ -15,6 +15,7 @@ export const routes = {
   exams: () => href('exams/'),
   exam: (exam: string) => href(`exams/${exam}/`),
   questions: (exam: string) => href(`exams/${exam}/questions/`),
+  topic: (exam: string, topic: string) => href(`exams/${exam}/topics/${topic}/`),
   question: (exam: string, slug: string) => href(`exams/${exam}/questions/${slug}/`),
   drill: (exam: string) => href(`exams/${exam}/drill/`),
   mocks: (exam: string) => href(`exams/${exam}/mock/`),

@@ -7,8 +7,7 @@ import { examContext, getExams } from '../../lib/content';
 const exams = (await getExams()).map((e) => ({ ...examContext(e), name: e.name }));
 ---
 
-<BaseLayout title={t.offline.pageTitle} description={t.offline.pageLead}>
-  <meta slot="head" name="robots" content="noindex" />
+<BaseLayout title={t.offline.pageTitle} description={t.offline.pageLead} noindex>
   <div class="container page">
     <OfflineFallback client:load exams={exams} />
   </div>

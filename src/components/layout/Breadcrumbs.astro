@@ -1,13 +1,26 @@
 ---
 import { ChevronRight } from '@lucide/astro';
 
+import { breadcrumbLd } from '../../lib/seo/structured-data';
+
 interface Props {
   items: { label: string; href?: string }[];
 }
 
 const { items } = Astro.props;
+// The same trail as schema.org BreadcrumbList; the last crumb is the current page.
+const trail = breadcrumbLd(
+  items.map((item, i) => ({
+    label: item.label,
+    url: new URL(
+      i === items.length - 1 || !item.href ? Astro.url.pathname : item.href,
+      Astro.site,
+    ).toString(),
+  })),
+);
 ---
 
+<script type="application/ld+json" set:html={JSON.stringify(trail).replace(/</g, '\\u003c')} />
 <nav class="crumbs" aria-label="パンくずリスト" data-pagefind-ignore>
   <ol>
     {items.map((item, i) => (
