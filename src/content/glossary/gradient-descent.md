@@ -2,10 +2,10 @@
 term: 勾配降下法
 reading: こうばいこうかほう
 en: gradient descent
-aliases: [最急降下法, 確率的勾配降下法, SGD, ミニバッチ学習]
-exams: [jdla-e]
+aliases: [最急降下法]
+exams: [jdla-e, toukei-dse]
 summary: 目的関数の勾配の逆方向にパラメータを少しずつ動かして最小値を探す反復法。ミニバッチで勾配を近似するものを確率的勾配降下法（SGD）という。
-related: [momentum, adam, backpropagation, hessian-matrix, taylor-expansion]
+related: [momentum, adam, backpropagation, hessian-matrix, taylor-expansion, sgd, learning-rate]
 formula: '\boldsymbol{\theta}_{t+1} = \boldsymbol{\theta}_t - \eta\,\nabla_{\boldsymbol{\theta}} L(\boldsymbol{\theta}_t)'
 ---
 ## 定義

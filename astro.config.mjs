@@ -15,10 +15,11 @@ const site = process.env.SITE_URL || 'http://localhost:4321';
 const base = process.env.BASE_PATH || '/';
 
 /**
- * CONTENT_WATCH=off stops the dev server from reloading on every question file change —
+ * CONTENT_WATCH=off stops the dev server from reloading on every question or glossary file change —
  * useful when a batch of questions is being written while you work on the UI.
  */
-const watchIgnored = process.env.CONTENT_WATCH === 'off' ? ['**/src/content/questions/**'] : [];
+const watchIgnored =
+  process.env.CONTENT_WATCH === 'off' ? ['**/src/content/questions/**', '**/src/content/glossary/**'] : [];
 
 /** Pages marked noindex (personal, interactive-only or utility) stay out of the sitemap too. */
 const NOT_IN_SITEMAP = [

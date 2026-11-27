@@ -14,9 +14,14 @@ export interface Term {
   exams: string[];
   summary: string;
   related: string[];
+  /** TeX source of the formula (without $ delimiters). */
+  formula?: string;
   formulaHtml?: string;
   row: KanaRow;
 }
+
+/** What the flashcard island fetches from /data/glossary.json (formulas as TeX, rendered on demand). */
+export type CardTerm = Pick<Term, 'id' | 'term' | 'reading' | 'en' | 'exams' | 'summary' | 'formula'>;
 
 let cache: Promise<Term[]> | undefined;
 
@@ -35,6 +40,7 @@ export function getTerms(): Promise<Term[]> {
           exams: e.data.exams.map((x) => x.id),
           summary: e.data.summary,
           related: e.data.related.map((x) => x.id),
+          formula: e.data.formula,
           formulaHtml: e.data.formula ? await renderMarkdown(`$$\n${e.data.formula}\n$$`) : undefined,
           row: kanaRow(e.data.reading),
         })),

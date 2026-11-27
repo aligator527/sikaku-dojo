@@ -2,10 +2,10 @@
 term: "RFP（提案依頼書）"
 reading: あーるえふぴー
 en: "request for proposal"
-aliases: ["提案依頼書", "RFI"]
+aliases: ["提案依頼書"]
 exams: [ipa-st, shindanshi]
 summary: "情報システムの調達で、発注者がシステム化の目的・要件・調達条件を示し、供給者候補に具体的な提案を求める文書。"
-related: [sla, it-investment-evaluation]
+related: [sla, it-investment-evaluation, rfi]
 ---
 ## 定義
 

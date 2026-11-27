@@ -22,6 +22,8 @@
 
 .card {
   display: grid;
+  /* minmax(0, …) lets a long formula scroll inside the card instead of widening it. */
+  grid-template-columns: minmax(0, 1fr);
   align-content: center;
   justify-items: center;
   gap: var(--s-3);
@@ -56,6 +58,7 @@
 
 .back {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s-3);
   width: 100%;
   padding-top: var(--s-4);

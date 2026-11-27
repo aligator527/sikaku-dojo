@@ -3,7 +3,7 @@ term: "機関設計（会社法）"
 reading: きかんせっけい
 en: "corporate organizational structure"
 aliases: ["株式会社の機関", "取締役会設置会社", "監査役設置会社"]
-exams: [shindanshi]
+exams: [shindanshi, boki-2]
 summary: "株式会社が、株主総会・取締役・取締役会・監査役・会計監査人などの機関をどのように組み合わせて置くかを定めること。"
 related: [industrial-property-rights, sme-definition]
 ---

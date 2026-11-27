@@ -2,10 +2,10 @@
 term: ガンマ関数
 reading: がんまかんすう
 en: gamma function
-aliases: [Γ関数, ベータ関数]
+aliases: [Γ関数]
 exams: [suken-1, toukei-1]
 summary: 階乗を実数（複素数）に拡張した特殊関数。Γ(s) = ∫₀^∞ t^(s−1) e^(−t) dt で定義され、自然数 n に対して Γ(n+1) = n! となる。
-related: [taylor-expansion, jacobian]
+related: [taylor-expansion, jacobian, beta-function]
 formula: '\Gamma(s) = \int_0^{\infty} t^{s-1} e^{-t}\,dt\quad (s > 0),\qquad \Gamma(s+1) = s\,\Gamma(s)'
 ---
 ## 定義と基本性質

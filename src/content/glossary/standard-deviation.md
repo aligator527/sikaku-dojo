@@ -3,26 +3,26 @@ term: '標準偏差'
 reading: ひょうじゅんへんさ
 en: 'standard deviation'
 aliases: ['SD']
-exams: [toukei-2, toukei-jun1, toukei-1, toukei-dse]
+exams: [toukei-2, toukei-jun1, toukei-1, toukei-dse, jdla-e, shindanshi]
 summary: 'データの散らばりの大きさを表す指標。分散の正の平方根で、元のデータと同じ単位をもつ。'
 related: [unbiased-variance, sample-mean, normal-distribution]
 formula: 's = \sqrt{\frac{1}{n-1}\sum_{i=1}^{n}(x_i-\bar{x})^2}'
 ---
-### 定義
+## 定義
 
 分散の正の平方根です。分散は偏差の 2 乗の平均なので単位も 2 乗になりますが、標準偏差は元のデータと同じ単位で散らばりを表せます。$n$ で割る定義と $n-1$ で割る定義（不偏分散の平方根）があるので、問題文の指定を確認します。
 
-### 直感的な意味
+## 直感的な意味
 
 正規分布では、平均 $\pm 1\sigma$ の範囲に約 68.3%、$\pm 2\sigma$ に約 95.4%、$\pm 3\sigma$ に約 99.7% のデータが入ります。データを $z = (x - \bar{x})/s$ と標準化すると、平均から標準偏差何個分離れているかが分かります。
 
-### 試験での問われ方
+## 試験での問われ方
 
 - 1 次変換 $y = a + bx$ では $s_y = |b|\,s_x$（定数 $a$ は散らばりに影響しない）。
 - 平均の大きさが異なるデータの比較には変動係数 $s/\bar{x}$ を使う。
 - 箱ひげ図やヒストグラムから、散らばりの大小を比較する。
 
-### よくある誤り
+## よくある誤り
 
 - 分散と標準偏差を取り違える（平方根のとり忘れ）。
 - 独立な確率変数の和の標準偏差を、標準偏差の和で計算する。足し算できるのは分散で、$\sqrt{\sigma_X^2 + \sigma_Y^2}$ となる。

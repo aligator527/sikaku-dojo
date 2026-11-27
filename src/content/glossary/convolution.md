@@ -2,10 +2,10 @@
 term: 畳み込み
 reading: たたみこみ
 en: convolution
-aliases: [畳み込み層, 畳み込みニューラルネットワーク, CNN, パディング, ストライド, im2col]
-exams: [jdla-e]
+aliases: [畳み込み層, パディング, ストライド, im2col]
+exams: [jdla-e, toukei-dse]
 summary: 小さなフィルタ（カーネル）を入力上でずらしながら局所領域との積和をとる演算。CNN では重み共有により、位置によらず同じ特徴を少ないパラメータで検出する。
-related: [residual-connection, batch-normalization]
+related: [residual-connection, batch-normalization, cnn, feature-map, transposed-convolution]
 formula: 'O = \left\lfloor \frac{H + 2P - K}{S} \right\rfloor + 1'
 ---
 ## 演算の定義

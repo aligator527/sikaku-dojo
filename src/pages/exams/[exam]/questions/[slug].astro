@@ -7,14 +7,25 @@ import QuestionPage from '../../../../components/question/QuestionPage';
 import q from '../../../../components/question/Question.module.css';
 import { t } from '../../../../i18n';
 import ExamLayout from '../../../../layouts/ExamLayout.astro';
-import { examContext, getExams, getQuestions, topicName, type Exam } from '../../../../lib/content';
+import {
+  examContext,
+  getExams,
+  getMentionIndex,
+  getQuestions,
+  topicName,
+  type Exam,
+  type QuestionTerm,
+} from '../../../../lib/content';
 import { answerOnly, type Question } from '../../../../domain/question';
 import { excerpt } from '../../../../lib/markdown/excerpt';
 import { routes } from '../../../../lib/paths';
 import { questionLd } from '../../../../lib/seo/structured-data';
 
 export async function getStaticPaths() {
+  // getStaticPaths runs in isolation: constants must live inside it.
+  const MAX_TERMS = 10;
   const paths = [];
+  const { byQuestion } = await getMentionIndex();
   for (const exam of await getExams()) {
     const questions = await getQuestions(exam.id);
     const stems = new Map(
@@ -29,6 +40,7 @@ export async function getStaticPaths() {
           prev: questions[i - 1],
           next: questions[i + 1],
           summary: excerpt(stems.get(question.id) ?? '', 110),
+          terms: (byQuestion.get(question.id) ?? []).slice(0, MAX_TERMS),
         },
       });
     }
@@ -42,9 +54,10 @@ interface Props {
   prev?: Question;
   next?: Question;
   summary: string;
+  terms: QuestionTerm[];
 }
 
-const { exam, question, prev, next, summary } = Astro.props;
+const { exam, question, prev, next, summary, terms } = Astro.props;
 const label = t.question.number(question.order);
 const mainTopic = topicName(exam, question.topics[0]!).split(/[（(]/)[0];
 const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
@@ -89,6 +102,25 @@ const kind = question.source.kind === 'past' ? '過去問題' : '練習問題';
         explanationId={explanationId}
       />
       <Explanation question={question} choiceStyle={exam.choiceStyle} id={explanationId} />
+      {terms.length > 0 && (
+        <ul
+          class={q.terms}
+          aria-label={t.question.terms}
+          data-after-answer={terms.every((x) => x.place === 1) ? '' : undefined}
+          data-pagefind-ignore
+        >
+          <li class={q.termsTitle} aria-hidden="true">
+            {t.question.terms}
+          </li>
+          {terms.map(({ term, place }) => (
+            <li class={place === 1 ? q.afterAnswer : undefined}>
+              <a class="tag tag--link" href={routes.term(term.id)}>
+                {term.term}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
     </article>
     {question.source.kind === 'past' && (
       <p class="meta notice">

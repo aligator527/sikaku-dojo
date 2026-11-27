@@ -2,10 +2,10 @@
 term: 総合原価計算
 reading: そうごうげんかけいさん
 en: process costing
-aliases: [完成品換算量, 平均法, 先入先出法, 仕損, 減損, 度外視法]
+aliases: [平均法, 先入先出法, 仕損]
 exams: [boki-2, boki-1, shindanshi]
 summary: 同じ規格の製品を連続して大量生産する場合に、一定期間の製造原価を生産量で割って製品単位原価を求める原価計算。
-related: [standard-costing, manufacturing-overhead]
+related: [standard-costing, manufacturing-overhead, equivalent-units, spoilage-neglect-method, normal-spoilage]
 formula: '\text{月末仕掛品原価（平均法）} = \frac{\text{月初仕掛品原価} + \text{当月製造費用}}{\text{完成品数量} + \text{月末仕掛品の換算量}} \times \text{月末仕掛品の換算量}'
 ---
 総合原価計算は、注文ごとに原価を集計する個別原価計算と違い、1か月などの期間で原価をまとめて計算します。期末に残る仕掛品の原価を求め、「月初仕掛品原価 ＋ 当月製造費用 − 月末仕掛品原価」で完成品総合原価を計算するのが基本の流れです。

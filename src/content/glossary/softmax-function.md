@@ -3,7 +3,7 @@ term: ソフトマックス関数
 reading: そふとまっくすかんすう
 en: softmax function
 aliases: [softmax, ソフトマックス]
-exams: [jdla-e]
+exams: [jdla-e, toukei-dse]
 summary: 実数ベクトルを、各成分が正で総和が 1 になる確率ベクトルに変換する関数。多クラス分類の出力層や注意機構の重みの計算に使う。
 related: [cross-entropy, activation-function, attention-mechanism]
 formula: '\mathrm{softmax}(\boldsymbol{z})_k = \frac{\exp(z_k)}{\sum_{j=1}^{K}\exp(z_j)}'

@@ -9,6 +9,7 @@
  *
  *   node scripts/validate-content.mjs                    # all content
  *   node scripts/validate-content.mjs --exam toukei-2    # one exam (questions + formula sheet)
+ *   node scripts/validate-content.mjs --glossary         # every glossary term
  *   node scripts/validate-content.mjs path/to/a.md …     # specific files
  *   add --quiet to hide warnings
  */
@@ -28,6 +29,7 @@ const katex = createRequire(import.meta.resolve('rehype-katex'))('katex');
 const args = process.argv.slice(2);
 const quiet = args.includes('--quiet');
 const examFilter = args.includes('--exam') ? args[args.indexOf('--exam') + 1] : undefined;
+const glossaryOnly = args.includes('--glossary');
 const explicitFiles = args.filter(
   (a, i) => !a.startsWith('--') && args[i - 1] !== '--exam' && /\.(md|ya?ml)$/.test(a),
 );
@@ -349,6 +351,82 @@ function checkFormulaSheet(file) {
   });
 }
 
+/* ------------------------------ glossary ------------------------------ */
+
+const GLOSSARY_KEYS = ['term', 'reading', 'en', 'aliases', 'exams', 'summary', 'related', 'formula'];
+const READING = /^[ぁ-ゟー・ ]+$/u;
+const SLUG_KEBAB = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+/** Every term name and alias → the slugs that claim it (case-sensitive, like the matcher: mAP ≠ MAP). */
+const namesInGlossary = new Map();
+for (const f of listFiles(path.join(contentDir, 'glossary'), /\.md$/)) {
+  const m = /^---\r?\n([\s\S]*?)\r?\n---/.exec(readFileSync(f, 'utf8'));
+  let data;
+  try {
+    data = m ? YAML.parse(m[1]) : undefined;
+  } catch {
+    continue; // reported when the file itself is checked
+  }
+  const slug = path.basename(f, '.md');
+  for (const name of [data?.term, ...(Array.isArray(data?.aliases) ? data.aliases : [])]) {
+    if (typeof name !== 'string' || !name.trim()) continue;
+    const key = name.normalize('NFKC').replace(/\s+/g, '');
+    namesInGlossary.set(key, [...(namesInGlossary.get(key) ?? []), slug]);
+  }
+}
+
+function checkGlossary(file) {
+  const parsed = readMarkdown(file);
+  if (!parsed) return;
+  const { data, body } = parsed;
+  const slug = path.basename(file, '.md');
+  if (!SLUG_KEBAB.test(slug)) error(file, `file name must be English kebab-case (got "${slug}")`);
+  for (const key of Object.keys(data)) if (!GLOSSARY_KEYS.includes(key)) error(file, `unknown key "${key}"`);
+
+  if (typeof data.term !== 'string' || !data.term.trim()) error(file, 'term is required');
+  if (typeof data.reading !== 'string' || !READING.test(data.reading))
+    error(file, `reading must be hiragana (got "${data.reading}")`);
+  if (data.en !== undefined && typeof data.en !== 'string') error(file, 'en must be a string');
+  if (
+    data.aliases !== undefined &&
+    !(Array.isArray(data.aliases) && data.aliases.every((a) => typeof a === 'string'))
+  )
+    error(file, 'aliases must be a list of strings');
+  if (!Array.isArray(data.exams) || data.exams.length === 0) error(file, 'exams must list at least one exam');
+  else for (const e of data.exams) if (!exams.has(e)) error(file, `exam "${e}" does not exist`);
+  if (typeof data.summary !== 'string' || !data.summary.trim()) error(file, 'summary is required');
+  else if (data.summary.length > 160)
+    warn(file, `summary is long (${data.summary.length} chars; aim for one sentence)`);
+  if (data.related !== undefined) {
+    if (!Array.isArray(data.related)) error(file, 'related must be a list of slugs');
+    else
+      for (const r of data.related) {
+        if (r === slug) error(file, 'related lists the term itself');
+        else if (!glossaryIds.has(r)) error(file, `related term "${r}" does not exist`);
+      }
+  }
+  if (data.formula !== undefined) {
+    if (typeof data.formula !== 'string') error(file, 'formula must be a string');
+    else checkTex(file, 'formula', data.formula);
+  }
+
+  for (const name of [data.term, ...(Array.isArray(data.aliases) ? data.aliases : [])]) {
+    if (typeof name !== 'string') continue;
+    const others = (
+      namesInGlossary.get(name.normalize('NFKC').replace(/\s+/g, '')) ?? []
+    ).filter((s) => s !== slug);
+    if (others.length) error(file, `"${name}" is already the term or an alias of ${others.join(', ')}`);
+  }
+
+  if (body.trim().length < 200) warn(file, `body is short (${body.trim().length} chars)`);
+  if (/^# /m.test(body)) error(file, 'body must not contain an h1 (# …); the page title is the term');
+  if (/^### /m.test(body) && !/^## /m.test(body)) warn(file, 'use ## for the top-level sections of the body');
+  if (/\]\((?:\/|\.\.?\/)/.test(body))
+    error(file, 'internal links break under the base path; do not link inside the body');
+  checkText(file, 'body', body);
+  checkText(file, 'summary', data.summary);
+}
+
 /* --------------------------- other markdown --------------------------- */
 
 function checkProse(file) {
@@ -365,11 +443,13 @@ function route(file) {
   const r = path.relative(contentDir, path.resolve(file));
   if (r.startsWith('questions')) return checkQuestion(path.resolve(file));
   if (r.startsWith('formulas')) return checkFormulaSheet(path.resolve(file));
-  if (r.startsWith('glossary') || r.startsWith('guides')) return checkProse(path.resolve(file));
+  if (r.startsWith('glossary')) return checkGlossary(path.resolve(file));
+  if (r.startsWith('guides')) return checkProse(path.resolve(file));
 }
 
 let files;
 if (explicitFiles.length) files = explicitFiles;
+else if (glossaryOnly) files = listFiles(path.join(contentDir, 'glossary'), /\.md$/);
 else if (examFilter) {
   if (!exams.has(examFilter)) {
     console.error(`unknown exam "${examFilter}"`);

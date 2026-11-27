@@ -2,10 +2,10 @@
 term: 正定値行列
 reading: せいていちぎょうれつ
 en: positive definite matrix
-aliases: [正定値, 半正定値行列, 二次形式]
-exams: [suken-1, jdla-e]
+aliases: [正定値, 半正定値行列]
+exams: [suken-1, jdla-e, toukei-dse]
 summary: 零でない任意のベクトル x に対して二次形式 xᵀAx が正になる実対称行列。固有値がすべて正であることと同値。
-related: [eigenvalue, hessian-matrix, singular-value-decomposition]
+related: [eigenvalue, hessian-matrix, singular-value-decomposition, quadratic-form]
 formula: '\boldsymbol{x}^{\mathsf T} A \boldsymbol{x} > 0 \quad (\forall\, \boldsymbol{x} \neq \boldsymbol{0})'
 ---
 ## 定義
@@ -29,7 +29,7 @@ formula: '\boldsymbol{x}^{\mathsf T} A \boldsymbol{x} > 0 \quad (\forall\, \bold
 
 ## 試験での問われ方
 
-数検1級では二次形式の最大・最小や標準形、条件付き極値で現れます。E資格では、損失関数の曲率（ヘッセ行列）と最適化の難しさ（悪条件・鞍点）の文脈で問われます。
+数検1級では二次形式の最大・最小や標準形、条件付き極値で現れます。E資格のシラバス 2026 では線形代数は前提知識（グレー網掛けで出題対象外）ですが、出題対象の最適化で、損失関数の曲率（ヘッセ行列）と最適化の難しさ（Pathological Curvature・鞍点）を理解する土台になります。
 
 ## よくある誤り
 

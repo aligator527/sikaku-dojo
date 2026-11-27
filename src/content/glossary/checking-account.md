@@ -3,7 +3,7 @@ term: 当座預金
 reading: とうざよきん
 en: checking account
 aliases: [当座借越, 当座預金出納帳]
-exams: [boki-3, boki-2]
+exams: [boki-3, boki-2, boki-1]
 summary: 銀行と当座取引契約を結んで開設する、利息の付かない決済用の預金。当座借越契約を結べば残高を超えて引き出すこともできる。
 related: [promissory-note, electronically-recorded-claims]
 ---

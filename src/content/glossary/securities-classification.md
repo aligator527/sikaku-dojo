@@ -2,10 +2,10 @@
 term: 有価証券
 reading: ゆうかしょうけん
 en: securities
-aliases: [売買目的有価証券, 満期保有目的債券, 子会社株式, 関連会社株式, その他有価証券, 端数利息]
+aliases: [売買目的有価証券, 満期保有目的債券, 子会社株式, 関連会社株式, 端数利息]
 exams: [boki-2, boki-1]
 summary: 株式や社債・国債などの証券。会計上は保有目的によって4つに分類され、分類ごとに期末の評価方法と評価差額の処理が異なる。
-related: [tax-effect-accounting, consolidated-financial-statements]
+related: [tax-effect-accounting, consolidated-financial-statements, available-for-sale-securities, amortized-cost-method]
 ---
 有価証券の会計処理は「何のために持っているか」で決まります。日商簿記2級では次の4つの分類が出題範囲です。
 

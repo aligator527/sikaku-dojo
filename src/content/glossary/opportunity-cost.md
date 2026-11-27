@@ -3,7 +3,7 @@ term: "機会費用"
 reading: きかいひよう
 en: "opportunity cost"
 aliases: ["機会原価"]
-exams: [shindanshi, ipa-st]
+exams: [shindanshi, ipa-st, boki-1]
 summary: "ある選択をしたことで、選ばなかった選択肢のうち最も価値の高いものから得られたはずの利益。"
 related: [price-elasticity-of-demand, it-investment-evaluation]
 ---

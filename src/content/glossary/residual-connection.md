@@ -2,10 +2,10 @@
 term: 残差接続
 reading: ざんさせつぞく
 en: residual connection
-aliases: [スキップ接続, skip connection, ResNet, Residual Block, 残差ブロック]
+aliases: [スキップ接続, skip connection, Residual Block, 残差ブロック]
 exams: [jdla-e]
 summary: 層の入力を出力に足し合わせる接続。層は入力との差分（残差）だけを学習すればよくなり、非常に深いネットワークでも学習が進む。ResNet で導入された。
-related: [vanishing-gradient, batch-normalization, transformer, convolution]
+related: [vanishing-gradient, batch-normalization, transformer, convolution, resnet]
 formula: '\boldsymbol{y} = F(\boldsymbol{x}) + \boldsymbol{x}'
 ---
 ## 仕組み

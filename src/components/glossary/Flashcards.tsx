@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { dueCards, toDateKey } from '../../domain/progress';
 import { t } from '../../i18n';
-import type { Term } from '../../lib/content/glossary';
+import type { CardTerm } from '../../lib/content/glossary';
 import { routes } from '../../lib/paths';
 import { progress as actions } from '../../stores/progress';
 import { useProgress } from '../hooks/useProgress';
@@ -10,10 +10,33 @@ import s from './Flashcards.module.css';
 
 const NEW_PER_SESSION = 15;
 
+/** Renders a card's formula with KaTeX, loaded the first time a card with a formula is turned. */
+function Formula({ tex }: { tex: string }) {
+  const [html, setHtml] = useState<string | null>(null);
+  useEffect(() => {
+    let live = true;
+    void import('katex').then(({ default: katex }) => {
+      if (live)
+        setHtml(
+          katex.renderToString(tex, {
+            displayMode: true,
+            throwOnError: false,
+            strict: false,
+            output: 'htmlAndMathml',
+          }),
+        );
+    });
+    return () => {
+      live = false;
+    };
+  }, [tex]);
+  return html ? <div dangerouslySetInnerHTML={{ __html: html }} /> : null;
+}
+
 /** 用語カード — Leitner-box flashcards over the glossary. */
 export default function Flashcards({ exams }: { exams: { id: string; name: string }[] }) {
   const { progress, ready } = useProgress();
-  const [terms, setTerms] = useState<Term[] | null>(null);
+  const [terms, setTerms] = useState<CardTerm[] | null>(null);
   const [exam, setExam] = useState(() => new URLSearchParams(window.location.search).get('exam') ?? '');
   const [queue, setQueue] = useState<string[] | null>(null);
   const [flipped, setFlipped] = useState(false);
@@ -21,7 +44,7 @@ export default function Flashcards({ exams }: { exams: { id: string; name: strin
 
   useEffect(() => {
     fetch(routes.glossaryData())
-      .then((r) => r.json() as Promise<Term[]>)
+      .then((r) => r.json() as Promise<CardTerm[]>)
       .then(setTerms)
       .catch(() => setTerms([]));
   }, []);
@@ -113,7 +136,7 @@ export default function Flashcards({ exams }: { exams: { id: string; name: strin
                   {current.en && <span className={s.en}>　{current.en}</span>}
                 </p>
                 <p>{current.summary}</p>
-                {current.formulaHtml && <div dangerouslySetInnerHTML={{ __html: current.formulaHtml }} />}
+                {current.formula && <Formula tex={current.formula} />}
                 <a href={routes.term(current.id)} target="_blank" rel="noreferrer" className="meta">
                   詳しい解説
                 </a>

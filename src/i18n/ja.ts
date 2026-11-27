@@ -61,6 +61,7 @@ export const ja = {
     submit: '解答する',
     showAnswer: '答えと解説を見る',
     hideAnswer: '解説を閉じる',
+    terms: '関連する用語',
     correct: '正解',
     incorrect: '不正解',
     partial: '部分点',

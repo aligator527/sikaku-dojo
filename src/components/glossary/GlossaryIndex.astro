@@ -1,0 +1,139 @@
+---
+import { KANA_ROWS } from '../../domain/kana';
+import { t } from '../../i18n';
+import type { Term } from '../../lib/content';
+import { routes } from '../../lib/paths';
+import s from './Glossary.module.css';
+
+interface Props {
+  terms: Term[];
+  /** When given, shows an exam filter (global glossary). */
+  exams?: { id: string; name: string }[];
+}
+
+const { terms, exams } = Astro.props;
+const rows = KANA_ROWS.map((row) => ({ row, items: terms.filter((x) => x.row === row) }));
+---
+
+{/*
+  50音 index. The list is plain HTML (crawlable, no hydration payload); the small script below
+  filters it in place by term, reading, English name or alias, and by exam. List items carry no
+  class names (the stylesheet uses child selectors): with ~1000 terms that saves ~100 KB.
+*/}
+<div data-glossary>
+  <div class={s.toolbar}>
+    <label class={`field ${s.search}`}>
+      <span>{t.glossary.filter}</span>
+      <input class="input" type="search" placeholder={t.glossary.filterPlaceholder} data-glossary-query />
+    </label>
+    {exams && (
+      <label class="field">
+        <span>{t.glossary.examFilter}</span>
+        <select class="select" data-glossary-exam>
+          <option value="">{t.glossary.allExams}</option>
+          {exams.map((x) => (
+            <option value={x.id}>{x.name}</option>
+          ))}
+        </select>
+      </label>
+    )}
+  </div>
+
+  <nav class={s.kana} aria-label="50音索引">
+    {rows.map(({ row, items }) =>
+      items.length > 0 ? (
+        <a href={`#kana-${row}`} data-kana={row}>
+          {row}
+        </a>
+      ) : (
+        <span aria-hidden="true">{row}</span>
+      ),
+    )}
+  </nav>
+
+  <p class={s.empty} data-glossary-empty hidden>
+    {t.glossary.none}
+  </p>
+
+  {rows
+    .filter((r) => r.items.length > 0)
+    .map(({ row, items }) => (
+      <section class={s.row} id={`kana-${row}`} data-kana-row={row}>
+        <h2 class={s.rowTitle}>{row}行</h2>
+        <ul class={s.list}>
+          {items.map((term) => (
+            <li data-exams={term.exams.join(' ')} data-aliases={term.aliases.join(' / ') || undefined}>
+              <div>
+                <a href={routes.term(term.id)}>{term.term}</a>
+                <span>{term.reading}</span>
+              </div>
+              <p>
+                {term.summary}
+                {term.en && <span>{term.en}</span>}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+</div>
+
+<script>
+  const normalize = (v: string) => v.trim().normalize('NFKC').toLowerCase();
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-glossary]')) {
+    const query = root.querySelector<HTMLInputElement>('[data-glossary-query]')!;
+    const exam = root.querySelector<HTMLSelectElement>('[data-glossary-exam]');
+    const empty = root.querySelector<HTMLElement>('[data-glossary-empty]')!;
+    const items = [...root.querySelectorAll<HTMLElement>('li[data-exams]')];
+    // Searchable text: term, reading and English name (shown) plus aliases (data-aliases).
+    const haystack = new Map(
+      items.map((li) => [
+        li,
+        normalize(
+          [
+            li.querySelector('a')?.textContent,
+            li.querySelector('div > span')?.textContent,
+            li.querySelector('p > span')?.textContent,
+            li.dataset.aliases,
+          ].join(' / '),
+        ),
+      ]),
+    );
+    const sections = [...root.querySelectorAll<HTMLElement>('[data-kana-row]')];
+    const links = new Map(
+      [...root.querySelectorAll<HTMLAnchorElement>('[data-kana]')].map((a) => [a.dataset.kana!, a]),
+    );
+
+    // ?exam=<id> and ?q=<text> preselect the filters (links from exam pages and flashcards).
+    const params = new URLSearchParams(location.search);
+    const wanted = params.get('exam');
+    if (exam && wanted && [...exam.options].some((o) => o.value === wanted)) exam.value = wanted;
+    if (params.get('q')) query.value = params.get('q')!;
+
+    const apply = () => {
+      const q = normalize(query.value);
+      const e = exam?.value ?? '';
+      let shown = 0;
+      for (const li of items) {
+        const ok = (!e || li.dataset.exams!.split(' ').includes(e)) && (!q || haystack.get(li)!.includes(q));
+        li.hidden = !ok;
+        if (ok) shown += 1;
+      }
+      for (const section of sections) {
+        const any = section.querySelector('li:not([hidden])') !== null;
+        section.hidden = !any;
+        const link = links.get(section.dataset.kanaRow!);
+        if (link) {
+          link.toggleAttribute('aria-disabled', !any);
+          link.tabIndex = any ? 0 : -1;
+        }
+      }
+      empty.hidden = shown > 0;
+    };
+
+    query.addEventListener('input', apply);
+    exam?.addEventListener('change', apply);
+    if (query.value || exam?.value) apply();
+  }
+</script>

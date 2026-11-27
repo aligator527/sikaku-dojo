@@ -2,10 +2,10 @@
 term: 勾配消失問題
 reading: こうばいしょうしつもんだい
 en: vanishing gradient problem
-aliases: [勾配消失, 勾配爆発, 勾配クリッピング]
+aliases: [勾配消失, 勾配爆発]
 exams: [jdla-e]
 summary: 深いネットワークや長い系列の RNN で、逆伝播される勾配が層（時刻）を遡るごとに指数的に小さくなり、入力に近い層の学習が進まなくなる現象。
-related: [backpropagation, activation-function, lstm, residual-connection, batch-normalization]
+related: [backpropagation, activation-function, lstm, residual-connection, batch-normalization, gradient-clipping]
 ---
 ## 原因
 

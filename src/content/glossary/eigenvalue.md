@@ -2,10 +2,10 @@
 term: 固有値
 reading: こゆうち
 en: eigenvalue
-aliases: [固有ベクトル, 固有方程式, 特性方程式]
-exams: [suken-1, jdla-e, toukei-jun1, toukei-1]
+aliases: [固有ベクトル, 固有方程式]
+exams: [suken-1, jdla-e, toukei-jun1, toukei-1, toukei-dse]
 summary: 正方行列 A に対して Ax = λx を満たす零でないベクトル x が存在するときのスカラー λ。x を固有ベクトルという。
-related: [determinant, singular-value-decomposition, positive-definite-matrix, hessian-matrix]
+related: [determinant, singular-value-decomposition, positive-definite-matrix, hessian-matrix, characteristic-equation]
 formula: 'A\boldsymbol{x} = \lambda\boldsymbol{x}\ (\boldsymbol{x} \neq \boldsymbol{0}) \iff \det(A - \lambda I) = 0'
 ---
 ## 定義
@@ -25,7 +25,7 @@ $n$ 次正方行列 $A$ に対して、$A\boldsymbol x = \lambda\boldsymbol x$ �
 ## 試験での問われ方
 
 - **数検1級**：固有値・固有ベクトルの計算、対角化、$A^n$ の計算、二次形式の標準形、実対称行列の性質の証明。
-- **E資格**：主成分分析（分散共分散行列の固有値分解）、寄与率、ヘッセ行列の固有値による停留点の判定。
+- **E資格**：シラバス 2026 では、固有値分解や主成分分析は前提知識（グレー網掛けで出題対象外）。出題対象の最適化（モメンタムの項目の Pathological Curvature）や鞍点を、ヘッセ行列の固有値で理解する土台になります。
 - **統計検定**：主成分分析・多変量正規分布の分散共分散行列。
 
 ## よくある誤り

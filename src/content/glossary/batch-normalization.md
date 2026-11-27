@@ -2,10 +2,10 @@
 term: バッチ正規化
 reading: ばっちせいきか
 en: batch normalization
-aliases: [Batch Normalization, BN, Layer Normalization, 層正規化]
-exams: [jdla-e]
+aliases: [Batch Normalization, BN]
+exams: [jdla-e, toukei-dse]
 summary: ミニバッチ内の統計量で各チャネル（特徴）の入力を平均 0・分散 1 に正規化し、学習可能なスケール γ とシフト β を掛ける手法。学習を安定・高速化する。
-related: [dropout, vanishing-gradient, residual-connection, transformer]
+related: [dropout, vanishing-gradient, residual-connection, transformer, layer-normalization, group-normalization]
 formula: '\hat{x} = \frac{x - \mu_{\mathcal{B}}}{\sqrt{\sigma_{\mathcal{B}}^2 + \varepsilon}},\qquad y = \gamma\,\hat{x} + \beta'
 ---
 ## 仕組み

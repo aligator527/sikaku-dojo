@@ -2,10 +2,10 @@
 term: 減価償却
 reading: げんかしょうきゃく
 en: depreciation
-aliases: [減価償却費, 減価償却累計額, 定額法, 定率法]
-exams: [boki-3, boki-2, boki-1, shindanshi]
+aliases: [減価償却費, 減価償却累計額, 定額法]
+exams: [boki-3, boki-2, boki-1, shindanshi, ipa-st]
 summary: 建物・備品・車両などの有形固定資産の取得原価を、使用する各期間に費用として配分する手続き。
-related: [impairment-of-fixed-assets, lease-accounting]
+related: [impairment-of-fixed-assets, lease-accounting, declining-balance-method]
 formula: '\text{減価償却費（定額法）} = \frac{\text{取得原価} - \text{残存価額}}{\text{耐用年数}}'
 ---
 有形固定資産は長期間にわたって収益の獲得に役立つため、購入した期にまとめて費用にするのではなく、使用する期間に分けて費用（減価償却費）にします。費用収益対応の考え方にもとづく手続きです。

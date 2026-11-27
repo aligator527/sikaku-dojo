@@ -2,7 +2,7 @@
 term: "STP"
 reading: えすてぃーぴー
 en: "segmentation, targeting, positioning"
-aliases: ["セグメンテーション", "ターゲティング", "ポジショニング"]
+aliases: ["STP分析", "STPマーケティング"]
 exams: [shindanshi, ipa-st]
 summary: "市場を細分化し（Segmentation）、狙う市場を選び（Targeting）、競合に対する自社の位置付けを決める（Positioning）マーケティング戦略の策定手順。"
 related: [marketing-mix-4p, swot-analysis]

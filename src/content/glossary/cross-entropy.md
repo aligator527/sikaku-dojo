@@ -3,7 +3,7 @@ term: 交差エントロピー
 reading: こうさえんとろぴー
 en: cross entropy
 aliases: [クロスエントロピー, 交差エントロピー誤差, クロスエントロピー誤差, バイナリクロスエントロピー]
-exams: [jdla-e]
+exams: [jdla-e, toukei-dse]
 summary: 真の分布 p のもとで、分布 q に基づく符号の平均符号長を表す量。分類問題の損失関数として使われ、最小化は KL ダイバージェンスの最小化と同じ意味を持つ。
 related: [softmax-function, activation-function]
 formula: 'H(p, q) = -\sum_{k} p_k \log q_k = H(p) + D_{\mathrm{KL}}(p \parallel q)'

@@ -2,10 +2,10 @@
 term: 売上原価
 reading: うりあげげんか
 en: cost of goods sold
-aliases: [売上原価対立法, 三分法, しいくり・くりしい]
-exams: [boki-3, boki-2, shindanshi]
+aliases: [しいくり・くりしい]
+exams: [boki-3, boki-2, shindanshi, boki-1]
 summary: 当期に販売した商品の仕入原価。売上高から差し引いて売上総利益を計算する。
-related: [accounting-worksheet, consumption-tax]
+related: [accounting-worksheet, consumption-tax, three-way-method, perpetual-cost-of-sales-method]
 formula: '\text{売上原価} = \text{期首商品棚卸高} + \text{当期商品仕入高} - \text{期末商品棚卸高}'
 ---
 売上原価は、当期に仕入れた商品の金額ではなく、当期に **売れた** 商品の原価です。仕入れたが売れ残った商品（期末商品）は次期に繰り越し、前期から繰り越した商品（期首商品）のうち売れた分は当期の売上原価に含めます。

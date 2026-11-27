@@ -3,7 +3,7 @@ term: 勘定科目
 reading: かんじょうかもく
 en: account title
 aliases: [勘定]
-exams: [boki-3, boki-2]
+exams: [boki-3, boki-2, boki-1]
 summary: 仕訳や帳簿で取引を分類・記録するための項目名。資産・負債・純資産・収益・費用の5つのグループのいずれかに属する。
 related: [journal-entry, trial-balance]
 ---

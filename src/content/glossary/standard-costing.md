@@ -2,10 +2,10 @@
 term: 標準原価計算
 reading: ひょうじゅんげんかけいさん
 en: standard costing
-aliases: [価格差異, 数量差異, 能率差異, 操業度差異, 予算差異, 配合差異, 歩留差異]
+aliases: [価格差異, 数量差異]
 exams: [boki-2, boki-1, shindanshi]
 summary: 科学的・統計的に定めた目標原価（標準原価）で製品原価を計算し、実際原価との差異を分析して原価管理に役立てる原価計算。
-related: [manufacturing-overhead, process-costing, direct-costing]
+related: [manufacturing-overhead, process-costing, direct-costing, partial-plan, mix-variance]
 formula: '\begin{aligned}\text{価格差異} &= (\text{標準単価} - \text{実際単価}) \times \text{実際消費量} \\ \text{数量差異} &= \text{標準単価} \times (\text{標準消費量} - \text{実際消費量})\end{aligned}'
 ---
 標準原価計算では、製品1単位当たりの標準原価（標準単価 × 標準消費量など）をあらかじめ設定し、実際の生産量に対する標準原価と実際原価を比べます。差異を原因別に分けることで、どこに無駄があったのかを把握できます。

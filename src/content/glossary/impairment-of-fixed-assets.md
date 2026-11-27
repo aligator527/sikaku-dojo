@@ -3,7 +3,7 @@ term: 減損会計
 reading: げんそんかいけい
 en: impairment of fixed assets
 aliases: [減損損失, 回収可能価額, 使用価値, 正味売却価額]
-exams: [boki-1]
+exams: [boki-1, boki-2]
 summary: 固定資産の収益性が低下し、投資額の回収が見込めなくなった場合に、一定の条件のもとで回収可能性を反映させるよう帳簿価額を減額する会計処理。
 related: [depreciation, goodwill]
 formula: '\text{減損損失} = \text{帳簿価額} - \max(\text{正味売却価額},\ \text{使用価値})'

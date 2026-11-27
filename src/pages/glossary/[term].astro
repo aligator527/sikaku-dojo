@@ -4,7 +4,14 @@ import { getCollection, render } from 'astro:content';
 import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
 import { t } from '../../i18n';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getExams, getQuestions, getTerms, type Term, type TermEntry } from '../../lib/content';
+import {
+  getExams,
+  getMentionIndex,
+  getQuestions,
+  getTerms,
+  type Term,
+  type TermEntry,
+} from '../../lib/content';
 import { excerpt } from '../../lib/markdown/excerpt';
 import { routes } from '../../lib/paths';
 import { absolute, definedTermLd } from '../../lib/seo/structured-data';
@@ -31,20 +38,16 @@ const related = term.related
   .filter((x): x is Term => Boolean(x));
 const termExams = exams.filter((e) => term.exams.includes(e.id));
 
-// Questions that mention the term (or an alias) in their stem.
-const needles = [term.term, ...term.aliases].filter((n) => n.length >= 2);
-const stems = await getCollection('questions', (q) => term.exams.includes(q.data.exam.id));
-const mentioned = new Set(
-  stems
-    .filter((q) => needles.some((n) => q.data.stem.includes(n) || (q.body ?? '').includes(n)))
-    .map((q) => q.id),
-);
-const relatedQuestions = (
+// Questions that mention the term (or an alias), those using it in the question text first.
+const placeOf = new Map(((await getMentionIndex()).byTerm.get(term.id) ?? []).map((m) => [m.id, m.place]));
+const stems = await getCollection('questions', (q) => placeOf.has(q.id));
+const mentioned = (
   await Promise.all(termExams.map(async (exam) => (await getQuestions(exam.id)).map((q) => ({ exam, q }))))
 )
   .flat()
-  .filter(({ q }) => mentioned.has(q.id))
-  .slice(0, 12);
+  .filter(({ q }) => placeOf.has(q.id))
+  .sort((a, b) => placeOf.get(a.q.id)! - placeOf.get(b.q.id)!);
+const relatedQuestions = mentioned.slice(0, 12);
 const stemById = new Map(stems.map((s) => [s.id, s.data.stem]));
 ---
 
@@ -117,7 +120,10 @@ const stemById = new Map(stems.map((s) => [s.id, s.data.stem]));
         )}
         {relatedQuestions.length > 0 && (
           <section>
-            <h2 class="foot-title">{t.glossary.relatedQuestions}</h2>
+            <h2 class="foot-title">
+              {t.glossary.relatedQuestions}
+              <small>{t.exam.questionCount(mentioned.length)}</small>
+            </h2>
             <ul class="related">
               {relatedQuestions.map(({ exam, q }) => (
                 <li>
@@ -194,6 +200,12 @@ const stemById = new Map(stems.map((s) => [s.id, s.data.stem]));
     font-size: var(--fs-sm);
     color: var(--ink-2);
     margin-bottom: var(--s-2);
+  }
+
+  .foot-title small {
+    margin-left: var(--s-2);
+    font-weight: 400;
+    color: var(--ink-3);
   }
 
   .chips {

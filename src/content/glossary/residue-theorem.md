@@ -2,10 +2,10 @@
 term: 留数定理
 reading: りゅうすうていり
 en: residue theorem
-aliases: [留数, ローラン展開]
+aliases: [留数]
 exams: [suken-1]
 summary: 閉曲線に沿った複素積分が、内部にある孤立特異点の留数の総和の 2πi 倍に等しいという定理。実積分の計算に応用される。
-related: [taylor-expansion]
+related: [taylor-expansion, laurent-series]
 formula: '\oint_C f(z)\,dz = 2\pi i \sum_{k} \operatorname{Res}_{z = a_k} f(z)'
 ---
 ## 内容

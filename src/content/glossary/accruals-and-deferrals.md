@@ -2,10 +2,10 @@
 term: 経過勘定
 reading: けいかかんじょう
 en: accruals and deferrals
-aliases: [前払費用, 前受収益, 未払費用, 未収収益, 再振替仕訳]
-exams: [boki-3, boki-2]
+aliases: [前払費用, 前受収益, 未払費用, 未収収益]
+exams: [boki-3, boki-2, boki-1]
 summary: 収益・費用の計上時期と現金の受払時期のずれを、決算で調整するために用いる前払費用・前受収益・未払費用・未収収益の4つの勘定。
-related: [accounting-worksheet, trial-balance]
+related: [accounting-worksheet, trial-balance, reversing-entry]
 ---
 継続的なサービスの提供や利用（家賃、保険料、利息など）では、お金を受け払いした時期と、そのサービスが属する期間がずれることがあります。決算でこのずれを調整し、当期に属する収益・費用だけを損益計算書に計上するのが経過勘定の役割です。
 

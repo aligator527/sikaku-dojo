@@ -2,10 +2,10 @@
 term: 活性化関数
 reading: かっせいかかんすう
 en: activation function
-aliases: [ReLU, シグモイド関数, tanh, GELU, Leaky ReLU]
+aliases: [tanh, GELU, Leaky ReLU]
 exams: [jdla-e]
 summary: ニューロンの入力の重み付き和に適用する非線形関数。非線形性によってネットワークは複雑な関数を表現できる。
-related: [vanishing-gradient, softmax-function, backpropagation]
+related: [vanishing-gradient, softmax-function, backpropagation, relu, sigmoid-function]
 formula: '\mathrm{ReLU}(x) = \max(0, x),\qquad \sigma(x) = \frac{1}{1 + e^{-x}},\qquad \sigma''(x) = \sigma(x)\bigl(1 - \sigma(x)\bigr)'
 ---
 ## なぜ非線形が必要か

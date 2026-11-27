@@ -1,11 +1,11 @@
 ---
 import { Layers } from '@lucide/astro';
 
-import GlossaryIndex from '../../components/glossary/GlossaryIndex';
+import GlossaryIndex from '../../components/glossary/GlossaryIndex.astro';
 import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
 import { t } from '../../i18n';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getExams, getTerms, toTermRow } from '../../lib/content';
+import { getExams, getTerms } from '../../lib/content';
 import { routes } from '../../lib/paths';
 
 const [terms, exams] = await Promise.all([getTerms(), getExams()]);
@@ -24,11 +24,7 @@ const [terms, exams] = await Promise.all([getTerms(), getExams()]);
         {t.glossary.cards}
       </a>
     </div>
-    <GlossaryIndex
-      client:load
-      terms={terms.map(toTermRow)}
-      exams={exams.map((e) => ({ id: e.id, name: e.name }))}
-    />
+    <GlossaryIndex terms={terms} exams={exams.map((e) => ({ id: e.id, name: e.name }))} />
   </div>
 </BaseLayout>
 

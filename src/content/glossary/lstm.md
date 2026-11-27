@@ -2,10 +2,10 @@
 term: LSTM
 reading: えるえすてぃーえむ
 en: long short-term memory
-aliases: [長短期記憶, Long Short-Term Memory, GRU, 忘却ゲート]
+aliases: [長短期記憶, Long Short-Term Memory, 忘却ゲート]
 exams: [jdla-e]
 summary: 入力ゲート・忘却ゲート・出力ゲートとメモリーセルを持つ RNN。セル状態を加法的に更新することで、長い系列でも勾配が消失しにくい。
-related: [vanishing-gradient, attention-mechanism, transformer]
+related: [vanishing-gradient, attention-mechanism, transformer, rnn, gru]
 formula: '\boldsymbol{c}_t = \boldsymbol{f}_t \odot \boldsymbol{c}_{t-1} + \boldsymbol{i}_t \odot \tilde{\boldsymbol{c}}_t,\qquad \boldsymbol{h}_t = \boldsymbol{o}_t \odot \tanh(\boldsymbol{c}_t)'
 ---
 ## 構造

@@ -25,6 +25,7 @@ const SHARED_PAGES = [
   'tools/statistics/',
   'glossary/',
   'glossary/cards/',
+  'data/glossary.json', // flashcard data, so 用語カード works offline
   'offline/',
 ];
 

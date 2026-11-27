@@ -2,7 +2,7 @@
 term: "中小企業者（中小企業基本法）"
 reading: ちゅうしょうきぎょうしゃ
 en: "small and medium-sized enterprises (definition under the SME Basic Act)"
-aliases: ["中小企業の定義", "中小企業"]
+aliases: ["中小企業の定義"]
 exams: [shindanshi]
 summary: "中小企業基本法第2条で、業種ごとに資本金の額または常時使用する従業員の数の基準を定めた、国の中小企業施策の対象となる事業者。"
 related: [small-scale-enterprise, company-organs]

@@ -2,10 +2,10 @@
 term: "産業財産権"
 reading: さんぎょうざいさんけん
 en: "industrial property rights"
-aliases: ["工業所有権", "特許権", "実用新案権", "意匠権", "商標権"]
+aliases: ["工業所有権", "実用新案権", "意匠権", "商標権"]
 exams: [shindanshi, ipa-st]
 summary: "特許権・実用新案権・意匠権・商標権の四つの権利の総称。特許庁への出願と登録によって発生し、一定期間、独占的に実施・使用できる。"
-related: [company-organs, valley-of-death]
+related: [company-organs, valley-of-death, patent-right]
 ---
 ## 定義と存続期間
 

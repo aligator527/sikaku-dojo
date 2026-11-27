@@ -3,7 +3,7 @@ term: 誤差逆伝播法
 reading: ごさぎゃくでんぱほう
 en: backpropagation
 aliases: [バックプロパゲーション, 逆伝播, 自動微分, 計算グラフ]
-exams: [jdla-e]
+exams: [jdla-e, toukei-dse]
 summary: ニューラルネットワークの損失の勾配を、連鎖律に従って出力側から入力側へ順に局所勾配を掛け合わせて効率よく計算する方法。
 related: [chain-rule, gradient-descent, vanishing-gradient, jacobian]
 formula: '\frac{\partial L}{\partial W} = X^{\mathsf T}\frac{\partial L}{\partial Y},\quad \frac{\partial L}{\partial X} = \frac{\partial L}{\partial Y}W^{\mathsf T}\qquad (Y = XW + \boldsymbol{b})'

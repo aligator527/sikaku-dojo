@@ -7,4 +7,4 @@ export * from './pathways';
 export * from './questions';
 export * from './resources';
 export * from './static-paths';
-export * from './term-rows';
+export * from './mentions';

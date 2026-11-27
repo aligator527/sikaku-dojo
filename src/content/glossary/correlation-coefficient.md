@@ -3,12 +3,12 @@ term: '相関係数'
 reading: そうかんけいすう
 en: 'correlation coefficient'
 aliases: ['ピアソンの積率相関係数']
-exams: [toukei-2, toukei-jun1, toukei-1, toukei-dse]
+exams: [toukei-2, toukei-jun1, toukei-1, toukei-dse, suken-1]
 summary: '2 つの変数の直線的な関係の強さと向きを −1 から 1 の値で表す指標。共分散を、それぞれの標準偏差の積で割ったもの。'
 related: [coefficient-of-determination, regression-coefficient, confounding]
 formula: 'r = \frac{\sum (x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum (x_i-\bar{x})^2}\sqrt{\sum (y_i-\bar{y})^2}}'
 ---
-### 定義と性質
+## 定義と性質
 
 ピアソンの積率相関係数 $r$ は、共分散を 2 つの標準偏差の積で割った量です。
 
@@ -16,11 +16,11 @@ formula: 'r = \frac{\sum (x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum (x_i-\bar{x})^2}
 - 1 次変換 $u = a + bx,\ v = c + dy$ に対して、$r_{uv} = \operatorname{sign}(bd)\,r_{xy}$。単位を変えても値は変わらない。
 - 単回帰の決定係数は $r^2$ に等しい。
 
-### 試験での問われ方
+## 試験での問われ方
 
 2級では、散布図と相関係数の値の対応、計算、1 次変換の影響、層別による見かけの相関（擬相関）、外れ値の影響が問われます。準1級では、母相関係数の検定 $t = r\sqrt{n-2}/\sqrt{1-r^2}$（自由度 $n-2$）、フィッシャーの $z$ 変換による区間推定、偏相関係数などが範囲です。
 
-### よくある誤り
+## よくある誤り
 
 - 相関があることを因果関係があることと取り違える。第 3 の変数（交絡因子）による見かけの相関の可能性を考える。
 - $r = 0$ なら無関係と考える。$r$ は直線的な関係だけを測るので、U 字型のような関係は捉えられない。

@@ -2,10 +2,10 @@
 term: Adam
 reading: あだむ
 en: Adam (adaptive moment estimation)
-aliases: [AdamW, RMSProp, AdaGrad, 適応的学習率]
+aliases: [AdamW, 適応的学習率]
 exams: [jdla-e]
 summary: 勾配の 1 次モーメント（平均）と 2 次モーメント（2 乗の平均）の指数移動平均を使い、パラメータごとに学習率を調整する最適化手法。バイアス補正を行う。
-related: [gradient-descent, momentum, weight-decay]
+related: [gradient-descent, momentum, weight-decay, rmsprop, adagrad]
 formula: '\hat{m}_t = \frac{m_t}{1-\beta_1^t},\quad \hat{v}_t = \frac{v_t}{1-\beta_2^t},\quad \theta_t = \theta_{t-1} - \eta\,\frac{\hat{m}_t}{\sqrt{\hat{v}_t} + \varepsilon}'
 ---
 ## 更新式

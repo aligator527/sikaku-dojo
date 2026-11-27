@@ -3,7 +3,7 @@ term: 特異値分解
 reading: とくいちぶんかい
 en: singular value decomposition
 aliases: [SVD, 特異値, 特異ベクトル]
-exams: [jdla-e]
+exams: [jdla-e, toukei-dse]
 summary: 任意の m×n 行列を、直交行列・非負の対角行列・直交行列の積 A = UΣVᵀ に分解すること。Σ の対角成分を特異値という。
 related: [eigenvalue, positive-definite-matrix]
 formula: 'A = U \Sigma V^{\mathsf T},\quad U^{\mathsf T}U = I_m,\ V^{\mathsf T}V = I_n,\ \Sigma = \operatorname{diag}(\sigma_1, \ldots, \sigma_r, 0, \ldots)'
@@ -24,7 +24,7 @@ $A^{\mathsf T}A = V\Sigma^{\mathsf T}\Sigma V^{\mathsf T}$、$AA^{\mathsf T} = U
 
 ## 試験での問われ方
 
-E資格では、固有値分解と特異値分解の関係、特異値と $A^{\mathsf T}A$ の固有値の関係、低ランク近似や主成分分析との対応が問われます。
+E資格のシラバス 2026 では、特異値分解は前提知識（グレー網掛けで出題対象外）です。固有値分解との関係、特異値と $A^{\mathsf T}A$ の固有値の関係、低ランク近似は、出題対象の潜在的意味インデキシング（LSI）を理解する土台になります。統計検定データサイエンスエキスパートでは、出題範囲表に特異値分解が挙がっています。
 
 ## よくある誤り
 

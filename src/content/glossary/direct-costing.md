@@ -2,10 +2,10 @@
 term: 直接原価計算
 reading: ちょくせつげんかけいさん
 en: direct costing
-aliases: [変動原価計算, 貢献利益, 固定費調整, 全部原価計算]
+aliases: [変動原価計算]
 exams: [boki-2, boki-1, shindanshi]
 summary: 原価を変動費と固定費に分け、変動製造原価だけを製品原価とし、固定製造原価は発生した期間の費用として全額を処理する原価計算。利益計画や意思決定に役立つ。
-related: [cvp-analysis, break-even-point, standard-costing]
+related: [cvp-analysis, break-even-point, standard-costing, absorption-costing, fixed-cost-adjustment]
 formula: '\text{全部原価計算の営業利益} = \text{直接原価計算の営業利益} + \text{期末在庫中の固定製造原価} - \text{期首在庫中の固定製造原価}'
 ---
 全部原価計算では固定製造原価も製品原価に含めるため、売れ残った在庫に固定費が繰り越され、生産量を増やすだけで利益が増えるという問題があります。直接原価計算は、固定製造原価を期間原価として処理することで、営業利益が販売量に応じて動くようにします。

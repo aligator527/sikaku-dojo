@@ -3,7 +3,7 @@ term: ラグランジュの未定乗数法
 reading: らぐらんじゅのみていじょうすうほう
 en: method of Lagrange multipliers
 aliases: [未定乗数法, ラグランジュ乗数, ラグランジュ関数]
-exams: [suken-1, jdla-e]
+exams: [suken-1, jdla-e, toukei-dse]
 summary: 等式制約 g(x) = 0 の下で f(x) の極値を求めるとき、∇f = λ∇g を満たす点を候補とする方法。λ をラグランジュ乗数という。
 related: [hessian-matrix, gradient-descent, positive-definite-matrix]
 formula: 'L(\boldsymbol{x}, \lambda) = f(\boldsymbol{x}) - \lambda g(\boldsymbol{x}),\qquad \nabla_{\boldsymbol{x}} L = \boldsymbol{0},\ g(\boldsymbol{x}) = 0'
@@ -32,4 +32,4 @@ $$\nabla f(\boldsymbol a) = \lambda\,\nabla g(\boldsymbol a)$$
 
 ## 試験での問われ方
 
-数検1級の2次では、条件付き最大・最小を論証つきで求める問題として出ます。E資格では SVM の双対問題や PCA の導出の背景として問われます。
+数検1級の2次では、条件付き最大・最小を論証つきで求める問題として出ます。E資格では、前提知識（シラバス 2026 でグレー網掛け）の SVM の双対問題や PCA の導出の背景として現れます。

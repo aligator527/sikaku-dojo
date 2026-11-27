@@ -2,10 +2,10 @@
 term: CVP分析
 reading: しーぶいぴーぶんせき
 en: cost-volume-profit analysis
-aliases: [損益分岐点分析, 貢献利益率, 安全余裕率, 感度分析]
+aliases: [損益分岐点分析, 感度分析]
 exams: [boki-2, boki-1, shindanshi]
 summary: 原価（Cost）・営業量（Volume）・利益（Profit）の関係を分析し、目標利益を達成する売上高や、価格・原価の変化が利益に与える影響を求める手法。
-related: [break-even-point, direct-costing]
+related: [break-even-point, direct-costing, contribution-margin, margin-of-safety, sales-mix]
 formula: '\text{目標営業利益達成売上高} = \frac{\text{固定費} + \text{目標営業利益}}{\text{貢献利益率}}'
 ---
 CVP分析は、原価を変動費と固定費に分解できることを前提に、「どれだけ売れば利益がいくらになるか」を計算する短期利益計画の手法です。直接原価計算の損益計算書と同じ構造で考えます。

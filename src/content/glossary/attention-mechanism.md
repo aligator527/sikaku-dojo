@@ -2,10 +2,10 @@
 term: 注意機構
 reading: ちゅういきこう
 en: attention mechanism
-aliases: [アテンション, Attention, Scaled Dot-Product Attention, Self-Attention, Multi-Head Attention]
+aliases: [アテンション, Attention, Scaled Dot-Product Attention, Multi-Head Attention]
 exams: [jdla-e]
 summary: クエリとキーの類似度から重みを計算し、その重みで値（バリュー）を加重平均する仕組み。入力のどの部分に注目するかをデータに応じて動的に決める。
-related: [transformer, softmax-function, lstm]
+related: [transformer, softmax-function, lstm, self-attention, masked-self-attention]
 formula: '\mathrm{Attention}(Q, K, V) = \mathrm{softmax}\!\left(\frac{QK^{\mathsf T}}{\sqrt{d_k}}\right) V'
 ---
 ## 基本的な考え方

@@ -2,10 +2,10 @@
 term: Transformer
 reading: とらんすふぉーまー
 en: Transformer
-aliases: [トランスフォーマー, Positional Encoding, 位置エンコーディング]
-exams: [jdla-e]
+aliases: [トランスフォーマー]
+exams: [jdla-e, toukei-dse]
 summary: 再帰も畳み込みも使わず、注意機構（Self-Attention）と位置ごとの全結合層を積み重ねた系列変換モデル。2017 年に提案され、BERT・GPT などの大規模言語モデルや Vision Transformer の基盤となった。
-related: [attention-mechanism, residual-connection, batch-normalization, lstm, softmax-function]
+related: [attention-mechanism, residual-connection, batch-normalization, lstm, softmax-function, self-attention, positional-encoding, bert, gpt]
 formula: 'PE_{(pos,\,2i)} = \sin\!\left(\frac{pos}{10000^{2i/d_{\mathrm{model}}}}\right),\quad PE_{(pos,\,2i+1)} = \cos\!\left(\frac{pos}{10000^{2i/d_{\mathrm{model}}}}\right)'
 ---
 ## 構成

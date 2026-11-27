@@ -3,7 +3,7 @@ term: ヘッセ行列
 reading: へっせぎょうれつ
 en: Hessian matrix
 aliases: [ヘシアン, ヘッシアン]
-exams: [suken-1, jdla-e]
+exams: [suken-1, jdla-e, toukei-dse]
 summary: 多変数関数の 2 階偏導関数を並べた対称行列。停留点が極大・極小・鞍点のどれかを判定し、関数の曲率を表す。
 related: [positive-definite-matrix, eigenvalue, taylor-expansion, gradient-descent]
 formula: 'H(f) = \left(\frac{\partial^2 f}{\partial x_i \partial x_j}\right)_{i,j}'

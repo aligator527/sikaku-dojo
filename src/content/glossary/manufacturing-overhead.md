@@ -2,10 +2,10 @@
 term: 製造間接費
 reading: せいぞうかんせつひ
 en: manufacturing overhead
-aliases: [予定配賦, 配賦差異, 予算差異, 操業度差異, 公式法変動予算]
+aliases: []
 exams: [boki-2, boki-1]
 summary: 特定の製品にいくらかかったかを直接把握できない製造原価（間接材料費・間接労務費・間接経費）。一定の基準で各製品に配賦する。
-related: [standard-costing, process-costing]
+related: [standard-costing, process-costing, predetermined-overhead-application, budget-variance, volume-variance]
 formula: '\text{予定配賦額} = \text{予定配賦率} \times \text{実際操業度}'
 ---
 工場の電力料、減価償却費、工場長の給料などは、どの製品のためにいくら使ったかを直接は把握できません。こうした製造間接費は、直接作業時間や機械作業時間などの配賦基準を使って製品に割り当てます。
