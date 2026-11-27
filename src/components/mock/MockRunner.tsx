@@ -51,13 +51,15 @@ function customConfig(): MockConfig {
   };
 }
 
-function pickQuestions(config: MockConfig, pool: QuestionMeta[]): QuestionMeta[] {
+/** Drawn questions in exam order: by 大問 (section, as listed for the exam), then by number. */
+function pickQuestions(config: MockConfig, pool: QuestionMeta[], sections: string[] = []): QuestionMeta[] {
   if (config.questions) {
     const byId = new Map(pool.map((x) => [x.id, x]));
     return config.questions.map((id) => byId.get(id)).filter((x): x is QuestionMeta => Boolean(x));
   }
+  const rank = (q: QuestionMeta) => (q.section ? sections.indexOf(q.section) : -1);
   return drawFromBlueprint(pool, config.blueprint ?? [], createRng(Date.now())).sort(
-    (a, b) => a.order - b.order,
+    (a, b) => rank(a) - rank(b) || a.order - b.order,
   );
 }
 
@@ -167,7 +169,7 @@ export default function MockRunner({ exam, mock, listHref }: Props) {
 
   const start = () => {
     if (data.status !== 'ready') return;
-    const picked = pickQuestions(config, data.value);
+    const picked = pickQuestions(config, data.value, Object.keys(exam.sections));
     setPhase('loading');
     setLoadFailed(false);
     loadQuestions(picked.map((x) => x.id))
@@ -240,7 +242,8 @@ export default function MockRunner({ exam, mock, listHref }: Props) {
 
   /* ------------------------------ intro ------------------------------ */
   if (phase === 'intro' || phase === 'loading') {
-    const available = data.status === 'ready' ? pickQuestions(config, data.value).length : null;
+    const available =
+      data.status === 'ready' ? pickQuestions(config, data.value, Object.keys(exam.sections)).length : null;
     return (
       <div className={s.intro}>
         <h1 className="section-title">{config.title}</h1>

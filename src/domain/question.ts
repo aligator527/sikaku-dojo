@@ -8,7 +8,7 @@
  */
 import type { ChoiceStyle } from '../config/catalog';
 
-export type QuestionFormat = 'single' | 'multiple' | 'numeric' | 'journal' | 'essay';
+export type QuestionFormat = 'single' | 'multiple' | 'numeric' | 'journal' | 'table' | 'essay';
 export type SourceKind = 'past' | 'adapted' | 'original';
 export type Difficulty = 1 | 2 | 3;
 
@@ -26,6 +26,29 @@ export interface NumericAnswer {
   value: number;
   tolerance: number;
   unit?: string;
+}
+
+/** A header cell of an answer table. */
+export interface TableHeadCell {
+  html: string;
+  /** Columns it spans (1 = normal). */
+  span: number;
+}
+
+/**
+ * A body cell of an answer table: printed text, or a box the learner fills in.
+ * Input answers: a number (amount), a list of accepted texts (勘定科目 or 語句), or null for a
+ * box that must stay empty (as in a 精算表, where not every column of a row is used). Empty
+ * boxes are not scored, but writing in one is marked.
+ */
+export type TableCell =
+  | { kind: 'text'; html: string; numeric?: boolean }
+  | { kind: 'input'; answer: number | string[] | null; tolerance?: number; prefix?: string };
+
+export interface AnswerTable {
+  captionHtml?: string;
+  head: TableHeadCell[][];
+  rows: TableCell[][];
 }
 
 interface QuestionBase {
@@ -49,6 +72,8 @@ export type SingleQuestion = QuestionBase & { format: 'single'; choicesHtml: str
 export type MultipleQuestion = QuestionBase & { format: 'multiple'; choicesHtml: string[]; answer: number[] };
 export type NumericQuestion = QuestionBase & { format: 'numeric'; answer: NumericAnswer; inputHint?: string };
 export type JournalQuestion = QuestionBase & { format: 'journal'; accounts: string[]; answer: JournalEntry };
+/** 勘定記入・精算表・財務諸表などの表を埋める問題。Text boxes become a select when `accounts` is given. */
+export type TableQuestion = QuestionBase & { format: 'table'; accounts?: string[]; tables: AnswerTable[] };
 export type EssayQuestion = QuestionBase & {
   format: 'essay';
   modelAnswerHtml: string;
@@ -56,7 +81,8 @@ export type EssayQuestion = QuestionBase & {
   charLimit?: number;
 };
 
-export type Question = SingleQuestion | MultipleQuestion | NumericQuestion | JournalQuestion | EssayQuestion;
+export type Question =
+  SingleQuestion | MultipleQuestion | NumericQuestion | JournalQuestion | TableQuestion | EssayQuestion;
 
 /**
  * The lightweight index entry of a question: everything needed to filter, sample and list,
@@ -103,9 +129,14 @@ export type Response =
   | { format: 'multiple'; choices: number[] }
   | { format: 'numeric'; value: string }
   | { format: 'journal'; entry: JournalEntry }
+  /** Typed values by cell key (see tableCellKey). */
+  | { format: 'table'; values: Record<string, string> }
   | { format: 'essay'; text: string; selfGrade?: SelfGrade };
 
 export type SelfGrade = 'good' | 'partial' | 'poor';
+
+/** Key of a table cell in a table response: "<table>-<row>-<column>", all 0-based. */
+export const tableCellKey = (table: number, row: number, column: number) => `${table}-${row}-${column}`;
 
 /** Exam-level context the question UI needs. */
 export interface ExamContext {

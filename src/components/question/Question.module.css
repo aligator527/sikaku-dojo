@@ -302,6 +302,102 @@
   text-align: right;
 }
 
+/* ---------------- answer tables (format: table) ---------------- */
+
+.tableField {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--s-4);
+}
+
+/* Wide sheets (精算表) scroll sideways instead of squeezing the boxes. */
+.tableScroll {
+  overflow-x: auto;
+}
+
+.answerTable {
+  min-width: 100%;
+  font-size: var(--fs-sm);
+  font-variant-numeric: tabular-nums;
+  background: var(--surface);
+  border-collapse: collapse;
+}
+
+.answerTable caption {
+  padding-bottom: var(--s-2);
+  font-weight: 700;
+  text-align: left;
+}
+
+.answerTable th,
+.answerTable td {
+  padding: var(--s-1) var(--s-2);
+  border: 1px solid var(--rule-strong);
+  white-space: nowrap;
+}
+
+.answerTable th {
+  background: var(--surface-sunken);
+  font-weight: 700;
+  text-align: center;
+}
+
+.box {
+  min-width: 6.5rem;
+  padding: 2px !important;
+  vertical-align: top;
+}
+
+.boxPrefix {
+  display: inline-block;
+  width: 1.2em;
+  text-align: center;
+}
+
+.box:has(.boxPrefix) input {
+  width: calc(100% - 1.3em);
+}
+
+.box input,
+.box select {
+  width: 100%;
+  min-height: 2.1rem;
+  padding: 0 var(--s-2);
+  font-size: var(--fs-sm);
+}
+
+.boxOk {
+  background: var(--ok-tint);
+}
+
+.boxNg {
+  background: var(--ng-tint);
+}
+
+.boxNg input,
+.boxNg select {
+  border-color: var(--ng);
+}
+
+.boxFix {
+  display: block;
+  padding: 2px var(--s-2) 0;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  /* The correct value in red pen, as on a marked paper. */
+  color: var(--ok);
+  text-align: right;
+}
+
+.keyBox {
+  font-weight: 700;
+}
+
+.cellsLine {
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
+
 /* ---------------- actions & verdict ---------------- */
 
 .actions {

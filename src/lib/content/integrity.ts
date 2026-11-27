@@ -58,6 +58,17 @@ async function run(): Promise<void> {
     if (d.format === 'multiple') {
       for (const a of d.answer) if (a > d.choices.length) fail(where, `answer ${a} is out of range`);
     }
+    if (d.format === 'table') {
+      const boxes = d.tables
+        .flatMap((t) => t.rows.flat())
+        .filter((c): c is Exclude<typeof c, string | number | null> => c !== null && typeof c === 'object');
+      if (!boxes.some((c) => c.ans !== null)) fail(where, 'tables have no box to fill in');
+      for (const c of boxes)
+        if (d.accounts && (typeof c.ans === 'string' || Array.isArray(c.ans))) {
+          const texts = typeof c.ans === 'string' ? [c.ans] : c.ans;
+          if (!texts.some((x) => d.accounts!.includes(x))) fail(where, `"${texts[0]}" missing from accounts`);
+        }
+    }
     if (d.format === 'journal') {
       const sum = (lines: { amount: number }[]) => lines.reduce((s, l) => s + l.amount, 0);
       if (sum(d.answer.debit) !== sum(d.answer.credit)) fail(where, 'debit and credit totals differ');
@@ -103,6 +114,19 @@ async function run(): Promise<void> {
         if (!exam.sections.some((x) => x.id === sec))
           fail(where, `blueprint section "${sec}" is not defined`);
       }
+      // A row that cannot be filled would silently shrink the mock (and its total score).
+      const pool = questions.filter(
+        (q) =>
+          q.data.exam.id === m.data.exam.id &&
+          (!row.topics || q.data.topics.some((t) => row.topics!.includes(t))) &&
+          (!row.sections || (q.data.section !== undefined && row.sections.includes(q.data.section))) &&
+          (!row.formats || row.formats.includes(q.data.format)),
+      );
+      if (pool.length < row.count)
+        fail(
+          where,
+          `blueprint row ${JSON.stringify(row)} needs ${row.count} questions, only ${pool.length} match`,
+        );
     }
   }
 

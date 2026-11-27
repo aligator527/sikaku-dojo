@@ -111,6 +111,32 @@ const questionBase = z.object({
 
 const journalLine = z.object({ account: z.string(), amount: z.number().nonnegative() });
 
+/** Table header: "勘定科目" or { text: 残高試算表, span: 2 }. One row as a flat list, several as a list of lists. */
+const tableHeadCell = z.union([
+  z.string(),
+  z.object({ text: z.string(), span: z.number().int().min(1).default(1) }),
+]);
+/**
+ * Table body: printed text / number, or a box to fill: { ans: 1200 }, { ans: 売掛金 }, and
+ * null (~) for a box that must stay empty.
+ */
+const tableBodyCell = z.union([
+  z.string(),
+  z.number(),
+  z.null(),
+  z.object({
+    ans: z.union([z.number(), z.string(), z.array(z.string()).min(1), z.null()]),
+    tol: z.number().nonnegative().optional(),
+    /** Printed in front of the box, e.g. △ before a 貸倒引当金 deduction (then type 8000, not -8000). */
+    pre: z.string().optional(),
+  }),
+]);
+const answerTable = z.object({
+  caption: z.string().optional(),
+  head: z.union([z.array(tableHeadCell), z.array(z.array(tableHeadCell))]).default([]),
+  rows: z.array(z.array(tableBodyCell).min(1)).min(1),
+});
+
 const questionSchema = z.discriminatedUnion('format', [
   questionBase.extend({
     format: z.literal('single'),
@@ -142,6 +168,12 @@ const questionSchema = z.discriminatedUnion('format', [
       debit: z.array(journalLine).min(1),
       credit: z.array(journalLine).min(1),
     }),
+  }),
+  questionBase.extend({
+    format: z.literal('table'),
+    /** Choices for text boxes (勘定科目・語句). Without it, text boxes are free input. */
+    accounts: z.array(z.string()).min(2).optional(),
+    tables: z.array(answerTable).min(1),
   }),
   questionBase.extend({
     format: z.literal('essay'),
@@ -240,7 +272,9 @@ const mocks = defineCollection({
           z.object({
             topics: z.array(z.string()).optional(),
             sections: z.array(z.string()).optional(),
-            formats: z.array(z.enum(['single', 'multiple', 'numeric', 'journal', 'essay'])).optional(),
+            formats: z
+              .array(z.enum(['single', 'multiple', 'numeric', 'journal', 'table', 'essay']))
+              .optional(),
             count: z.number().int().positive(),
           }),
         )

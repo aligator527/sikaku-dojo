@@ -1,13 +1,16 @@
 exam: boki-3
 title: 3級 ネット試験形式模試（60分）
-description: ネット試験と同じ 60分で、第1問の仕訳15題（各3点）、第2問の帳簿・伝票・語句、第3問の決算整理と財務諸表の数値を出題します。2027年度からの出題区分表に合わせた問題です。合格ラインは本試験と同じ 70% です。
+description: ネット試験と同じ 60分・100点満点で、第1問の仕訳15題（各3点）、第2問の勘定記入・補助簿・語句などの表の記入 2題（各10点）、第3問の精算表・財務諸表・決算整理後残高試算表の作成（35点）を出題します。表の問題は欄ごとの部分点です。2027年度からの出題区分表に合わせた問題で、合格ラインは本試験と同じ 70% です。
 durationMin: 60
 passingRate: 0.7
 order: 5
 blueprint:
   - sections: [q1]
+    formats: [journal]
     count: 15
   - sections: [q2]
-    count: 8
+    formats: [table]
+    count: 2
   - sections: [q3]
-    count: 10
+    formats: [table]
+    count: 1

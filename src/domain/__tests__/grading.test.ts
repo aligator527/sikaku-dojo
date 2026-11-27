@@ -154,3 +154,101 @@ describe('isAnswered', () => {
     expect(isAnswered({ format: 'single', choice: 1 })).toBe(true);
   });
 });
+
+describe('table questions', () => {
+  const question: Question = {
+    ...base,
+    id: 'test/o-table',
+    points: 10,
+    format: 'table',
+    accounts: ['現金', '売掛金', '当期純利益'],
+    tables: [
+      {
+        head: [
+          [
+            { html: '勘定科目', span: 1 },
+            { html: '借方', span: 1 },
+            { html: '貸方', span: 1 },
+          ],
+        ],
+        rows: [
+          [
+            { kind: 'text', html: '現金' },
+            { kind: 'input', answer: 1200 },
+            { kind: 'input', answer: null },
+          ],
+          [
+            { kind: 'input', answer: ['売掛金'] },
+            { kind: 'input', answer: null },
+            { kind: 'input', answer: -300 },
+          ],
+          [
+            { kind: 'input', answer: ['当期純利益', '当期純損失'] },
+            { kind: 'text', html: '' },
+            { kind: 'input', answer: 5000 },
+          ],
+        ],
+      },
+    ],
+  };
+  const answer = (values: Record<string, string>) => grade(question, { format: 'table', values });
+  const all = {
+    '0-0-1': '1,200',
+    '0-1-0': '売掛金',
+    '0-1-2': '△300',
+    '0-2-0': '当期純損失',
+    '0-2-2': '５，０００',
+  };
+
+  it('gives full marks when every scored box is right and the empty boxes are empty', () => {
+    expect(answer(all)).toEqual({ correct: true, score: 10, cells: { correct: 5, total: 5 } });
+  });
+
+  it('gives partial credit per box', () => {
+    expect(answer({ ...all, '0-0-1': '1,300', '0-1-0': '現金' })).toEqual({
+      correct: false,
+      score: 6,
+      cells: { correct: 3, total: 5 },
+    });
+  });
+
+  it('withholds full marks when a box that should stay empty is filled', () => {
+    const g = answer({ ...all, '0-0-2': '100' });
+    expect(g.correct).toBe(false);
+    expect(g.score).toBe(10);
+  });
+
+  it('counts a table as answered once anything is typed', () => {
+    expect(isAnswered({ format: 'table', values: {} })).toBe(false);
+    expect(isAnswered({ format: 'table', values: { '0-0-1': ' ' } })).toBe(false);
+    expect(isAnswered({ format: 'table', values: { '0-0-1': '1' } })).toBe(true);
+  });
+
+  it('reads △ and ▲ as minus signs', () => {
+    expect(parseNumericInput('△1,000')).toBe(-1000);
+    expect(parseNumericInput('▲25')).toBe(-25);
+  });
+});
+
+describe('boxes behind a printed △', () => {
+  const question: Question = {
+    ...base,
+    id: 'test/o-prefix',
+    points: 2,
+    format: 'table',
+    tables: [
+      {
+        head: [],
+        rows: [
+          [
+            { kind: 'text', html: '貸倒引当金' },
+            { kind: 'input', answer: 8000, prefix: '△' },
+          ],
+        ],
+      },
+    ],
+  };
+  it.each(['8000', '8,000', '△8,000', '-8000'])('accepts %s', (v) => {
+    expect(grade(question, { format: 'table', values: { '0-0-1': v } }).correct).toBe(true);
+  });
+});

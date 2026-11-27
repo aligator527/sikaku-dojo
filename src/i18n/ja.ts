@@ -92,6 +92,13 @@ export const ja = {
       choose: '選択',
       total: '合計',
     },
+    table: {
+      cells: (correct: number, total: number) => `${total}欄中 ${correct}欄 正解`,
+      choose: '選択',
+      shouldBeEmpty: '空欄',
+      correctIs: '正',
+      enterHint: 'Enter で次の欄へ。金額はカンマなしでも入力できます（マイナスは △ または -）。',
+    },
     passage: '資料',
     pastNotice: '本問は主催者の利用条件に従い出典を明記して掲載しています。',
   },

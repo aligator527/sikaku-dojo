@@ -87,7 +87,8 @@ export function PracticeQuestion({
   const [response, setResponse] = useState<Response>(() => emptyResponse(question));
   const [result, setResult] = useState<Grade | null>(null);
   const [open, setOpen] = useExplanationOpen(explanationId);
-  const hideAnswerKey = result !== null && result.correct === false;
+  // The verdict repeats the answer key, except for tables (marked box by box in place).
+  const hideAnswerKey = result !== null && result.correct === false && question.format !== 'table';
 
   // The page's static explanation hides its "正解は …" line while the verdict shows it.
   useEffect(() => {

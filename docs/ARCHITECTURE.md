@@ -64,6 +64,14 @@ explanation HTML — and drives the page's `<details>` explanation by id. Shippi
 once instead of twice roughly halves these pages. Drills and mocks still render whole questions
 from `/data/q/…json` with `PracticeQuestion`.
 
+## Table questions
+
+`format: table` (簿記 精算表, 財務諸表, 勘定記入 …) is converted at build time into `AnswerTable`s of
+printed cells and answer boxes (`src/domain/question.ts`). `tableCellResults` / `grade` in
+`src/domain/grading.ts` score each box, giving partial credit (`Grade.cells`), so mocks add up real
+exam points. `TableField` in `src/components/question/inputs.tsx` renders the boxes (Enter moves to
+the next box), marks each one after grading, and `AnswerTables` prints the key in the explanation.
+
 ## Glossary links
 
 `src/domain/mentions.ts` finds the glossary terms a text mentions (term names and aliases, longest

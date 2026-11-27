@@ -3,11 +3,20 @@
  * the parent owns the Response and decides when answers are locked or revealed.
  */
 import { Circle, Minus, Plus, X } from 'lucide-react';
-import { useId } from 'react';
+import { useId, useRef, type KeyboardEvent } from 'react';
 
 import type { ChoiceStyle } from '../../config/catalog';
 import { choiceLabel } from '../../domain/labels';
-import type { JournalEntry, JournalLine, Question, Response } from '../../domain/question';
+import { tableCellResults } from '../../domain/grading';
+import {
+  tableCellKey,
+  type AnswerTable,
+  type JournalEntry,
+  type JournalLine,
+  type Question,
+  type Response,
+  type TableCell,
+} from '../../domain/question';
 import { t } from '../../i18n';
 import s from './Question.module.css';
 
@@ -24,6 +33,8 @@ export function emptyResponse(q: Question): Response {
         format: 'journal',
         entry: { debit: [{ account: '', amount: 0 }], credit: [{ account: '', amount: 0 }] },
       };
+    case 'table':
+      return { format: 'table', values: {} };
     case 'essay':
       return { format: 'essay', text: '' };
   }
@@ -63,6 +74,8 @@ export function AnswerInput(props: InputProps) {
       return <NumericField {...props} question={question} />;
     case 'journal':
       return <JournalField {...props} question={question} />;
+    case 'table':
+      return <TableField {...props} question={question} />;
     case 'essay':
       return <EssayField {...props} question={question} />;
   }
@@ -281,6 +294,215 @@ export function JournalTable({ entry }: { entry: JournalEntry }) {
         ))}
       </tbody>
     </table>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+
+const plain = (html: string) => html.replace(/<[^>]+>/g, '').trim();
+
+/** "残高試算表 借方" for each column: the header rows' labels with their spans expanded. */
+function columnLabels(table: AnswerTable): string[] {
+  const width = table.rows[0]?.length ?? 0;
+  const labels: string[][] = Array.from({ length: width }, () => []);
+  for (const row of table.head) {
+    let col = 0;
+    for (const cell of row) {
+      for (let k = 0; k < cell.span && col < width; k += 1, col += 1) {
+        const text = plain(cell.html);
+        if (text) labels[col]!.push(text);
+      }
+    }
+  }
+  return labels.map((l) => l.join(' '));
+}
+
+/** The answer of one box as printed in the key: 1,200 / △300 / 売掛金 / （空欄）. */
+export function boxAnswerText(cell: Extract<TableCell, { kind: 'input' }>): string {
+  if (cell.answer === null) return `（${t.question.table.shouldBeEmpty}）`;
+  if (typeof cell.answer === 'number') return cell.answer < 0 ? `△${yen(-cell.answer)}` : yen(cell.answer);
+  return cell.answer[0]!;
+}
+
+function TableHead({ table }: { table: AnswerTable }) {
+  if (table.head.length === 0) return null;
+  return (
+    <thead>
+      {table.head.map((row, i) => (
+        <tr key={i}>
+          {row.map((cell, j) => (
+            <th
+              key={j}
+              colSpan={cell.span > 1 ? cell.span : undefined}
+              dangerouslySetInnerHTML={{ __html: cell.html }}
+            />
+          ))}
+        </tr>
+      ))}
+    </thead>
+  );
+}
+
+function TableField({
+  question,
+  response,
+  onChange,
+  locked,
+  reveal,
+}: InputProps & { question: Extract<Question, { format: 'table' }> }) {
+  const values = response.format === 'table' ? response.values : {};
+  const results = reveal ? tableCellResults(question, values) : null;
+  const root = useRef<HTMLDivElement>(null);
+  const set = (key: string, value: string) =>
+    onChange({ format: 'table', values: { ...values, [key]: value } });
+
+  // Enter moves to the next box, like a spreadsheet (it never submits from inside the table).
+  const onKeyDown = (e: KeyboardEvent<HTMLElement>) => {
+    if (e.key !== 'Enter' || e.nativeEvent.isComposing) return;
+    e.preventDefault();
+    const boxes = [...(root.current?.querySelectorAll<HTMLElement>('input, select') ?? [])];
+    const next = boxes[boxes.indexOf(e.currentTarget) + 1];
+    next?.focus();
+  };
+
+  return (
+    <div className={s.tableField} ref={root}>
+      {!locked && <p className={s.hint}>{t.question.table.enterHint}</p>}
+      {question.tables.map((table, ti) => {
+        const columns = columnLabels(table);
+        // Columns that take names (勘定科目・摘要). A box that must stay empty gets the same
+        // control as its column, so the kind of box never gives away where the answer goes.
+        const textColumns = new Set([
+          ...table.rows.flatMap((row) =>
+            row.flatMap((c, ci) => (c.kind === 'input' && Array.isArray(c.answer) ? [ci] : [])),
+          ),
+          ...columns.flatMap((label, ci) => (/摘要|科目|語句/.test(label) ? [ci] : [])),
+        ]);
+        return (
+          <div className={s.tableScroll} key={ti}>
+            <table className={s.answerTable}>
+              {table.captionHtml && <caption dangerouslySetInnerHTML={{ __html: table.captionHtml }} />}
+              <TableHead table={table} />
+              <tbody>
+                {table.rows.map((row, ri) => {
+                  // A box is named after the nearest printed label to its left (勘定科目, or the
+                  // date of a T-account side) and its column header: "現金 修正記入 借方".
+                  const rowLabelAt = (ci: number) => {
+                    for (let k = ci - 1; k >= 0; k -= 1) {
+                      const c = row[k]!;
+                      if (c.kind === 'text' && !c.numeric && plain(c.html)) return plain(c.html);
+                    }
+                    return '';
+                  };
+                  return (
+                    <tr key={ri}>
+                      {row.map((cell, ci) => {
+                        if (cell.kind === 'text')
+                          return (
+                            <td
+                              key={ci}
+                              className={cell.numeric ? s.amount : undefined}
+                              dangerouslySetInnerHTML={{ __html: cell.html }}
+                            />
+                          );
+                        const key = tableCellKey(ti, ri, ci);
+                        const ok = results?.get(key);
+                        const label =
+                          [rowLabelAt(ci), columns[ci]].filter(Boolean).join(' ') ||
+                          `${ri + 1}行目 ${ci + 1}列目`;
+                        const text =
+                          Array.isArray(cell.answer) || (cell.answer === null && textColumns.has(ci));
+                        return (
+                          <td
+                            key={ci}
+                            className={[s.box, ok === true ? s.boxOk : '', ok === false ? s.boxNg : ''].join(
+                              ' ',
+                            )}
+                          >
+                            {cell.prefix && <span className={s.boxPrefix}>{cell.prefix}</span>}
+                            {text && question.accounts ? (
+                              <select
+                                className="select"
+                                aria-label={label}
+                                value={values[key] ?? ''}
+                                disabled={locked}
+                                onChange={(e) => set(key, e.target.value)}
+                                onKeyDown={onKeyDown}
+                              >
+                                <option value="">{t.question.table.choose}</option>
+                                {question.accounts.map((a) => (
+                                  <option key={a} value={a}>
+                                    {a}
+                                  </option>
+                                ))}
+                              </select>
+                            ) : (
+                              <input
+                                className={`input ${text ? '' : s.amount}`}
+                                inputMode={text ? 'text' : 'decimal'}
+                                autoComplete="off"
+                                aria-label={label}
+                                value={values[key] ?? ''}
+                                readOnly={locked}
+                                onChange={(e) => set(key, e.target.value)}
+                                onKeyDown={onKeyDown}
+                              />
+                            )}
+                            {ok === false && (
+                              <span className={s.boxFix}>
+                                {t.question.table.correctIs} {boxAnswerText(cell)}
+                              </span>
+                            )}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+/** The filled-in tables, for the answer key in the explanation. */
+export function AnswerTables({ question }: { question: Extract<Question, { format: 'table' }> }) {
+  return (
+    <div className={s.tableField}>
+      {question.tables.map((table, ti) => (
+        <div className={s.tableScroll} key={ti}>
+          <table className={s.answerTable}>
+            {table.captionHtml && <caption dangerouslySetInnerHTML={{ __html: table.captionHtml }} />}
+            <TableHead table={table} />
+            <tbody>
+              {table.rows.map((row, ri) => (
+                <tr key={ri}>
+                  {row.map((cell, ci) =>
+                    cell.kind === 'text' ? (
+                      <td
+                        key={ci}
+                        className={cell.numeric ? s.amount : undefined}
+                        dangerouslySetInnerHTML={{ __html: cell.html }}
+                      />
+                    ) : (
+                      <td
+                        key={ci}
+                        className={[s.keyBox, typeof cell.answer === 'number' ? s.amount : ''].join(' ')}
+                      >
+                        {cell.answer === null ? '' : `${cell.prefix ?? ''}${boxAnswerText(cell)}`}
+                      </td>
+                    ),
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ))}
+    </div>
   );
 }
 

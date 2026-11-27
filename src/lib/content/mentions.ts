@@ -20,8 +20,16 @@ interface MentionIndex {
 
 function questionText(entry: CollectionEntry<'questions'>): string {
   const d = entry.data;
-  const answerArea = 'choices' in d ? d.choices.join('\n') : 'accounts' in d ? d.accounts.join('\n') : '';
-  return [d.passage ?? '', d.stem, answerArea].join('\n');
+  const answerArea =
+    'choices' in d
+      ? d.choices
+      : d.format === 'table'
+        ? // The printed cells of answer tables (勘定科目, 項目名) count as question text.
+          d.tables.flatMap((t) => [t.caption ?? '', ...t.rows.flat().filter((c) => typeof c === 'string')])
+        : 'accounts' in d
+          ? d.accounts
+          : [];
+  return [d.passage ?? '', d.stem, ...answerArea].join('\n');
 }
 
 /**

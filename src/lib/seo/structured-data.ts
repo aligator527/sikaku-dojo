@@ -116,6 +116,25 @@ export function questionLd(question: Question, exam: Exam, url: string, topic: s
         ...question.answer.credit.map((l) => `（貸）${l.account} ${l.amount.toLocaleString('ja-JP')}`),
       ].join(' ');
       break;
+    case 'table':
+      // Each row's label (its first printed cell) and the amounts or names that go into its boxes.
+      accepted = question.tables
+        .flatMap((table) =>
+          table.rows.map((row) => {
+            const label = row.find((c) => c.kind === 'text' && c.html !== '');
+            const answers = row.flatMap((c) =>
+              c.kind === 'input' && c.answer !== null
+                ? [typeof c.answer === 'number' ? c.answer.toLocaleString('ja-JP') : c.answer[0]!]
+                : [],
+            );
+            const name = label?.kind === 'text' ? stripHtml(label.html, 30) : '';
+            return answers.length ? `${name} ${answers.join('・')}`.trim() : '';
+          }),
+        )
+        .filter(Boolean)
+        .join(' / ')
+        .slice(0, 300);
+      break;
     case 'essay':
       accepted = stripHtml(question.modelAnswerHtml, 300);
       break;

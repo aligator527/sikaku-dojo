@@ -6,7 +6,7 @@ import type { Grade } from '../../domain/grading';
 import { choiceLabel, DIFFICULTY_LABEL, FORMAT_LABEL, SOURCE_KIND_LABEL } from '../../domain/labels';
 import type { ExamContext, Question, SelfGrade } from '../../domain/question';
 import { t } from '../../i18n';
-import { JournalTable } from './inputs';
+import { AnswerTables, JournalTable } from './inputs';
 import s from './Question.module.css';
 
 export function QuestionMeta({
@@ -82,6 +82,13 @@ export function AnswerKey({ question, choiceStyle }: { question: Question; choic
           <JournalTable entry={question.answer} />
         </div>
       );
+    case 'table':
+      return (
+        <div className={s.answerKey} style={{ display: 'grid', width: '100%' }}>
+          <span className={s.answerKeyLabel}>{t.question.answerIs}</span>
+          <AnswerTables question={question} />
+        </div>
+      );
     case 'essay':
       return null;
   }
@@ -115,7 +122,15 @@ export function Verdict({
         )}
         {ok ? t.question.correct : partial ? t.question.partial : t.question.incorrect}
       </span>
-      {!ok && question.format !== 'essay' && <AnswerKey question={question} choiceStyle={choiceStyle} />}
+      {grade.cells && (
+        <span className={`${s.cellsLine} num`}>
+          {t.question.table.cells(grade.cells.correct, grade.cells.total)}
+        </span>
+      )}
+      {/* Table questions mark each box in place, so the verdict does not repeat the whole table. */}
+      {!ok && question.format !== 'essay' && question.format !== 'table' && (
+        <AnswerKey question={question} choiceStyle={choiceStyle} />
+      )}
     </div>
   );
 }

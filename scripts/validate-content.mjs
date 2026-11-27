@@ -160,6 +160,7 @@ const FORMAT_KEYS = {
   multiple: ['choices', 'answer'],
   numeric: ['answer', 'inputHint'],
   journal: ['accounts', 'answer'],
+  table: ['accounts', 'tables'],
   essay: ['modelAnswer', 'rubric', 'charLimit'],
 };
 // A label typed into the choice text would be shown twice (labels are added by choiceStyle).
@@ -297,6 +298,8 @@ function checkQuestion(file) {
       warn(file, 'accounts offers almost no distractors (add plausible wrong accounts)');
   }
 
+  if (format === 'table') checkTables(file, q);
+
   if (format === 'essay') {
     if (typeof q.modelAnswer !== 'string' || !q.modelAnswer.trim()) error(file, 'modelAnswer is empty');
     checkText(file, 'modelAnswer', q.modelAnswer);
@@ -314,6 +317,76 @@ function checkQuestion(file) {
     seen.set(key, slug);
     stemsByExam.set(q.exam, seen);
   }
+}
+
+/* ---------------------------- answer tables ---------------------------- */
+
+const isAnswerBox = (c) => c !== null && typeof c === 'object' && !Array.isArray(c) && 'ans' in c;
+
+/** Table questions (format: table): shape, widths, answers and choices. */
+function checkTables(file, q) {
+  const accounts = q.accounts;
+  if (accounts !== undefined) {
+    if (!Array.isArray(accounts) || accounts.length < 2) error(file, 'accounts needs at least 2 items');
+    else if (new Set(accounts).size !== accounts.length) error(file, 'accounts has duplicates');
+  }
+  if (!Array.isArray(q.tables) || q.tables.length === 0)
+    return error(file, 'tables needs at least one table');
+  let scored = 0;
+  q.tables.forEach((table, ti) => {
+    const w = `table ${ti + 1}`;
+    if (!table || typeof table !== 'object') return error(file, `${w} is not an object`);
+    for (const key of Object.keys(table))
+      if (!['caption', 'head', 'rows'].includes(key)) error(file, `${w}: unknown key "${key}"`);
+    checkText(file, `${w} caption`, table.caption);
+    const head = table.head ?? [];
+    const headRows = head.length && Array.isArray(head[0]) ? head : head.length ? [head] : [];
+    const widthOf = (row) =>
+      row.reduce((n, c) => n + (typeof c === 'object' && c !== null ? (c.span ?? 1) : 1), 0);
+    const headWidths = headRows.map(widthOf);
+    if (new Set(headWidths).size > 1) error(file, `${w}: header rows have different widths (${headWidths})`);
+    headRows.flat().forEach((c) => checkText(file, `${w} header`, typeof c === 'string' ? c : c?.text));
+    if (!Array.isArray(table.rows) || table.rows.length === 0) return error(file, `${w}: rows is empty`);
+    const width = headWidths[0] ?? table.rows[0].length;
+    table.rows.forEach((row, ri) => {
+      const r = `${w} row ${ri + 1}`;
+      if (!Array.isArray(row)) return error(file, `${r} is not a list`);
+      if (row.length !== width) error(file, `${r} has ${row.length} cells, expected ${width}`);
+      row.forEach((c, ci) => {
+        const where = `${r} cell ${ci + 1}`;
+        if (c === null) return; // a box that must stay empty
+        if (typeof c === 'string') return checkText(file, where, c);
+        if (typeof c === 'number')
+          return Number.isFinite(c) || error(file, `${where} is not a finite number`);
+        if (!isAnswerBox(c)) return error(file, `${where}: use text, a number, ~ (empty box) or { ans: … }`);
+        for (const key of Object.keys(c))
+          if (!['ans', 'tol', 'pre'].includes(key)) error(file, `${where}: unknown key "${key}"`);
+        if (c.pre !== undefined && (typeof c.pre !== 'string' || c.pre.length > 4))
+          error(file, `${where}: pre must be a short text such as △`);
+        const a = c.ans;
+        if (a === null) return;
+        scored += 1;
+        if (typeof a === 'number') {
+          if (!Number.isFinite(a)) error(file, `${where}: ans is not a finite number`);
+          if (c.tol !== undefined && !(typeof c.tol === 'number' && c.tol >= 0))
+            error(file, `${where}: tol must be ≥ 0`);
+          return;
+        }
+        const texts = typeof a === 'string' ? [a] : a;
+        if (
+          !Array.isArray(texts) ||
+          texts.length === 0 ||
+          texts.some((x) => typeof x !== 'string' || !x.trim())
+        )
+          return error(file, `${where}: ans must be a number, a non-empty text, a list of texts or null`);
+        if (c.tol !== undefined) error(file, `${where}: tol only applies to numbers`);
+        if (Array.isArray(accounts) && !texts.some((x) => accounts.includes(x)))
+          error(file, `${where}: "${texts[0]}" is not in accounts (text boxes are chosen from accounts)`);
+      });
+    });
+  });
+  if (scored === 0) error(file, 'tables have no box to fill in ({ ans: … })');
+  if (scored > 80) warn(file, `${scored} boxes to fill in — consider splitting the question`);
 }
 
 /* ------------------------------ formulas ------------------------------ */
@@ -412,9 +485,9 @@ function checkGlossary(file) {
 
   for (const name of [data.term, ...(Array.isArray(data.aliases) ? data.aliases : [])]) {
     if (typeof name !== 'string') continue;
-    const others = (
-      namesInGlossary.get(name.normalize('NFKC').replace(/\s+/g, '')) ?? []
-    ).filter((s) => s !== slug);
+    const others = (namesInGlossary.get(name.normalize('NFKC').replace(/\s+/g, '')) ?? []).filter(
+      (s) => s !== slug,
+    );
     if (others.length) error(file, `"${name}" is already the term or an alias of ${others.join(', ')}`);
   }
 

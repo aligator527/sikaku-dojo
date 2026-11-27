@@ -1,0 +1,19 @@
+exam: boki-1
+title: 1級 本試験形式模試（4題・180分）
+description: 本試験と同じ構成で、商業簿記・会計学・工業簿記・原価計算から 1 題ずつ（各25点、計100点）、財務諸表・連結・語句と計算・原価計算表などの表を埋める総合問題を出題します。表の問題は欄ごとの部分点です。時間は本試験と同じ 180分（商業簿記・会計学と工業簿記・原価計算の各90分）。合格の目安は 70% ですが、本試験では 1 科目でも 10点未満があると不合格になるので、結果の分野別得点も確認してください。
+durationMin: 180
+passingRate: 0.7
+order: 4
+blueprint:
+  - sections: [shogyo]
+    formats: [table]
+    count: 1
+  - sections: [kaikeigaku]
+    formats: [table]
+    count: 1
+  - sections: [kogyo]
+    formats: [table]
+    count: 1
+  - sections: [genka]
+    formats: [table]
+    count: 1

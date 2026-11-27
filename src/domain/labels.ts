@@ -31,5 +31,6 @@ export const FORMAT_LABEL = {
   multiple: '複数選択',
   numeric: '数値入力',
   journal: '仕訳',
+  table: '表の記入',
   essay: '記述',
 } as const;
